@@ -1,4 +1,21 @@
+"use client";
+
 import Image from "next/image";
+import { useRef } from "react";
+import { gsap } from "gsap";
+import { useGSAP } from "@gsap/react";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { SplitText } from "gsap/SplitText";
+import { DrawSVGPlugin } from "gsap/DrawSVGPlugin";
+import { ScrambleTextPlugin } from "gsap/ScrambleTextPlugin";
+
+gsap.registerPlugin(
+  useGSAP,
+  ScrollTrigger,
+  SplitText,
+  DrawSVGPlugin,
+  ScrambleTextPlugin
+);
 
 /**
  * Tool callouts for the full-bleed anatomy photo.
@@ -17,88 +34,250 @@ type Callout = {
   n: string;
   title: string;
   desc: string;
+  // The "everything it replaces" photo this tool stands in for.
+  src: string;
+  // Place the photo below the text instead of above — for the bottom-most
+  // callout in a gutter, where an above-text photo would collide with the
+  // callout stacked above it.
+  imgBelow?: boolean;
   node: [number, number];
   points: string;
-  label: { x: number; y: number; side: Side };
+  label: { x: number; y: number; side: Side; maxWidth?: string };
 };
 
+// Coordinates are calibrated to the wrapper box. The photo is centred at 70%
+// width (so it occupies x:[15,85]); the node X values are the original photo
+// coords remapped through x' = 15 + 0.70·x so the dots still land on the tool.
+// Labels live out in the wide side gutters ([0,15] and [85,100]) — that extra
+// room is what keeps them from crowding the photo.
 const CALLOUTS: Callout[] = [
-  // Close — clean whitespace sits right beside these parts, so short leaders.
   {
     n: "01",
     title: "Magnetic Ball Markers",
     desc: "Two, seated in the body",
-    node: [40, 36],
-    points: "40,36 36,27",
-    label: { x: 36, y: 26, side: "left" },
+    src: "/6v1/ball-marker-nobg.png",
+    node: [32, 45],
+    points: "32,45 32,24 2,24",
+    label: { x: 2, y: 24, side: "right", maxWidth: "22rem" },
   },
   {
     n: "02",
     title: "T25 Torx Driver",
     desc: "Tunes adjustable clubs",
-    node: [70, 33],
-    points: "70,33 78,28",
-    label: { x: 79, y: 27, side: "right" },
+    src: "/6v1/torx-driver-nobg.png",
+    node: [68, 35],
+    points: "68,35 68,24 98,24",
+    label: { x: 98, y: 24, side: "left", maxWidth: "22rem" },
   },
-  // Far — these parts sit over product/steel, so labels run out to the margins.
   {
     n: "03",
     title: "Divot Repair Fork",
     desc: "Fixes pitch marks",
-    node: [67, 46],
-    points: "67,46 80,40 86,40",
-    label: { x: 86, y: 40, side: "right" },
+    src: "/6v1/divot-tool-nobg.png",
+    node: [65, 57],
+    points: "65,57 86,51 98,51",
+    label: { x: 98, y: 51, side: "left" },
   },
   {
     n: "04",
     title: "Knife",
     desc: "Full-tang, stainless",
-    node: [63, 61],
-    points: "63,61 80,58 86,58",
-    label: { x: 86, y: 58, side: "right" },
+    src: "/6v1/pocket-knife-nobg.png",
+    node: [58, 73],
+    points: "58,73 86,82 98,82",
+    label: { x: 98, y: 82, side: "left" },
   },
   {
     n: "05",
     title: "Bottle Opener",
     desc: "For the 19th hole",
-    node: [54, 62],
-    points: "54,62 30,54 15,54",
-    label: { x: 15, y: 54, side: "left" },
+    src: "/6v1/bottle-opener-nobg.png",
+    imgBelow: true,
+    node: [51, 66],
+    points: "51,66 28,89 2,89",
+    label: { x: 2, y: 89, side: "right" },
   },
   {
     n: "06",
     title: "Brass Wire Brush",
     desc: "Cleans grooves",
-    node: [37, 64],
-    points: "37,64 24,78 15,78",
-    label: { x: 15, y: 78, side: "left" },
+    src: "/6v1/ChatGPT%20Image%20May%2024%2C%202026%2C%2012_02_58%20AM-nobg.png",
+    node: [28, 74],
+    points: "28,74 28,73 2,73",
+    label: { x: 2, y: 73, side: "right" },
   },
 ];
 
-// Keeps every label a guaranteed gutter from the viewport edge: a right-side
-// label's left edge sits at 85vw, so it can be at most (100 − 85)vw − gutter
-// wide; left-side labels are the mirror. Text wraps before it ever bleeds.
-const LABEL_MAX_WIDTH = "calc(15vw - 1.5rem)";
+// The photo only fills the central 70% of the wrapper, so each gutter is ~15%
+// of the box — plenty of room for the two text lines at this cap.
+const LABEL_MAX_WIDTH = "20rem";
 
 export default function Anatomy() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const diagramRef = useRef<HTMLDivElement>(null);
+  const titleRef = useRef<HTMLHeadingElement>(null);
+
+  useGSAP(
+    () => {
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+      // Same line-mask rise as SixIntoOne: split each block into its rendered
+      // lines, mask each behind overflow-hidden, then sweep them up from below.
+      // autoSplit re-measures once webfonts load / on resize. The title leads;
+      // the description trails by a beat so the eye lands left-then-right.
+      const reveal = (
+        el: Element | null,
+        { delay = 0 }: { delay?: number } = {}
+      ) =>
+        SplitText.create(el, {
+          type: "lines",
+          mask: "lines",
+          autoSplit: true,
+          onSplit: (self) =>
+            gsap.from(self.lines, {
+              yPercent: 110,
+              duration: 1,
+              ease: "power4.out",
+              stagger: 0.15,
+              delay,
+              scrollTrigger: {
+                trigger: titleRef.current,
+                start: "top 80%",
+                once: true,
+              },
+              // Release the line mask once settled so leading-[1.05] stops
+              // cropping descenders (the "g" in golfer).
+              onComplete: () =>
+                gsap.set(
+                  self.lines.map((l) => l.parentNode),
+                  { overflow: "visible" }
+                ),
+            }),
+        });
+
+      const splits = [reveal(titleRef.current)];
+
+      // The callout overlay only renders at lg, so scope its reveal to that
+      // breakpoint — matchMedia cleans the timeline up if the viewport drops
+      // below it (where the lines/labels are display:none and undrawable).
+      const mm = gsap.matchMedia();
+      mm.add("(min-width: 1024px)", () => {
+        const q = gsap.utils.selector(diagramRef);
+
+        // Capture each label's final text, then hide it — the scramble tween
+        // resolves back to this string. Read now, while the DOM still holds the
+        // real copy (before any scramble has overwritten it).
+        const labelLines = q(".anatomy-label-line");
+        const finalText = labelLines.map((el) => el.textContent ?? "");
+        gsap.set(labelLines, { autoAlpha: 0 });
+
+        // The replaced-tool thumbnails fade in with their callout (one per
+        // callout), so hide them up front too.
+        const labelImgs = q(".anatomy-label-img");
+        gsap.set(labelImgs, { autoAlpha: 0 });
+
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: diagramRef.current,
+            start: "top 70%",
+            once: true,
+          },
+        });
+
+        // Nodes pop on first, then each line draws outward from its node.
+        tl.from(q(".anatomy-node"), {
+          autoAlpha: 0,
+          scale: 0,
+          transformOrigin: "center",
+          duration: 0.3,
+          ease: "back.out(2)",
+          stagger: 0.1,
+        }).from(
+          q(".anatomy-line"),
+          { drawSVG: 0, duration: 0.5, ease: "power2.out", stagger: 0.1 },
+          "<"
+        );
+
+        // Each label scrambles into place just as its line arrives — line i
+        // lands ~i*0.1s in, so kick off that label's scramble a beat after.
+        // The line fades in (autoAlpha) while the plugin churns random glyphs
+        // and resolves them left-to-right into the captured text. Each label is
+        // two lines (title + desc), so step the timeline by two per callout.
+        labelLines.forEach((el, i) => {
+          tl.to(
+            el,
+            {
+              autoAlpha: 1,
+              duration: 1.6,
+              ease: "power2.out",
+              scrambleText: {
+                text: finalText[i],
+                chars: "upperCase",
+                speed: 0.3,
+              },
+            },
+            0.25 + Math.floor(i / 2) * 0.1
+          );
+        });
+
+        // Fade each thumbnail in on the same beat as its callout's text.
+        labelImgs.forEach((el, j) => {
+          tl.to(
+            el,
+            { autoAlpha: 1, duration: 0.6, ease: "power2.out" },
+            0.25 + j * 0.1
+          );
+        });
+
+        return () => {
+          gsap.set(labelImgs, { clearProps: "all" });
+          gsap.set(labelLines, { clearProps: "all" });
+          labelLines.forEach((el, i) => {
+            el.textContent = finalText[i];
+          });
+        };
+      });
+
+      return () => {
+        splits.forEach((s) => s.revert());
+        mm.revert();
+      };
+    },
+    { scope: sectionRef }
+  );
+
   return (
-    <section className="relative w-full bg-[#fafaf7] py-16 md:py-20">
-      {/* Section eyebrow — technical/engineered framing */}
-      <div className="mx-auto mb-10 flex max-w-7xl items-baseline justify-between px-6 font-mono text-[11px] uppercase tracking-[0.18em] text-zinc-400 md:mb-14 md:px-12">
-        <span>[ Anatomy ]</span>
-        <span>Six tools · one body</span>
+    <section
+      ref={sectionRef}
+      className="relative z-20 w-full bg-[#fafaf7] pt-32 md:pt-44 pb-16 md:pb-20 lg:grid lg:grid-cols-[minmax(0,1fr)_auto] lg:grid-rows-[auto_auto_auto] lg:items-center lg:gap-x-8 lg:gap-y-0 lg:pt-28 lg:pb-4"
+    >
+      {/* Section heading + intro, on top of the diagram. */}
+      <div className="w-full max-w-5xl px-6 lg:pl-28 mb-16 md:mb-24 lg:mb-0 text-left lg:col-start-1 lg:row-start-1 lg:self-end">
+        <h2
+          ref={titleRef}
+          className="font-inter font-medium text-black text-3xl sm:text-4xl md:text-5xl lg:text-5xl leading-[1.05] tracking-tight"
+        >
+          Six tools every golfer carries.
+          <br className="hidden sm:block" />
+          <span className="text-zinc-400"> Now it&apos;s just this.</span>
+        </h2>
+        <p className="mt-8 md:mt-10 max-w-2xl font-inter text-zinc-600 text-base md:text-lg leading-[1.5]">
+          Every tool swings out of a single milled frame. Repair a pitch mark,
+          clean your grooves, mark your line, tune your driver, cut, and crack
+          one at the turn.
+        </p>
       </div>
 
       {/* Relative wrapper sized to the image — annotations are absolutely
           positioned in here, so percentage coords map onto the photo. */}
-      <div className="relative w-full">
+      <div ref={diagramRef} className="relative mx-auto mt-24 mb-24 md:mt-36 md:mb-36 lg:mt-12 lg:mb-4 w-full max-w-5xl lg:max-w-[100vh] lg:col-span-2 lg:row-start-2 lg:self-center lg:justify-self-center">
         <Image
-          src="/recreate_this_exact_photo_and_202605251519.jpeg"
+          src="/caddie-companion.png"
           alt="Caddie Companion folded fully open, every tool fanned out"
-          width={2752}
-          height={1536}
-          className="h-auto w-full"
-          sizes="100vw"
+          width={1080}
+          height={1080}
+          className="mx-auto block h-auto w-full lg:w-[70%]"
+          sizes="(max-width: 1024px) 100vw, 56rem"
         />
 
         {/* Connector lines. viewBox 0–100 + preserveAspectRatio=none lets us
@@ -106,7 +285,7 @@ export default function Anatomy() {
             Hidden on small screens — see the mobile legend below. */}
         <svg
           aria-hidden
-          className="pointer-events-none absolute inset-0 hidden h-full w-full text-zinc-900/55 lg:block"
+          className="pointer-events-none absolute inset-0 hidden h-full w-full text-zinc-500/40 lg:block"
           viewBox="0 0 100 100"
           preserveAspectRatio="none"
           fill="none"
@@ -114,6 +293,7 @@ export default function Anatomy() {
           {CALLOUTS.map((c) => (
             <polyline
               key={c.n}
+              className="anatomy-line"
               points={c.points}
               stroke="currentColor"
               strokeWidth={1}
@@ -129,7 +309,7 @@ export default function Anatomy() {
           {CALLOUTS.map((c) => (
             <span
               key={c.n}
-              className="absolute h-[7px] w-[7px] -translate-x-1/2 -translate-y-1/2 bg-zinc-900 outline outline-2 outline-[#fafaf7]/80"
+              className="anatomy-node absolute h-[9px] w-[9px] -translate-x-1/2 -translate-y-1/2 bg-zinc-900 outline outline-2 outline-[#fafaf7]/80"
               style={{ left: `${c.node[0]}%`, top: `${c.node[1]}%` }}
             />
           ))}
@@ -142,19 +322,37 @@ export default function Anatomy() {
             return (
               <div
                 key={c.n}
-                className={`absolute -translate-y-1/2 ${
-                  right ? "text-left" : "-translate-x-full text-right"
+                className={`anatomy-label absolute -translate-y-1/2 ${
+                  right ? "text-left" : "text-right"
                 }`}
                 style={{
-                  left: `${c.label.x}%`,
+                  // Right-gutter labels are anchored by their right edge so
+                  // shrink-to-fit measures the room growing *leftward* (up to
+                  // maxWidth), not the sliver between left:x% and the container
+                  // edge — otherwise the text collapses to its longest word.
+                  ...(right
+                    ? { left: `${c.label.x}%` }
+                    : { right: `${100 - c.label.x}%` }),
                   top: `${c.label.y}%`,
-                  maxWidth: LABEL_MAX_WIDTH,
+                  maxWidth: c.label.maxWidth ?? LABEL_MAX_WIDTH,
                 }}
               >
-                <div className="font-mono text-[11px] font-medium uppercase leading-tight tracking-[0.12em] text-zinc-900 md:text-xs">
+                {/* Lifted above the text block (out of flow) so the connector
+                    line — which meets the label horizontally at its center —
+                    lands on the text, not across the photo. */}
+                <Image
+                  src={c.src}
+                  alt=""
+                  width={120}
+                  height={120}
+                  className={`anatomy-label-img absolute h-20 w-20 object-contain ${
+                    c.imgBelow ? "top-full mt-2" : "bottom-full mb-2"
+                  } ${right ? "left-0" : "right-0"}`}
+                />
+                <div className="anatomy-label-line font-mono text-xs font-medium uppercase leading-tight text-zinc-900 md:text-sm">
                   {c.title}
                 </div>
-                <div className="mt-1 font-mono text-[10px] leading-tight tracking-wide text-zinc-500 md:text-[11px]">
+                <div className="anatomy-label-line mt-1 font-mono text-[11px] leading-tight text-zinc-500 md:text-xs">
                   {c.desc}
                 </div>
               </div>
@@ -162,19 +360,6 @@ export default function Anatomy() {
           })}
         </div>
       </div>
-
-      {/* Compact legend — the side overlay needs room, so below lg we list
-          the tools instead. */}
-      <ul className="mx-auto mt-10 grid max-w-md grid-cols-2 gap-x-6 gap-y-3 px-6 lg:hidden">
-        {CALLOUTS.map((c) => (
-          <li key={c.n} className="flex items-baseline gap-2">
-            <span aria-hidden className="h-[5px] w-[5px] shrink-0 bg-zinc-400" />
-            <span className="font-mono text-[11px] uppercase tracking-wide text-zinc-700">
-              {c.title}
-            </span>
-          </li>
-        ))}
-      </ul>
     </section>
   );
 }

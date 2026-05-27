@@ -20,10 +20,38 @@
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --font-brand: var(--font-brand-sans);
+  --font-inter: var(--font-inter);
 }
 
 /* Brand is always light. No prefers-color-scheme override. */
 body {
   background: var(--background);
   color: var(--foreground);
+}
+
+/* Initial-load entrance: fade up from below. */
+@keyframes hero-rise {
+  from {
+    opacity: 0;
+    transform: translateY(1.75rem);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.hero-rise {
+  animation: hero-rise 1s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Stagger the description in after the title. */
+.hero-rise-delay {
+  animation-delay: 0.18s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-rise {
+    animation: none;
+  }
 }

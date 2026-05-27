@@ -1,4 +1,4 @@
-import { Geist, Geist_Mono, Montserrat } from "next/font/google";
+import { Geist, Geist_Mono, Montserrat, Inter } from "next/font/google";
 
 // Body / UI — neutral, quiet. Reads as "engineered," not salesy.
 export const geistSans = Geist({
@@ -18,5 +18,12 @@ export const geistMono = Geist_Mono({
 export const brandSans = Montserrat({
   weight: ["400", "500", "700", "900"],
   variable: "--font-brand-sans",
+  subsets: ["latin"],
+});
+
+// Content below the hero — Inter. Quieter, narrower letterforms than the
+// Montserrat brand display, used for section copy and headings.
+export const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
 });
