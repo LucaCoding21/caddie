@@ -47,7 +47,7 @@ export default function Promise() {
       // start multiplier / scrub for a slower, lazier glide.
       gsap.fromTo(
         sectionRef.current,
-        { y: () => window.innerHeight * 0.6 },
+        { y: () => window.innerHeight * 0.3 },
         {
           y: 0,
           ease: "power2.out",
@@ -55,7 +55,7 @@ export default function Promise() {
             trigger: sectionRef.current,
             start: "top bottom",
             end: "top top",
-            scrub: 1.5,
+            scrub: 1,
           },
         }
       );
@@ -65,7 +65,7 @@ export default function Promise() {
       gsap.from(eyebrowRef.current, {
         opacity: 0,
         y: 14,
-        duration: 0.6,
+        duration: 1.2,
         ease: "power2.out",
         scrollTrigger: trigger,
       });
@@ -78,9 +78,9 @@ export default function Promise() {
             opacity: 0,
             y: 12,
             filter: "blur(6px)",
-            duration: 0.45,
+            duration: 0.95,
             ease: "power2.out",
-            stagger: 0.012,
+            stagger: 0.028,
             scrollTrigger: trigger,
           }),
       });

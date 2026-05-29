@@ -57,16 +57,16 @@ const CALLOUTS: Callout[] = [
     desc: "Two, seated in the body",
     src: "/6v1/ball-marker-nobg.png",
     node: [32, 45],
-    points: "32,45 32,24 2,24",
-    label: { x: 2, y: 24, side: "right", maxWidth: "22rem" },
+    points: "32,45 32,24 -12,24",
+    label: { x: -12, y: 24, side: "right", maxWidth: "22rem" },
   },
   {
     n: "02",
     title: "T25 Torx Driver",
     desc: "Tunes adjustable clubs",
     src: "/6v1/torx-driver-nobg.png",
-    node: [68, 35],
-    points: "68,35 68,24 98,24",
+    node: [72, 35],
+    points: "72,35 72,24 98,24",
     label: { x: 98, y: 24, side: "left", maxWidth: "22rem" },
   },
   {
@@ -74,8 +74,8 @@ const CALLOUTS: Callout[] = [
     title: "Divot Repair Fork",
     desc: "Fixes pitch marks",
     src: "/6v1/divot-tool-nobg.png",
-    node: [65, 57],
-    points: "65,57 86,51 98,51",
+    node: [69, 57],
+    points: "69,57 86,51 98,51",
     label: { x: 98, y: 51, side: "left" },
   },
   {
@@ -83,9 +83,9 @@ const CALLOUTS: Callout[] = [
     title: "Knife",
     desc: "Full-tang, stainless",
     src: "/6v1/pocket-knife-nobg.png",
-    node: [58, 73],
-    points: "58,73 86,82 98,82",
-    label: { x: 98, y: 82, side: "left" },
+    node: [65, 73],
+    points: "65,73 86,82 112,82",
+    label: { x: 112, y: 82, side: "left" },
   },
   {
     n: "05",
@@ -93,8 +93,8 @@ const CALLOUTS: Callout[] = [
     desc: "For the 19th hole",
     src: "/6v1/bottle-opener-nobg.png",
     imgBelow: true,
-    node: [51, 66],
-    points: "51,66 28,89 2,89",
+    node: [55, 66],
+    points: "55,66 28,89 2,89",
     label: { x: 2, y: 89, side: "right" },
   },
   {
@@ -102,8 +102,8 @@ const CALLOUTS: Callout[] = [
     title: "Brass Wire Brush",
     desc: "Cleans grooves",
     src: "/6v1/ChatGPT%20Image%20May%2024%2C%202026%2C%2012_02_58%20AM-nobg.png",
-    node: [28, 74],
-    points: "28,74 28,73 2,73",
+    node: [32, 74],
+    points: "32,74 32,73 2,73",
     label: { x: 2, y: 73, side: "right" },
   },
 ];
@@ -249,7 +249,7 @@ export default function Anatomy() {
   return (
     <section
       ref={sectionRef}
-      className="relative z-20 w-full bg-[#fafaf7] pt-32 md:pt-44 pb-16 md:pb-20 lg:grid lg:grid-cols-[minmax(0,1fr)_auto] lg:grid-rows-[auto_auto_auto] lg:items-center lg:gap-x-8 lg:gap-y-0 lg:pt-28 lg:pb-4"
+      className="relative z-20 w-full bg-[#fafaf7] pt-32 md:pt-44 pb-24 md:pb-32 lg:grid lg:grid-cols-[minmax(0,1fr)_auto] lg:grid-rows-[auto_auto_auto] lg:items-center lg:gap-x-8 lg:gap-y-0 lg:pt-28 lg:pb-24"
     >
       {/* Section heading + intro, on top of the diagram. */}
       <div className="w-full max-w-5xl px-6 lg:pl-28 mb-16 md:mb-24 lg:mb-0 text-left lg:col-start-1 lg:row-start-1 lg:self-end">
@@ -285,7 +285,7 @@ export default function Anatomy() {
             Hidden on small screens — see the mobile legend below. */}
         <svg
           aria-hidden
-          className="pointer-events-none absolute inset-0 hidden h-full w-full text-zinc-500/40 lg:block"
+          className="pointer-events-none absolute inset-0 hidden h-full w-full overflow-visible text-zinc-500/40 lg:block"
           viewBox="0 0 100 100"
           preserveAspectRatio="none"
           fill="none"
