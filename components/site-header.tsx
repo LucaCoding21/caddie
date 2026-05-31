@@ -9,6 +9,10 @@ export default function SiteHeader() {
   // Once scrolled past the hero, the header sits over light sections, so
   // flip the logo to a dark color to keep it legible.
   const [pastHero, setPastHero] = useState(false);
+  // Some later sections are dark too (e.g. the exploded view). Track whether a
+  // section marked [data-nav-dark] currently sits under the logo, so it can
+  // stay white there instead of flipping to the dark, light-section color.
+  const [overDark, setOverDark] = useState(false);
   // Hide the logo while scrolling down, reveal it on scroll up (and always
   // near the top). lastY tracks the previous position to infer direction.
   const [showLogo, setShowLogo] = useState(true);
@@ -18,6 +22,16 @@ export default function SiteHeader() {
     const onScroll = () => {
       const y = window.scrollY;
       setPastHero(y > window.innerHeight - 80);
+
+      // Probe a point near the logo's vertical center; if a dark-marked section
+      // spans it, the logo is over dark.
+      const probe = 36;
+      let dark = false;
+      document.querySelectorAll<HTMLElement>("[data-nav-dark]").forEach((el) => {
+        const r = el.getBoundingClientRect();
+        if (r.top <= probe && r.bottom >= probe) dark = true;
+      });
+      setOverDark(dark);
 
       // Near the top: always show. Otherwise compare against the last position
       // (with a small dead zone) so tiny jitters don't flicker the logo.
@@ -40,7 +54,7 @@ export default function SiteHeader() {
       <Link
         href="/"
         className={`font-brand text-2xl font-bold uppercase tracking-tight transition-all duration-300 ${
-          pastHero ? "text-zinc-900" : "text-white"
+          pastHero && !overDark ? "text-zinc-900" : "text-white"
         } ${
           showLogo
             ? "-translate-y-1 opacity-100 pointer-events-auto"

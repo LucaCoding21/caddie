@@ -4,6 +4,9 @@ import Promise from "@/components/promise";
 import Anatomy from "@/components/anatomy";
 import OnCourse from "@/components/on-course";
 import ExplodedView from "@/components/exploded-view";
+import ClosingColours from "@/components/closing-colours";
+import Faq from "@/components/faq";
+import SiteFooter from "@/components/site-footer";
 
 export default function Home() {
   return (
@@ -25,12 +28,15 @@ export default function Home() {
         {/* 5. Exploded view — technical illustration that irises open on scroll */}
         <ExplodedView />
 
-        {/* Add sections below as you build them:
-            <Features />
-            <HowItWorks />
-            <Reviews />
-        */}
+        {/* 6. Closing colour picker — choose a finish, then buy */}
+        <ClosingColours />
+
+        {/* 7. FAQ */}
+        <Faq />
       </main>
+
+      {/* 8. Footer */}
+      <SiteFooter />
     </>
   );
 }

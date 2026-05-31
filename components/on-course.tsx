@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useRef } from "react";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
@@ -124,6 +125,17 @@ export default function OnCourse() {
           >
             It goes where you go.
           </h2>
+          <p className="mt-6 ml-auto max-w-xl font-inter text-zinc-500 text-base md:text-lg leading-[1.5]">
+            Caddie started with a pocket full of single-use gadgets and one
+            simple idea: fold the six tools every golfer actually reaches for
+            into one frame, machined to last a lifetime of rounds.
+          </p>
+          <Link
+            href="/about"
+            className="mt-7 inline-flex items-center bg-black px-6 py-3 font-inter text-sm font-medium text-white transition-colors hover:bg-zinc-800"
+          >
+            Learn more about Caddie
+          </Link>
         </div>
 
         {/* Two portraits, the second dropped a beat on desktop for editorial
