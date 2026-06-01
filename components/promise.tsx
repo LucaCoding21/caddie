@@ -161,7 +161,7 @@ export default function Promise() {
         </p>
         <p
           ref={paraRef}
-          className="font-inter font-medium text-black text-xl sm:text-2xl lg:text-[1.7rem] leading-[1.5] tracking-[-0.04em] max-w-xl mx-auto"
+          className="font-inter font-medium text-black text-2xl sm:text-3xl lg:text-[1.95rem] leading-[1.5] tracking-[-0.04em] max-w-xl mx-auto"
         >
           One tool that does it all. Fix divots, clean grooves, and dial
           in your driver, so you spend less time fumbling and more time

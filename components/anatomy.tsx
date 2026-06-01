@@ -112,6 +112,14 @@ const CALLOUTS: Callout[] = [
 // of the box — plenty of room for the two text lines at this cap.
 const LABEL_MAX_WIDTH = "20rem";
 
+// Car-style spec read-out tucked beside the headline: a headline figure on the
+// left, the thing it measures on the right, one thin rule per row.
+const SPECS: { value: string; label: string }[] = [
+  { value: "6-in-1", label: "Tools in one frame" },
+  { value: "2.9 oz", label: "Pocket carry weight" },
+  { value: "6061-T6", label: "Milled aluminum body" },
+];
+
 export default function Anatomy() {
   const sectionRef = useRef<HTMLElement>(null);
   const diagramRef = useRef<HTMLDivElement>(null);
@@ -266,6 +274,28 @@ export default function Anatomy() {
           clean your grooves, mark your line, tune your driver, cut, and crack
           one at the turn.
         </p>
+      </div>
+
+      {/* Spec sheet — a technical read-out anchored in the section's
+          bottom-right corner (third grid row, right gutter); on smaller screens
+          it stacks under the diagram. Headline figure left, the thing it
+          measures right, a thin rule per row. */}
+      <div className="w-full max-w-md px-6 mt-12 lg:mt-0 lg:px-0 lg:pr-28 lg:w-[36rem] lg:max-w-none lg:col-start-2 lg:row-start-3 lg:self-start lg:justify-self-end">
+        <dl className="font-mono">
+          {SPECS.map(({ value, label }) => (
+            <div
+              key={label}
+              className="flex items-baseline justify-between gap-6 border-t border-zinc-900/30 py-3.5"
+            >
+              <dt className="text-sm font-medium tracking-tight text-zinc-900">
+                {value}
+              </dt>
+              <dd className="text-right text-[11px] uppercase leading-tight tracking-[0.12em] text-zinc-600">
+                {label}
+              </dd>
+            </div>
+          ))}
+        </dl>
       </div>
 
       {/* Relative wrapper sized to the image — annotations are absolutely

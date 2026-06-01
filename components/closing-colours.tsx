@@ -11,19 +11,75 @@ import { PRODUCT } from "@/lib/products";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger, SplitText);
 
+const HERO = "/caddie-buy-section.jpeg";
+
+// Price shown beside the finish selector. priceCents is whole dollars here, so
+// keep the formatting light rather than pulling in Intl for one number.
+const PRICE = `$${PRODUCT.priceCents / 100}`;
+
+// Three selling points, shown as an airy three-up spec row beneath the hero —
+// plain line icons, no heavy tiles, in keeping with the gallery feel.
+const FEATURES = [
+  {
+    title: "Golf Essential",
+    desc: "Brush, divot tool, groove cleaner & more.",
+    icon: (
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={1.4}
+        className="h-6 w-6"
+      >
+        <rect x="3" y="3" width="7" height="7" rx="1.5" />
+        <rect x="14" y="3" width="7" height="7" rx="1.5" />
+        <rect x="3" y="14" width="7" height="7" rx="1.5" />
+        <rect x="14" y="14" width="7" height="7" rx="1.5" />
+      </svg>
+    ),
+  },
+  {
+    title: "Premium Build",
+    desc: "Durable aluminum body. Built to last.",
+    icon: (
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={1.4}
+        strokeLinejoin="round"
+        className="h-6 w-6"
+      >
+        <path d="M12 3l7 3v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z" />
+        <path d="M9 12l2 2 4-4" strokeLinecap="round" />
+      </svg>
+    ),
+  },
+  {
+    title: "Pocket Friendly",
+    desc: "Compact design that goes wherever you go.",
+    icon: (
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={1.4}
+        className="h-6 w-6"
+      >
+        <rect x="3" y="5" width="18" height="14" rx="2" />
+        <path d="M3 10h18" strokeLinecap="round" />
+      </svg>
+    ),
+  },
+];
+
 export default function ClosingColours() {
   const [activeIdx, setActiveIdx] = useState(0);
-  const active = PRODUCT.colors[activeIdx] ?? PRODUCT.colors[0];
-  const count = PRODUCT.colors.length;
-  const price = `$${(PRODUCT.priceCents / 100).toFixed(0)}`;
-
-  const step = (dir: number) =>
-    setActiveIdx((i) => (i + dir + count) % count);
+  const activeColor = PRODUCT.colors[activeIdx];
 
   const sectionRef = useRef<HTMLElement>(null);
   const eyebrowRef = useRef<HTMLParagraphElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
-  const copyRef = useRef<HTMLParagraphElement>(null);
 
   useGSAP(
     () => {
@@ -60,14 +116,6 @@ export default function ClosingColours() {
           }),
       });
 
-      gsap.from(copyRef.current, {
-        opacity: 0,
-        y: 24,
-        duration: 0.9,
-        ease: "power3.out",
-        scrollTrigger: { trigger: copyRef.current, start: "top 88%", once: true },
-      });
-
       return () => split.revert();
     },
     { scope: sectionRef }
@@ -78,146 +126,100 @@ export default function ClosingColours() {
       ref={sectionRef}
       className="relative z-20 w-full bg-[#fafaf7] px-6 md:px-12 py-32 md:py-44"
     >
-      <div className="mx-auto grid max-w-[1440px] items-center gap-12 lg:grid-cols-[1.3fr_0.7fr] lg:gap-16">
-        {/* Left — large product image with name + price overlaid, crossfading
-            between the colour variants. */}
-        <div className="relative order-2 aspect-[4/3] w-full lg:order-1">
-          {PRODUCT.colors.map((c, idx) => (
-            <Image
-              key={c.id}
-              src={c.image}
-              alt={`Caddie Companion in ${c.name}`}
-              fill
-              priority={idx === 0}
-              sizes="(max-width: 1024px) 92vw, 640px"
-              className={`object-contain transition-opacity duration-500 ${
-                idx === activeIdx ? "opacity-100" : "opacity-0"
-              }`}
-            />
-          ))}
-          <div className="absolute bottom-6 left-6 md:bottom-8 md:left-8">
-            <p className="font-inter text-base font-medium tracking-tight text-zinc-500 md:text-lg">
-              Caddie Companion
-            </p>
-            <p className="mt-1 font-inter text-3xl font-bold tracking-tight text-black md:text-4xl">
-              {price}
-            </p>
-          </div>
-        </div>
-
-        {/* Right — label + arrows, copy, colour thumbnails, buy. */}
-        <div className="order-1 lg:order-2">
-          <div className="flex items-center justify-between gap-6">
-            <p
-              ref={eyebrowRef}
-              className="font-mono text-[11px] font-medium uppercase tracking-[0.08em] text-zinc-400"
-            >
-              Four ways to carry
-            </p>
-            <div className="flex items-center gap-2">
-              <button
-                type="button"
-                onClick={() => step(-1)}
-                aria-label="Previous colour"
-                className="flex h-8 w-8 cursor-pointer items-center justify-center border border-black/15 text-zinc-500 transition-colors hover:border-black hover:text-black"
-              >
-                <svg
-                  width="14"
-                  height="14"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  aria-hidden="true"
-                >
-                  <path d="m15 18-6-6 6-6" />
-                </svg>
-              </button>
-              <button
-                type="button"
-                onClick={() => step(1)}
-                aria-label="Next colour"
-                className="flex h-8 w-8 cursor-pointer items-center justify-center border border-black/15 text-zinc-500 transition-colors hover:border-black hover:text-black"
-              >
-                <svg
-                  width="14"
-                  height="14"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  aria-hidden="true"
-                >
-                  <path d="m9 18 6-6-6-6" />
-                </svg>
-              </button>
-            </div>
-          </div>
-
+      <div className="mx-auto max-w-[1100px]">
+        {/* Centered editorial intro — gallery-style close. */}
+        <div className="mx-auto max-w-3xl text-center">
+          <p
+            ref={eyebrowRef}
+            className="font-mono text-[11px] font-medium uppercase tracking-[0.18em] text-zinc-400"
+          >
+            Four ways to carry
+          </p>
           <h2
             ref={titleRef}
-            className="mt-5 max-w-md font-inter font-medium text-black text-3xl sm:text-4xl md:text-5xl lg:text-[3.5rem] leading-[1.05] tracking-tight"
+            className="mt-5 font-inter font-medium text-black text-5xl sm:text-6xl lg:text-[4rem] leading-[1.0] tracking-tight"
           >
-            Pick your Caddie.
+            {PRODUCT.title}
           </h2>
-          <p
-            ref={copyRef}
-            className="mt-6 max-w-md font-inter text-zinc-500 text-base md:text-lg leading-[1.5]"
-          >
-            Six tools, four anodised finishes. Each frame is machined from a
-            single billet of aluminium and colour-anodised through, so the
-            finish never chips.
+          <p className="mx-auto mt-6 max-w-xl font-inter text-zinc-600 text-base md:text-lg leading-[1.5]">
+            The all-in-one golf multi-tool. Clean clubs, fix divots, and be
+            ready for anything — in the finish that suits your bag.
           </p>
+        </div>
 
-          {/* Finish label + colour thumbnail row. */}
-          <div className="mt-10">
-            <div className="flex items-baseline justify-between border-b border-black/10 pb-3">
-              <span className="font-inter text-sm font-medium text-black">
-                {active.name}
-              </span>
-              <span className="font-mono text-[11px] tabular-nums text-zinc-400">
-                {String(activeIdx + 1).padStart(2, "0")} / {String(count).padStart(2, "0")}
-              </span>
+        {/* Hero — the multi-tool laid across a half-grass, half-stone sweep. */}
+        <div className="relative mt-14 md:mt-20 aspect-[16/10] w-full overflow-hidden rounded-2xl bg-[#f1f0ec] ring-1 ring-black/5">
+          <Image
+            src={HERO}
+            alt="Caddie Companion multi-tool, fanned open on the green"
+            fill
+            sizes="(max-width: 1024px) 92vw, 1100px"
+            className="object-contain"
+            priority
+          />
+        </div>
+
+        {/* Three-up spec row — hairline-divided, no boxes. */}
+        <div className="mt-16 grid border-y border-zinc-900/10 divide-y divide-zinc-900/10 sm:grid-cols-3 sm:divide-x sm:divide-y-0">
+          {FEATURES.map(({ title, desc, icon }) => (
+            <div key={title} className="px-2 py-8 sm:px-8 text-center sm:text-left">
+              <span className="inline-flex text-zinc-700">{icon}</span>
+              <p className="mt-4 font-inter text-base font-medium text-black">
+                {title}
+              </p>
+              <p className="mt-1 font-inter text-sm text-zinc-500 leading-[1.5]">
+                {desc}
+              </p>
             </div>
-            <div className="mt-5 flex gap-3">
-              {PRODUCT.colors.map((c, idx) => {
-                const selected = idx === activeIdx;
-                return (
-                  <button
-                    key={c.id}
-                    type="button"
-                    onClick={() => setActiveIdx(idx)}
-                    aria-pressed={selected}
-                    aria-label={c.name}
-                    className={`relative aspect-square flex-1 cursor-pointer overflow-hidden transition-all ${
-                      selected
-                        ? "ring-1 ring-black opacity-100"
-                        : "opacity-40 hover:opacity-100"
-                    }`}
-                  >
-                    <Image
-                      src={c.image}
-                      alt={c.name}
-                      fill
-                      sizes="140px"
-                      className="object-contain"
-                    />
-                  </button>
-                );
-              })}
-            </div>
+          ))}
+        </div>
+
+        {/* Finish selector + buy — the calm, decisive close. */}
+        <div className="mt-16 flex flex-col items-center">
+          <div className="flex items-baseline gap-3">
+            <span className="font-inter text-lg font-medium text-black">
+              {activeColor.name}
+            </span>
+            <span className="text-zinc-300">·</span>
+            <span className="font-inter text-lg text-zinc-500">
+              {PRICE} {PRODUCT.currency}
+            </span>
           </div>
 
-          {/* Close & buy. */}
+          {/* A swatch per finish; the active one sits in a black ring. */}
+          <div className="mt-6 flex gap-3">
+            {PRODUCT.colors.map((c, idx) => {
+              const selected = idx === activeIdx;
+              return (
+                <button
+                  key={c.id}
+                  type="button"
+                  onClick={() => setActiveIdx(idx)}
+                  aria-pressed={selected}
+                  aria-label={c.name}
+                  className={`relative h-16 w-16 cursor-pointer overflow-hidden rounded-xl bg-[#f1f0ec] transition-all ${
+                    selected
+                      ? "ring-2 ring-black"
+                      : "ring-1 ring-black/10 hover:ring-black/30"
+                  }`}
+                >
+                  <Image
+                    src={c.image}
+                    alt={c.name}
+                    fill
+                    sizes="64px"
+                    className="object-contain p-2"
+                  />
+                </button>
+              );
+            })}
+          </div>
+
           <Link
             href="/select-color"
-            className="mt-16 inline-flex items-center bg-black px-8 py-4 font-inter text-sm font-medium text-white transition-colors hover:bg-zinc-800"
+            className="mt-10 inline-flex items-center bg-black px-9 py-3.5 font-inter text-sm font-medium text-white transition-colors hover:bg-zinc-800"
           >
-            Buy now {price}
+            Buy Caddie Companion
           </Link>
         </div>
       </div>

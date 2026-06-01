@@ -9,6 +9,16 @@
 
   /* Blue logo accent — confirm against the real logo blue */
   --accent: #1d4ed8;
+
+  /* Height of the reveal footer. Drives both the fixed footer and the scroll
+     space reserved above it, so the two can't drift apart. */
+  --footer-h: 92vh;
+}
+
+@media (max-width: 640px) {
+  :root {
+    --footer-h: 64vh;
+  }
 }
 
 @theme inline {

@@ -12,6 +12,10 @@ export default function Home() {
   return (
     <>
       <SiteHeader />
+      {/* Opaque layer that scrolls over the fixed footer. The bottom margin
+          reserves scroll space exactly the footer's height, so the footer is
+          revealed as the last section scrolls up. */}
+      <div className="relative z-10 bg-background" style={{ marginBottom: "var(--footer-h)" }}>
       <main>
         {/* 1. Hero — moody product photo + one-line headline */}
         <Hero />
@@ -34,8 +38,9 @@ export default function Home() {
         {/* 7. FAQ */}
         <Faq />
       </main>
+      </div>
 
-      {/* 8. Footer */}
+      {/* 8. Footer — pinned behind the content, revealed on scroll. */}
       <SiteFooter />
     </>
   );
