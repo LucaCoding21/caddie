@@ -76,7 +76,7 @@ export default function ClosingColours() {
   return (
     <section
       ref={sectionRef}
-      className="relative z-20 w-full bg-[#fafaf7] px-6 md:px-12 py-24 md:py-32"
+      className="relative z-20 w-full bg-[#fafaf7] px-6 md:px-12 py-32 md:py-44"
     >
       <div className="mx-auto grid max-w-[1440px] items-center gap-12 lg:grid-cols-[1.3fr_0.7fr] lg:gap-16">
         {/* Left — large product image with name + price overlaid, crossfading
