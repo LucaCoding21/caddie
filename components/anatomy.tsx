@@ -270,7 +270,7 @@ export default function Anatomy() {
 
       {/* Relative wrapper sized to the image — annotations are absolutely
           positioned in here, so percentage coords map onto the photo. */}
-      <div ref={diagramRef} className="relative mx-auto mt-24 mb-24 md:mt-36 md:mb-36 lg:mt-12 lg:mb-4 w-full max-w-5xl lg:max-w-[100vh] lg:col-span-2 lg:row-start-2 lg:self-center lg:justify-self-center">
+      <div ref={diagramRef} className="relative mx-auto mt-24 mb-32 md:mt-36 md:mb-48 lg:mt-12 lg:mb-20 w-full max-w-5xl lg:max-w-[100vh] lg:col-span-2 lg:row-start-2 lg:self-center lg:justify-self-center">
         <Image
           src="/caddie-companion.png"
           alt="Caddie Companion folded fully open, every tool fanned out"

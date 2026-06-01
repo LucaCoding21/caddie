@@ -118,7 +118,7 @@ export default function Promise() {
   return (
     <section
       ref={sectionRef}
-      className="relative z-20 rounded-t-[2rem] lg:rounded-t-[2.5rem] shadow-[0_-24px_48px_-24px_rgba(0,0,0,0.5)] min-h-[115vh] w-full overflow-hidden bg-[#fafaf7] px-6 py-24 lg:py-0 flex flex-col items-center justify-center"
+      className="relative z-20 rounded-t-[2rem] lg:rounded-t-[2.5rem] shadow-[0_-24px_48px_-24px_rgba(0,0,0,0.5)] min-h-[115vh] w-full overflow-hidden bg-[#fafaf7] px-6 pt-24 pb-16 lg:py-0 flex flex-col items-center justify-center"
     >
       {/* Scattered photos — desktop only, positioned around the centered text */}
       <div aria-hidden className="hidden lg:block">

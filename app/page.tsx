@@ -22,13 +22,13 @@ export default function Home() {
         {/* 3. Anatomy — full fanned-open photo, tool callouts to come */}
         <Anatomy />
 
-        {/* 4. On the course — lifestyle proof: open at the pin, stowed in a pocket */}
-        <OnCourse />
-
-        {/* 5. Exploded view — technical illustration that irises open on scroll */}
+        {/* 4. Exploded view — technical illustration that irises open on scroll */}
         <ExplodedView />
 
-        {/* 6. Closing colour picker — choose a finish, then buy */}
+        {/* 5. On the course — lifestyle proof: open at the pin, stowed in a pocket */}
+        <OnCourse />
+
+        {/* 6. Colour picker — choose a finish, then buy */}
         <ClosingColours />
 
         {/* 7. FAQ */}
