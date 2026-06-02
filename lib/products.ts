@@ -29,9 +29,9 @@ export const PRODUCT = {
       variantId: "gid://shopify/ProductVariant/53821333143918",
     },
     {
-      id: "pink",
-      name: "Pink",
-      image: "/colors/pink-fit.png",
+      id: "red",
+      name: "Red",
+      image: "/colors/red-fit.png",
       variantId: "gid://shopify/ProductVariant/53821333078382",
     },
   ] as ProductColor[],

@@ -1,42 +1,27 @@
 "use client";
 
-import Image from "next/image";
 import { useRef } from "react";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
+import CaddieExplodeCanvas from "@/components/CaddieExplodeCanvas";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger, SplitText);
 
-// The dark technical illustration sliced into five pieces by connected-component
-// analysis, so each is a full-canvas transparent PNG that stacks back into the
-// original. The `from` offsets converge the pieces toward the centre; scrolling
-// tweens them back to 0 (their drawn positions) — i.e. the parts fly apart.
-const LAYERS = [
-  { src: "/explode2-top.png", from: { yPercent: 19.4, xPercent: 7.9 } },
-  { src: "/explode2-plate.png", from: { yPercent: 11.9, xPercent: 2.2 } },
-  { src: "/explode2-pivot.png", from: { yPercent: 7.2, xPercent: 2.3 } },
-  { src: "/explode2-body.png", from: { yPercent: -0.7, xPercent: 2.7 } },
-  { src: "/explode2-bottom.png", from: { yPercent: -15.5, xPercent: -0.7 } },
-];
-
-// A parts legend keyed to the diagram — numbered top-to-bottom in the same
-// order the pieces stack on the right, so it reads like a technical key rather
-// than a product spec sheet.
-const PARTS: { name: string; note: string }[] = [
-  { name: "Handle scales", note: "Anodised 6061 aluminium, in your colour" },
-  { name: "Pivot screw & pin", note: "Stainless — the hinge it all folds on" },
-  { name: "Knife & divot tool", note: "The business end, ground from one billet" },
-  { name: "Tool stack", note: "Marker, T25 driver and bottle opener" },
-  { name: "Brass brush", note: "Clears your grooves between shots" },
+// The 30% spec strip — hard numbers as proof, kept in one contained zone so the
+// warm copy above stays warm. SAMPLE VALUES — swap for confirmed manufacturing facts.
+const SPECS: { stat: string; label: string }[] = [
+  { stat: "6061-T6", label: "Billet" },
+  { stat: "62g", label: "Weight" },
+  { stat: "±0.05", label: "mm tol." },
+  { stat: "4", label: "Colours" },
 ];
 
 export default function ExplodedView() {
   const sectionRef = useRef<HTMLElement>(null);
   const eyebrowRef = useRef<HTMLParagraphElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
-  const figureRef = useRef<HTMLDivElement>(null);
 
   useGSAP(
     () => {
@@ -72,22 +57,6 @@ export default function ExplodedView() {
           }),
       });
 
-      // Scrub the explode to scroll: pieces start converged toward the centre
-      // and spread out to their drawn positions as the figure reaches centre.
-      // Reverses on scroll-up, so it reads as an assemble/explode you can drive.
-      const q = gsap.utils.selector(figureRef);
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: figureRef.current,
-          start: "top 75%",
-          end: "center 55%",
-          scrub: true,
-        },
-      });
-      q<HTMLDivElement>(".ev-layer").forEach((layer, i) => {
-        tl.from(layer, { ...LAYERS[i].from, ease: "none" }, 0);
-      });
-
       return () => split.revert();
     },
     { scope: sectionRef }
@@ -97,11 +66,11 @@ export default function ExplodedView() {
     <section
       ref={sectionRef}
       data-nav-dark
-      className="relative z-20 w-full bg-[#0b0b0d] px-6 md:px-12 py-24 md:py-32"
+      className="relative z-20 w-full bg-[#0b0b0d] px-6 md:px-12 lg:h-screen lg:overflow-hidden"
     >
-      <div className="mx-auto grid max-w-[1440px] grid-cols-1 items-stretch gap-12 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:gap-20">
-        {/* Left column — context + spec tables */}
-        <div className="text-left">
+      <div className="mx-auto grid h-full max-w-[1440px] grid-cols-1 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:gap-20">
+        {/* Left column — text + legend + stats, all in one fold. */}
+        <div className="py-24 md:py-32 lg:flex lg:h-full lg:flex-col lg:justify-center lg:py-0">
           <p
             ref={eyebrowRef}
             className="font-mono text-[11px] font-medium uppercase tracking-[0.18em] text-zinc-500"
@@ -110,90 +79,50 @@ export default function ExplodedView() {
           </p>
           <h2
             ref={titleRef}
-            className="mt-5 max-w-md font-inter font-medium text-white text-3xl sm:text-4xl md:text-5xl lg:text-[3.5rem] leading-[1.05] tracking-tight"
+            className="mt-4 max-w-md font-inter font-medium text-white text-2xl sm:text-3xl md:text-4xl lg:text-[2.5rem] leading-[1.05] tracking-tight"
           >
             Every part, by design.
           </h2>
-          <p className="mt-6 max-w-md font-inter text-zinc-400 text-base md:text-lg leading-[1.5]">
-            From the pivot screw to the brass brush, each piece is machined to
-            fold into one frame. Scroll to pull it apart.
+          {/* The 70% — warm craftsmanship story. SAMPLE COPY (voice B, golfer-leaning). */}
+          <p className="mt-5 max-w-sm font-inter text-zinc-300 text-sm md:text-base leading-[1.65]">
+            No castings, no stamped parts. Each Caddie is machined from one
+            block of aircraft aluminium and finished by hand, folded down
+            small enough to forget, built to hold up season after season in
+            the bottom of your bag.
           </p>
 
-          {/* Parts legend — numbered to match the diagram, top to bottom. */}
-          <ol className="mt-12 max-w-md border-t border-white/10">
-            {PARTS.map(({ name, note }, idx) => (
-              <li
-                key={name}
-                className="flex items-baseline gap-5 border-b border-white/10 py-4"
-              >
-                <span className="font-mono text-xs tabular-nums text-zinc-600">
-                  {String(idx + 1).padStart(2, "0")}
-                </span>
-                <div>
-                  <p className="font-inter text-base font-medium text-white">
-                    {name}
-                  </p>
-                  <p className="mt-0.5 font-inter text-sm leading-snug text-zinc-500">
-                    {note}
-                  </p>
-                </div>
-              </li>
-            ))}
-          </ol>
-
-          {/* Headline meta — three quick numbers, not a spec table. */}
-          <div className="mt-10 flex gap-10">
-            {[
-              { stat: "6", unit: "tools in one" },
-              { stat: "62g", unit: "in your pocket" },
-              { stat: "4", unit: "colourways" },
-            ].map(({ stat, unit }) => (
-              <div key={unit}>
-                <p className="font-inter text-2xl font-medium tracking-tight text-white md:text-3xl">
+          {/* The 30% — contained spec strip. */}
+          <dl className="mt-8 grid max-w-sm grid-cols-4 gap-4 border-t border-white/10 pt-5">
+            {SPECS.map(({ stat, label }) => (
+              <div key={label}>
+                <dt className="font-inter text-base font-medium tracking-tight text-white md:text-lg">
                   {stat}
-                </p>
-                <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.14em] text-zinc-500">
-                  {unit}
-                </p>
+                </dt>
+                <dd className="mt-1 font-mono text-[9px] uppercase tracking-[0.12em] text-zinc-500">
+                  {label}
+                </dd>
               </div>
             ))}
-          </div>
+          </dl>
         </div>
 
-        {/* Right column — dotted panel with the layered illustration. Each
-            layer animates independently for the explode; transparent gaps let
-            the dotted backdrop show through. */}
-        <div className="relative flex h-full min-h-[28rem] items-center justify-center overflow-hidden rounded-2xl border border-white/10 bg-[#0e0e11] p-4 md:p-6">
-          <div
-            aria-hidden
-            className="absolute inset-0"
-            style={{
-              backgroundImage:
-                "radial-gradient(rgba(255,255,255,0.22) 1.3px, transparent 1.3px)",
-              backgroundSize: "20px 20px",
-            }}
-          />
-          <div
-            ref={figureRef}
-            className="relative z-10 aspect-[1600/1236] w-full"
-          >
-            {LAYERS.map(({ src }) => (
-              <div key={src} className="ev-layer absolute inset-0 will-change-transform">
-                <Image
-                  src={src}
-                  alt=""
-                  fill
-                  className="object-contain"
-                  sizes="(max-width: 768px) 92vw, 600px"
-                />
-              </div>
-            ))}
-            {/* One layer carries the alt text for the whole diagram (a11y). */}
-            <span className="sr-only">
-              Exploded view of the Caddie Companion: handle scales, pivot screw
-              and pin, divot repair tool, knife blade, bottle opener, and brass
-              brush.
-            </span>
+        {/* Right column — the dotted technical panel holding the live 3D model.
+            Fills the fold; the section pins so the model explodes in place. */}
+        <div className="h-[60vh] pb-10 lg:h-full lg:py-12">
+          <div className="relative h-full w-full overflow-hidden rounded-2xl border border-white/10 bg-[#0e0e11]">
+            {/* The WebGL canvas is transparent, so these dots show through. */}
+            <div
+              aria-hidden
+              className="absolute inset-0"
+              style={{
+                backgroundImage:
+                  "radial-gradient(rgba(255,255,255,0.22) 1.3px, transparent 1.3px)",
+                backgroundSize: "20px 20px",
+              }}
+            />
+            <div className="relative z-10 h-full w-full">
+              <CaddieExplodeCanvas pinRef={sectionRef} />
+            </div>
           </div>
         </div>
       </div>

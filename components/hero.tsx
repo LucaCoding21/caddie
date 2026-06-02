@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useRef } from "react";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
@@ -52,14 +51,17 @@ export default function Hero() {
       ref={sectionRef}
       className="sticky top-0 h-screen w-full overflow-hidden bg-black"
     >
-      <Image
-        src="/herov1.png"
-        alt="Caddie Companion in the grass"
-        fill
-        priority
-        className="object-cover"
-        sizes="100vw"
-      />
+      {/* TEST hero video — poster falls back to the old still while it loads. */}
+      <video
+        className="absolute inset-0 h-full w-full object-cover"
+        autoPlay
+        muted
+        loop
+        playsInline
+        poster="/herov1.png"
+      >
+        <source src="/14252773_2560_1440_60fps.mp4" type="video/mp4" />
+      </video>
 
       {/* Subtle bottom gradient for text legibility */}
       <div
