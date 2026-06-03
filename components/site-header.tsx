@@ -1,8 +1,8 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import { ProductPill } from "@/components/product-pill";
 
 export default function SiteHeader() {
   // Hero is full-viewport and dark; the logo is white to read against it.
@@ -51,9 +51,8 @@ export default function SiteHeader() {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 px-4 sm:px-6 py-4 flex items-center justify-between gap-4 pointer-events-none">
-      <Link
-        href="/"
-        className={`font-brand text-2xl font-bold uppercase tracking-tight transition-all duration-300 ${
+      <div
+        className={`flex items-center gap-6 transition-all duration-300 ${
           pastHero && !overDark ? "text-zinc-900" : "text-white"
         } ${
           showLogo
@@ -61,32 +60,24 @@ export default function SiteHeader() {
             : "-translate-y-6 opacity-0 pointer-events-none"
         }`}
       >
-        Caddie
-      </Link>
-
-      <div className="pointer-events-auto flex items-center gap-4 bg-white/95 backdrop-blur rounded-full pl-2 pr-2 py-2 shadow-[0_4px_24px_-4px_rgba(0,0,0,0.25)]">
-        <Image
-          src="/colors/black.png"
-          alt=""
-          width={56}
-          height={56}
-          className="h-10 w-10 object-contain rounded-full bg-zinc-100"
-        />
-        <span className="text-base font-medium text-black">
-          Caddie Companion
-        </span>
-        <span className="text-zinc-300" aria-hidden>
-          ·
-        </span>
-        <span className="text-base text-zinc-600 tabular-nums">$29</span>
         <Link
-          href="/select-color"
-          className="ml-1 inline-flex items-center gap-1 bg-black text-white rounded-full px-5 py-2.5 text-sm font-medium hover:bg-zinc-800 transition-colors"
+          href="/"
+          className="font-brand text-2xl font-bold uppercase tracking-tight"
         >
-          Order now
-          <span aria-hidden>→</span>
+          Caddie
         </Link>
+
+        <nav className="ml-4 flex items-center gap-6 text-sm font-semibold uppercase tracking-wide">
+          <Link href="/about" className="hover:underline underline-offset-4">
+            About
+          </Link>
+          <Link href="/contact" className="hover:underline underline-offset-4">
+            Contact
+          </Link>
+        </nav>
       </div>
+
+      <ProductPill />
     </header>
   );
 }

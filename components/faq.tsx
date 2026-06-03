@@ -3,11 +3,11 @@
 const FAQS: { q: string; a: string }[] = [
   {
     q: "What are the six tools?",
-    a: "A divot repair tool, a brass groove brush, a magnetic ball marker, a T25 Torx driver for your clubheads, a pocket knife, and a bottle opener — folded into one frame.",
+    a: "A divot repair tool, a brass groove brush, a magnetic ball marker, a T25 Torx driver for your clubheads, a pocket knife, and a bottle opener, folded into one frame.",
   },
   {
     q: "Is it allowed on the course?",
-    a: "Yes. Every tool is course-legal and built for the things golfers actually do between shots — fixing pitch marks, cleaning grooves, marking your line.",
+    a: "Yes. Every tool is course-legal and built for the things golfers actually do between shots: fixing pitch marks, cleaning grooves, marking your line.",
   },
   {
     q: "What's it made of?",
@@ -15,7 +15,7 @@ const FAQS: { q: string; a: string }[] = [
   },
   {
     q: "How big is it, and how much does it weigh?",
-    a: "It folds down to 92 mm and weighs 62 grams — slim enough to forget you're carrying it until you reach for it.",
+    a: "It folds down to 92 mm and weighs 62 grams, slim enough to forget you're carrying it until you reach for it.",
   },
   {
     q: "What about shipping and returns?",

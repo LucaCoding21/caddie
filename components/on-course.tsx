@@ -14,7 +14,7 @@ gsap.registerPlugin(useGSAP, ScrollTrigger, SplitText);
 // portrait shots: open at the pin, and stowed in a pocket between shots.
 const SHOTS = [
   {
-    src: "/on-course.jpg",
+    src: "/caddie-pic1.png",
     alt: "A hand holding the Caddie Companion open in front of the flagstick",
     title: "At the pin",
     desc: "Flip it open one-handed, fix your mark, and keep walking.",

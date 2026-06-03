@@ -7,18 +7,25 @@ import Image from "next/image";
 export default function SiteFooter() {
   return (
     <footer
-      className="fixed inset-x-0 bottom-0 z-0 flex flex-col items-center justify-center gap-10 overflow-hidden bg-white px-6 md:px-12"
+      className="fixed inset-x-0 bottom-0 z-0 flex flex-col items-center justify-center overflow-hidden bg-white"
       style={{ height: "var(--footer-h)" }}
     >
+      {/* Full-bleed backdrop: golf clubs against the sky. */}
       <Image
-        src="/caddie-footer2.png"
-        alt="Caddie"
-        width={3986}
-        height={1832}
+        src="/footer-clubs-v2.jpg"
+        alt="Golf clubs against a blue sky"
+        fill
         priority
-        className="h-auto w-full max-w-[1500px] select-none object-contain"
+        sizes="100vw"
+        className="select-none object-cover object-[center_15%]"
       />
-      <p className="font-inter text-xs text-zinc-400">
+
+      {/* Wordmark, centered over the photo. */}
+      <h2 className="relative z-10 select-none font-brand text-8xl font-bold uppercase tracking-tight text-white md:text-[11rem]">
+        Caddie
+      </h2>
+
+      <p className="absolute bottom-6 z-10 font-inter text-xs text-white/80">
         © 2026 Caddie. Designed for the walk from tee to green.
       </p>
     </footer>

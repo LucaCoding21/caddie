@@ -57,8 +57,8 @@ const CALLOUTS: Callout[] = [
     desc: "Two, seated in the body",
     src: "/6v1/ball-marker-nobg.png",
     node: [32, 45],
-    points: "32,45 32,24 -12,24",
-    label: { x: -12, y: 24, side: "right", maxWidth: "22rem" },
+    points: "32,45 32,20 -12,20",
+    label: { x: -12, y: 20, side: "right", maxWidth: "22rem" },
   },
   {
     n: "02",
@@ -66,8 +66,8 @@ const CALLOUTS: Callout[] = [
     desc: "Tunes adjustable clubs",
     src: "/6v1/torx-driver-nobg.png",
     node: [72, 35],
-    points: "72,35 72,24 98,24",
-    label: { x: 98, y: 24, side: "left", maxWidth: "22rem" },
+    points: "72,35 72,20 99,20",
+    label: { x: 99, y: 20, side: "left", maxWidth: "22rem" },
   },
   {
     n: "03",
@@ -75,8 +75,8 @@ const CALLOUTS: Callout[] = [
     desc: "Fixes pitch marks",
     src: "/6v1/divot-tool-nobg.png",
     node: [69, 57],
-    points: "69,57 86,51 98,51",
-    label: { x: 98, y: 51, side: "left" },
+    points: "69,57 86,53 99,53",
+    label: { x: 99, y: 53, side: "left" },
   },
   {
     n: "04",
@@ -84,8 +84,8 @@ const CALLOUTS: Callout[] = [
     desc: "Full-tang, stainless",
     src: "/6v1/pocket-knife-nobg.png",
     node: [65, 73],
-    points: "65,73 86,82 112,82",
-    label: { x: 112, y: 82, side: "left" },
+    points: "65,73 86,86 112,86",
+    label: { x: 112, y: 86, side: "left" },
   },
   {
     n: "05",
@@ -94,8 +94,8 @@ const CALLOUTS: Callout[] = [
     src: "/6v1/bottle-opener-nobg.png",
     imgBelow: true,
     node: [55, 66],
-    points: "55,66 28,89 2,89",
-    label: { x: 2, y: 89, side: "right" },
+    points: "55,66 27,91 1,91",
+    label: { x: 1, y: 91, side: "right" },
   },
   {
     n: "06",
@@ -103,22 +103,14 @@ const CALLOUTS: Callout[] = [
     desc: "Cleans grooves",
     src: "/6v1/ChatGPT%20Image%20May%2024%2C%202026%2C%2012_02_58%20AM-nobg.png",
     node: [32, 74],
-    points: "32,74 32,73 2,73",
-    label: { x: 2, y: 73, side: "right" },
+    points: "32,74 32,60 1,60",
+    label: { x: 1, y: 60, side: "right" },
   },
 ];
 
 // The photo only fills the central 70% of the wrapper, so each gutter is ~15%
 // of the box — plenty of room for the two text lines at this cap.
 const LABEL_MAX_WIDTH = "20rem";
-
-// Car-style spec read-out tucked beside the headline: a headline figure on the
-// left, the thing it measures on the right, one thin rule per row.
-const SPECS: { value: string; label: string }[] = [
-  { value: "6-in-1", label: "Tools in one frame" },
-  { value: "2.9 oz", label: "Pocket carry weight" },
-  { value: "6061-T6", label: "Milled aluminum body" },
-];
 
 export default function Anatomy() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -276,31 +268,19 @@ export default function Anatomy() {
         </p>
       </div>
 
-      {/* Spec sheet — a technical read-out anchored in the section's
-          bottom-right corner (third grid row, right gutter); on smaller screens
-          it stacks under the diagram. Headline figure left, the thing it
-          measures right, a thin rule per row. */}
+      {/* Closing line — replaces the old spec strip. Anchored in the section's
+          bottom-right gutter (third grid row); on smaller screens it stacks
+          under the diagram. */}
       <div className="w-full max-w-md px-6 mt-12 lg:mt-0 lg:px-0 lg:pr-28 lg:w-[36rem] lg:max-w-none lg:col-start-2 lg:row-start-3 lg:self-start lg:justify-self-end">
-        <dl className="font-mono">
-          {SPECS.map(({ value, label }) => (
-            <div
-              key={label}
-              className="flex items-baseline justify-between gap-6 border-t border-zinc-900/30 py-3.5"
-            >
-              <dt className="text-sm font-medium tracking-tight text-zinc-900">
-                {value}
-              </dt>
-              <dd className="text-right text-[11px] uppercase leading-tight tracking-[0.12em] text-zinc-600">
-                {label}
-              </dd>
-            </div>
-          ))}
-        </dl>
+        <p className="font-inter text-base leading-[1.5] text-zinc-600 md:text-lg lg:text-right">
+          Fix your line, clean your grooves, tune your driver, and built to last
+          for seasons.
+        </p>
       </div>
 
       {/* Relative wrapper sized to the image — annotations are absolutely
           positioned in here, so percentage coords map onto the photo. */}
-      <div ref={diagramRef} className="relative mx-auto mt-24 mb-32 md:mt-36 md:mb-48 lg:mt-12 lg:mb-20 w-full max-w-5xl lg:max-w-[100vh] lg:col-span-2 lg:row-start-2 lg:self-center lg:justify-self-center">
+      <div ref={diagramRef} className="relative mx-auto mt-24 mb-32 md:mt-36 md:mb-48 lg:mt-12 lg:mb-20 w-full max-w-5xl lg:max-w-[112vh] lg:col-span-2 lg:row-start-2 lg:self-center lg:justify-self-center">
         <Image
           src="/caddie-companion.png"
           alt="Caddie Companion folded fully open, every tool fanned out"

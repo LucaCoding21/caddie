@@ -84,7 +84,7 @@ export default function ExplodedView() {
             Every part, by design.
           </h2>
           {/* The 70% — warm craftsmanship story. SAMPLE COPY (voice B, golfer-leaning). */}
-          <p className="mt-5 max-w-sm font-inter text-zinc-300 text-sm md:text-base leading-[1.65]">
+          <p className="mt-5 max-w-lg font-inter text-zinc-300 text-sm md:text-base leading-[1.65]">
             No castings, no stamped parts. Each Caddie is machined from one
             block of aircraft aluminium and finished by hand, folded down
             small enough to forget, built to hold up season after season in

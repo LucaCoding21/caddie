@@ -19,6 +19,27 @@ const PRICE = `$${PRODUCT.priceCents / 100}`;
 // moment, not a restatement of the product. SAMPLE COPY — confirm before ship.
 const TRUST = ["Free shipping", "30-day returns", "1-yr guarantee"];
 
+// Swatch dot colour + a line of copy per finish, keyed by colour id. Drives the
+// finish list. SAMPLE COPY — confirm before ship.
+const FINISH: Record<string, { hex: string; blurb: string }> = {
+  black: {
+    hex: "#1c1c1c",
+    blurb: "Matte black that disappears into any bag and shrugs off scuffs.",
+  },
+  blue: {
+    hex: "#2f5dd0",
+    blurb: "A deep cobalt blue with a cool, understated shine on the course.",
+  },
+  green: {
+    hex: "#2f6b40",
+    blurb: "Fairway green, a muted, classic finish that nods to the course.",
+  },
+  red: {
+    hex: "#c23a2f",
+    blurb: "Bold signal red, easy to spot the moment you reach for it.",
+  },
+};
+
 export default function ClosingColours() {
   const [activeIdx, setActiveIdx] = useState(0);
   const activeColor = PRODUCT.colors[activeIdx];
@@ -26,10 +47,10 @@ export default function ClosingColours() {
   // TEST: real studio shots in as they're shot; finishes without one yet fall back
   // to the old cut-outs. Fold these into products.ts once all four are in.
   const STUDIO_SHOTS: Record<string, string> = {
-    black: "/productshot-black.png",
-    blue: "/blueprod.png",
-    green: "/greenprod.png",
-    red: "/redprod.png",
+    black: "/black-product-v2.png",
+    blue: "/blue-product-v2.png",
+    green: "/green-product-v2.png",
+    red: "/red-product-v2.png",
   };
   const heroSrc = STUDIO_SHOTS[activeColor.id] ?? activeColor.image;
 
@@ -82,9 +103,9 @@ export default function ClosingColours() {
       ref={sectionRef}
       className="relative z-20 w-full bg-[#fafaf7] px-6 md:px-12 py-32 md:py-44"
     >
-      <div className="mx-auto grid max-w-[1100px] items-center gap-12 lg:grid-cols-[1fr_1.2fr] lg:gap-20">
-        {/* Decision panel — leads on the left; image is the payoff on the right. */}
-        <div className="order-2 lg:order-1">
+      <div className="mx-auto grid max-w-[1100px] items-center gap-12 lg:grid-cols-[1.55fr_1fr] lg:gap-36">
+        {/* Decision panel — content on the right; image is the payoff on the left. */}
+        <div className="order-2 lg:order-2">
           <p
             ref={eyebrowRef}
             className="font-mono text-[11px] font-medium uppercase tracking-[0.18em] text-zinc-400"
@@ -93,7 +114,7 @@ export default function ClosingColours() {
           </p>
           <h2
             ref={titleRef}
-            className="mt-5 font-inter font-medium text-black text-4xl sm:text-5xl lg:text-[3.5rem] leading-[1.0] tracking-tight"
+            className="mt-5 whitespace-nowrap font-inter font-medium text-black text-3xl sm:text-4xl md:text-5xl lg:text-[3.5rem] leading-[1.05] tracking-tight"
           >
             {PRODUCT.title}
           </h2>
@@ -102,49 +123,63 @@ export default function ClosingColours() {
             ready for anything, in the finish that suits your bag.
           </p>
 
-          {/* Finish name + price. */}
-          <div className="mt-10 flex items-baseline gap-3">
+          {/* Finish list — name on the left, swatch dot on the right, one row each.
+              The active row's dot sits in a black ring and drives the hero. */}
+          <div className="mt-10 max-w-md">
+            <p className="font-mono text-[11px] font-medium uppercase tracking-[0.18em] text-zinc-400">
+              Finish
+            </p>
+            <ul className="mt-4">
+              {PRODUCT.colors.map((c, idx) => {
+                const selected = idx === activeIdx;
+                return (
+                  <li key={c.id} className="border-t border-black/10 last:border-b">
+                    <button
+                      type="button"
+                      onClick={() => setActiveIdx(idx)}
+                      aria-pressed={selected}
+                      className="flex w-full cursor-pointer items-center justify-between py-3.5 text-left"
+                    >
+                      <span
+                        className={`font-inter text-sm transition-colors ${
+                          selected
+                            ? "font-semibold text-black"
+                            : "font-medium text-zinc-600 hover:text-black"
+                        }`}
+                      >
+                        {c.name}
+                      </span>
+                      <span
+                        aria-hidden
+                        className={`h-4 w-4 rounded-full transition-all ${
+                          selected
+                            ? "ring-2 ring-black ring-offset-2 ring-offset-[#fafaf7]"
+                            : ""
+                        }`}
+                        style={{ backgroundColor: FINISH[c.id]?.hex }}
+                      />
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+
+            {/* Blurb for the selected finish. */}
+            <p className="mt-4 font-inter text-sm leading-[1.5] text-zinc-500">
+              {FINISH[activeColor.id]?.blurb}
+            </p>
+          </div>
+
+          {/* Price. */}
+          <div className="mt-9 flex items-baseline gap-3">
             <span className="font-inter text-lg font-medium text-black">
-              {activeColor.name}
-            </span>
-            <span className="text-zinc-300">·</span>
-            <span className="font-inter text-lg text-zinc-500">
               {PRICE} {PRODUCT.currency}
             </span>
           </div>
 
-          {/* A swatch per finish; the active one drives the hero and sits in a black ring. */}
-          <div className="mt-5 flex gap-3">
-            {PRODUCT.colors.map((c, idx) => {
-              const selected = idx === activeIdx;
-              return (
-                <button
-                  key={c.id}
-                  type="button"
-                  onClick={() => setActiveIdx(idx)}
-                  aria-pressed={selected}
-                  aria-label={c.name}
-                  className={`relative h-14 w-14 cursor-pointer overflow-hidden rounded-sm bg-black/[0.04] transition-all ${
-                    selected
-                      ? "ring-2 ring-black"
-                      : "ring-1 ring-black/10 hover:ring-black/30"
-                  }`}
-                >
-                  <Image
-                    src={c.image}
-                    alt={c.name}
-                    fill
-                    sizes="56px"
-                    className="scale-[1.4] object-contain"
-                  />
-                </button>
-              );
-            })}
-          </div>
-
           <Link
             href="/select-color"
-            className="mt-9 inline-flex items-center bg-black px-9 py-3.5 font-inter text-sm font-medium text-white transition-colors hover:bg-zinc-800"
+            className="mt-5 inline-flex items-center bg-black px-9 py-3.5 font-inter text-sm font-medium text-white transition-colors hover:bg-zinc-800"
           >
             Buy Caddie Companion
           </Link>
@@ -161,17 +196,17 @@ export default function ClosingColours() {
         </div>
 
         {/* Hero — swaps to the selected finish, so "four ways to carry" is shown, not told.
-            Studio shots carry their own surface, so the photo fills a portrait block and
-            the baked-in stage does the work the empty grey box used to fail at. */}
-        <div className="order-1 lg:order-2">
-          <div className="relative aspect-[4/5] w-full overflow-hidden rounded-lg">
+            Landscape product shots: the frame ratio matches the source (2000×1545) and
+            object-contain shows the whole tool, uncropped and at native resolution. */}
+        <div className="order-1 lg:order-1">
+          <div className="relative aspect-[2000/1545] w-full rounded-lg">
             <Image
               key={activeColor.id}
               src={heroSrc}
               alt={`Caddie Companion multi-tool in ${activeColor.name}`}
               fill
-              sizes="(max-width: 1024px) 92vw, 620px"
-              className="object-cover"
+              sizes="(max-width: 1024px) 92vw, 720px"
+              className="scale-[1.08] object-contain"
               priority
             />
           </div>
