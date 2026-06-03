@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
@@ -39,11 +40,15 @@ export function AboutNav() {
       }`}
     >
       <div className="flex items-center gap-6 text-black">
-        <Link
-          href="/"
-          className="font-brand text-2xl font-bold uppercase tracking-tight"
-        >
-          Caddie
+        <Link href="/" aria-label="Caddie Companion home" className="block">
+          <Image
+            src="/caddie-logo.png"
+            alt="Caddie Companion"
+            width={305}
+            height={103}
+            priority
+            className="h-10 md:h-11 w-auto"
+          />
         </Link>
         <nav className="ml-4 flex items-center gap-6 text-sm font-semibold uppercase tracking-wide">
           <Link href="/about" className="hover:underline underline-offset-4">

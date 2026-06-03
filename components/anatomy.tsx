@@ -259,7 +259,7 @@ export default function Anatomy() {
         >
           Six tools every golfer carries.
           <br className="hidden sm:block" />
-          <span className="text-zinc-400"> Now it&apos;s just this.</span>
+          <span className="text-[#768dc5]"> Now it&apos;s just this.</span>
         </h2>
         <p className="mt-8 md:mt-10 max-w-2xl font-inter text-zinc-600 text-base md:text-lg leading-[1.5]">
           Every tool swings out of a single milled frame. Repair a pitch mark,
@@ -273,8 +273,8 @@ export default function Anatomy() {
           under the diagram. */}
       <div className="w-full max-w-md px-6 mt-12 lg:mt-0 lg:px-0 lg:pr-28 lg:w-[36rem] lg:max-w-none lg:col-start-2 lg:row-start-3 lg:self-start lg:justify-self-end">
         <p className="font-inter text-base leading-[1.5] text-zinc-600 md:text-lg lg:text-right">
-          Fix your line, clean your grooves, tune your driver, and built to last
-          for seasons.
+          It all folds into one piece, small enough for a pocket. Nothing to
+          rattle, nothing to lose.
         </p>
       </div>
 

@@ -17,7 +17,7 @@ export function ProductPill() {
       </span>
       <Link
         href="/select-color"
-        className="ml-1 inline-flex items-center rounded-full bg-black px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-zinc-800"
+        className="ml-1 inline-flex items-center rounded-full bg-accent px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-accent-hover"
       >
         Order now
       </Link>

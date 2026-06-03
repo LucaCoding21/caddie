@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
@@ -30,6 +31,7 @@ export default function Promise() {
   const textRef = useRef<HTMLDivElement>(null);
   const eyebrowRef = useRef<HTMLParagraphElement>(null);
   const paraRef = useRef<HTMLParagraphElement>(null);
+  const ctaRef = useRef<HTMLAnchorElement>(null);
   // Signed distance (px) between the section's center and the viewport
   // center. 0 when the section is centered; grows as it scrolls past.
   const [offset, setOffset] = useState(0);
@@ -83,6 +85,17 @@ export default function Promise() {
             stagger: 0.028,
             scrollTrigger: trigger,
           }),
+      });
+
+      // CTA eases up a beat after the paragraph resolves, so it reads as the
+      // last thing to land rather than competing with the line for attention.
+      gsap.from(ctaRef.current, {
+        opacity: 0,
+        y: 16,
+        duration: 0.9,
+        ease: "power2.out",
+        delay: 0.35,
+        scrollTrigger: trigger,
       });
 
       return () => split.revert();
@@ -157,16 +170,23 @@ export default function Promise() {
           ref={eyebrowRef}
           className="font-inter font-medium text-xs uppercase tracking-[0.12em] text-zinc-500 mb-6"
         >
-          The Caddie Companion
+          What it is
         </p>
         <p
           ref={paraRef}
           className="font-inter font-medium text-black text-2xl sm:text-3xl lg:text-[1.95rem] leading-[1.5] tracking-[-0.04em] max-w-xl mx-auto"
         >
-          One tool that does it all. Fix divots, clean grooves, and dial
-          in your driver, so you spend less time fumbling and more time
-          playing.
+          The Caddie Companion is a six-in-one golf tool. Small enough to
+          forget in your pocket, built to handle everything around your
+          swing.
         </p>
+        <Link
+          ref={ctaRef}
+          href="/select-color"
+          className="mt-10 inline-flex items-center rounded-full bg-accent px-7 py-3 font-inter text-sm font-medium text-white transition-colors hover:bg-accent-hover"
+        >
+          Order now
+        </Link>
       </div>
     </section>
   );

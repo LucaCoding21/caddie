@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { ProductPill } from "@/components/product-pill";
@@ -60,11 +61,19 @@ export default function SiteHeader() {
             : "-translate-y-6 opacity-0 pointer-events-none"
         }`}
       >
-        <Link
-          href="/"
-          className="font-brand text-2xl font-bold uppercase tracking-tight"
-        >
-          Caddie
+        <Link href="/" aria-label="Caddie Companion home" className="block">
+          {/* Logo art is cobalt; over the dark hero / dark sections it's flipped
+              to white so the dark-blue mark doesn't disappear. */}
+          <Image
+            src="/caddie-logo.png"
+            alt="Caddie Companion"
+            width={305}
+            height={103}
+            priority
+            className={`h-10 md:h-11 w-auto transition-[filter] duration-300 ${
+              pastHero && !overDark ? "" : "brightness-0 invert"
+            }`}
+          />
         </Link>
 
         <nav className="ml-4 flex items-center gap-6 text-sm font-semibold uppercase tracking-wide">

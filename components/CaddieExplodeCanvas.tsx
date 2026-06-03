@@ -316,12 +316,6 @@ export default function CaddieExplodeCanvas({
 
       {/* Progress + meta overlay */}
       <div className="pointer-events-none absolute inset-0">
-        {/* top-right meta */}
-        <div className="absolute right-6 top-6 text-right font-mono text-[11px] uppercase tracking-[0.2em] text-zinc-500">
-          <div>Caddie Companion</div>
-          <div className="text-zinc-600">No. 000001 · 34 parts</div>
-        </div>
-
         {/* scroll hint, fades out once you start */}
         <div
           className="absolute bottom-8 left-1/2 -translate-x-1/2 font-mono text-[11px] uppercase tracking-[0.3em] text-zinc-500 transition-opacity duration-500"

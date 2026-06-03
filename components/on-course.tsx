@@ -15,9 +15,9 @@ gsap.registerPlugin(useGSAP, ScrollTrigger, SplitText);
 const SHOTS = [
   {
     src: "/caddie-pic1.png",
-    alt: "A hand holding the Caddie Companion open in front of the flagstick",
-    title: "At the pin",
-    desc: "Flip it open one-handed, fix your mark, and keep walking.",
+    alt: "The Caddie Companion in a basket of golf balls beside a bottle and a pour of whisky on the turf",
+    title: "The 19th hole",
+    desc: "There's an opener folded into the frame, for the part of golf that isn't golf.",
   },
   {
     src: "/pocket-carry.jpg",

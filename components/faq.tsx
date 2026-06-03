@@ -3,27 +3,27 @@
 const FAQS: { q: string; a: string }[] = [
   {
     q: "What are the six tools?",
-    a: "A divot repair tool, a brass groove brush, a magnetic ball marker, a T25 Torx driver for your clubheads, a pocket knife, and a bottle opener, folded into one frame.",
+    a: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.",
   },
   {
     q: "Is it allowed on the course?",
-    a: "Yes. Every tool is course-legal and built for the things golfers actually do between shots: fixing pitch marks, cleaning grooves, marking your line.",
+    a: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis nostrud exercitation ullamco laboris.",
   },
   {
     q: "What's it made of?",
-    a: "A machined 6061 aluminium frame, a stainless steel pivot and pin, and a brass brush. It's anodised in four colours and finished to shrug off a season in your bag.",
+    a: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur excepteur sint occaecat.",
   },
   {
     q: "How big is it, and how much does it weigh?",
-    a: "It folds down to 92 mm and weighs 62 grams, slim enough to forget you're carrying it until you reach for it.",
+    a: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim ad minim veniam.",
   },
   {
     q: "What about shipping and returns?",
-    a: "Orders ship within two business days with tracking. If it isn't right for you, send it back within 30 days for a full refund.",
+    a: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud.",
   },
   {
     q: "Is there a warranty?",
-    a: "Every Caddie Companion is covered by a lifetime warranty against manufacturing defects. If the hardware ever fails, we'll repair or replace it.",
+    a: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua duis aute irure dolor in reprehenderit.",
   },
 ];
 

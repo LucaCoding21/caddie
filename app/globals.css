@@ -7,8 +7,10 @@
   /* Warm-neutral editorial surface (the off-white used in section beats) */
   --surface: #fafaf7;
 
-  /* Blue logo accent — confirm against the real logo blue */
-  --accent: #1d4ed8;
+  /* Blue product accent — matches the cobalt of the physical tool and logo.
+     Reserved for the buy action and live moments, never decoration. */
+  --accent: #1a419e;
+  --accent-hover: #15357f;
 
   /* Height of the reveal footer. Drives both the fixed footer and the scroll
      space reserved above it, so the two can't drift apart. */
@@ -26,6 +28,7 @@
   --color-foreground: var(--foreground);
   --color-surface: var(--surface);
   --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
 
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);

@@ -54,37 +54,28 @@ export default function CaddieFan() {
 
       if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-      // Fan open: from a closed, stacked deck (all rotation 0, lying flat) out
-      // to each card's resting angle, dealt back-to-front with a stagger. `x`
-      // holds its staggered offset throughout, so only the swing-up animates.
-      // Fan open: from a closed, stacked deck (all rotation 0, lying flat) out
-      // to each card's resting angle, dealt back-to-front with a stagger. `x`
-      // holds its staggered offset throughout, so only the swing-up animates.
-      // force3D:false keeps the transform 2D so the clip box still crops the
-      // cards mid-animation (a 3D-promoted layer escapes overflow clipping).
-      // Fan open: from a closed, stacked deck (all rotation 0, lying flat) out
-      // to each card's resting angle, dealt back-to-front with a stagger. `x`
-      // holds its staggered offset throughout, so only the swing-up animates.
-      // force3D:false keeps the transform 2D so the clip box still crops the
-      // cards mid-animation (a 3D-promoted layer escapes overflow clipping).
-      // Fan open: from a closed, stacked deck (all rotation 0, lying flat) out
-      // to each card's resting angle, dealt back-to-front with a stagger. `x`
-      // holds its staggered offset throughout, so only the swing-up animates.
-      // force3D:false keeps the transform 2D so the clip box still crops the
-      // cards mid-animation (a 3D-promoted layer escapes overflow clipping).
-      // Fan open: from a closed, stacked deck (all rotation 0, lying flat) out
-      // to each card's resting angle, dealt back-to-front with a stagger. `x`
-      // holds its staggered offset throughout, so only the swing-up animates.
+      // Scroll-scrubbed fan: a tween from a closed, flat deck (rotation 0) out to
+      // each card's resting angle, with its progress tied directly to scroll
+      // position (`scrub`) rather than played once. Scrolling the section up
+      // through the viewport fans it open; scrolling back up unfans it, in
+      // lockstep with the scrollbar. `x` holds its staggered offset throughout,
+      // so only the swing-up animates; the stagger spreads the four cards across
+      // the scroll range so they deal out back-to-front. No pinning — the page
+      // scrolls normally, only the fan's progress is mapped to the range below.
       // force3D:false keeps the transform 2D so the clip box still crops the
       // cards mid-animation (a 3D-promoted layer escapes overflow clipping).
       gsap.from(cards, {
         rotation: 0,
         transformOrigin: PIVOT,
         force3D: false,
-        duration: 1.2,
         ease: "power3.out",
         stagger: 0.12,
-        scrollTrigger: { trigger: rootRef.current, start: "top 80%", once: true },
+        scrollTrigger: {
+          trigger: rootRef.current,
+          start: "top 60%", // stays closed until the section is well into view
+          end: "top 15%", // fully fanned only once it's near the top — long, slow band
+          scrub: 1.5, // 1.5s catch-up smoothing; raise for softer, lower for snappier
+        },
       });
     },
     { scope: rootRef }

@@ -75,15 +75,15 @@ export default function Hero() {
             ref={headingRef}
             className="font-brand font-medium uppercase text-white text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-[0.95] tracking-tight"
           >
-            A new species
+            Everything
             <br />
-            of caddie.
+            but the swing.
           </h1>
           <p
             ref={subRef}
             className="mt-4 text-white text-sm md:text-base tracking-wide [text-shadow:0_1px_8px_rgba(0,0,0,0.5)]"
           >
-            The multi-tool every golfer keeps in their bag.
+            The multi-tool that earns its place in the bag.
           </p>
         </div>
       </div>

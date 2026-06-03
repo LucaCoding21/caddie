@@ -160,7 +160,7 @@ export default function SelectColorPage() {
                       title={soon ? `${c.name} — coming soon` : c.name}
                       className={`flex h-9 w-9 items-center justify-center rounded-full transition-all ${
                         selected
-                          ? "ring-2 ring-black ring-offset-2 ring-offset-white"
+                          ? "ring-2 ring-accent ring-offset-2 ring-offset-white"
                           : "ring-1 ring-black/15 ring-offset-2 ring-offset-white hover:ring-black/40"
                       } ${soon ? "opacity-40" : ""}`}
                     >

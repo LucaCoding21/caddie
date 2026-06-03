@@ -153,7 +153,7 @@ export default function ClosingColours() {
                         aria-hidden
                         className={`h-4 w-4 rounded-full transition-all ${
                           selected
-                            ? "ring-2 ring-black ring-offset-2 ring-offset-[#fafaf7]"
+                            ? "ring-2 ring-accent ring-offset-2 ring-offset-[#fafaf7]"
                             : ""
                         }`}
                         style={{ backgroundColor: FINISH[c.id]?.hex }}
