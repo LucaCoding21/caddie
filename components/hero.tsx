@@ -51,16 +51,17 @@ export default function Hero() {
       ref={sectionRef}
       className="sticky top-0 h-screen w-full overflow-hidden bg-black"
     >
-      {/* TEST hero video — poster falls back to the old still while it loads. */}
+      {/* Hero video — poster is the video's own first frame so there's no
+          shot mismatch while it loads. */}
       <video
         className="absolute inset-0 h-full w-full object-cover"
         autoPlay
         muted
         loop
         playsInline
-        poster="/herov1.png"
+        poster="/hero-poster.jpg"
       >
-        <source src="/14252773_2560_1440_60fps.mp4" type="video/mp4" />
+        <source src="/hero.mp4" type="video/mp4" />
       </video>
 
       {/* Subtle bottom gradient for text legibility */}
