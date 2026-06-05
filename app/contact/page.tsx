@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
-import Image from "next/image";
-import Link from "next/link";
 import { ContactContent } from "@/components/contact-content";
-import { ProductPill } from "@/components/product-pill";
+import { AboutNav } from "@/components/about-nav";
+import { FloatingPill } from "@/components/floating-pill";
 
 export const metadata: Metadata = {
   title: "Contact | Caddie",
@@ -13,35 +12,17 @@ export const metadata: Metadata = {
 export default function ContactPage() {
   return (
     <main className="flex min-h-screen flex-col bg-[#fafaf7] text-black">
-      {/* Slim header, matches the About page. */}
-      <header className="flex items-center justify-between gap-4 px-4 py-4 sm:px-6">
-        <div className="flex items-center gap-6 text-black">
-          <Link href="/" aria-label="Caddie Companion home" className="block">
-            <Image
-              src="/caddie-logo.png"
-              alt="Caddie Companion"
-              width={305}
-              height={103}
-              priority
-              className="h-10 md:h-11 w-auto"
-            />
-          </Link>
-          <nav className="ml-4 flex items-center gap-6 text-sm font-semibold uppercase tracking-wide">
-            <Link href="/about" className="hover:underline underline-offset-4">
-              About
-            </Link>
-            <Link href="/contact" className="hover:underline underline-offset-4">
-              Contact
-            </Link>
-          </nav>
-        </div>
-        <ProductPill />
-      </header>
+      {/* Nav bar, fixed at the top; both halves reappear whenever you scroll
+          back up. Left: wordmark + links. Right: the product pill. Same as the
+          home and About pages. */}
+      <AboutNav />
+      <FloatingPill />
 
       {/* Body. The oversized wordmark sits above a two-column split: intro +
           direct lines on the left, form on the right. The whole block reveals
-          on load via GSAP (see ContactContent). */}
-      <section className="mx-auto flex w-full max-w-[1400px] flex-1 flex-col px-6 pt-6 pb-20 md:px-12">
+          on load via GSAP (see ContactContent). Top padding clears the fixed
+          nav. */}
+      <section className="mx-auto flex w-full max-w-[1400px] flex-1 flex-col px-6 pt-28 pb-20 md:px-12">
         <ContactContent />
       </section>
     </main>

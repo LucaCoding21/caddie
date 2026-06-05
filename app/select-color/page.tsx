@@ -82,14 +82,18 @@ export default function SelectColorPage() {
 
   return (
     <div className="flex min-h-screen flex-col bg-white text-black">
-      <header className="flex items-center justify-between border-b border-black/10 px-5 py-4 sm:px-8">
-        <Link
-          href="/"
-          className="font-brand text-2xl font-bold uppercase tracking-tight"
-        >
-          Caddie
+      <header className="flex items-center justify-between border-b border-black/10 px-5 py-6 sm:px-8">
+        <Link href="/" aria-label="Caddie" className="flex items-center">
+          <Image
+            src="/caddie-logo.png"
+            alt="Caddie Companion"
+            width={160}
+            height={50}
+            priority
+            className="h-8 w-auto"
+          />
         </Link>
-        <p className="hidden font-mono text-[11px] font-medium uppercase tracking-[0.18em] text-zinc-400 sm:block">
+        <p className="hidden font-mono text-[11px] font-medium uppercase text-zinc-400 sm:block">
           We ship worldwide
         </p>
         <Link
@@ -104,9 +108,6 @@ export default function SelectColorPage() {
       <div className="flex flex-1 flex-col lg:flex-row">
         {/* Gallery — the selected finish, large, on the warm editorial surface. */}
         <div className="relative flex min-h-[42vh] items-center justify-center overflow-hidden bg-[#fafaf7] p-8 lg:min-h-0 lg:w-[55%]">
-          <span className="pointer-events-none absolute left-6 top-6 font-mono text-[11px] font-medium uppercase tracking-[0.18em] text-zinc-400 sm:left-8 sm:top-8">
-            {activeColor.name}
-          </span>
           <div className="relative aspect-[2000/1545] w-full max-w-[640px]">
             <Image
               key={activeColor.id}
@@ -121,7 +122,28 @@ export default function SelectColorPage() {
         </div>
 
         {/* Configurator — compact product rail. */}
-        <div className="flex flex-1 flex-col justify-center px-6 py-12 sm:px-10 lg:w-[45%] lg:px-14">
+        <div className="relative flex flex-1 flex-col justify-center px-6 py-12 sm:px-10 lg:w-[45%] lg:px-14">
+          <Link
+            href="/"
+            aria-label="Back to home"
+            className="group absolute left-3 top-6 flex items-center gap-2 font-inter text-xs font-medium uppercase tracking-[0.08em] text-zinc-500 transition-colors hover:text-black sm:left-4 sm:top-8 lg:left-5"
+          >
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden
+              className="transition-transform group-hover:-translate-x-0.5"
+            >
+              <path d="M15 18l-6-6 6-6" />
+            </svg>
+            Home
+          </Link>
           <div className="mx-auto flex w-full max-w-md flex-col">
             {/* Title + price. */}
             <div className="flex items-start justify-between gap-6">

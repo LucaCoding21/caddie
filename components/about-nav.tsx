@@ -33,7 +33,7 @@ export function AboutNav() {
 
   return (
     <div
-      className={`fixed left-4 top-4 z-50 transition-all duration-300 sm:left-6 ${
+      className={`fixed left-5 top-6 z-50 transition-all duration-300 sm:left-8 ${
         show
           ? "translate-y-0 opacity-100"
           : "pointer-events-none -translate-y-6 opacity-0"
@@ -47,7 +47,7 @@ export function AboutNav() {
             width={305}
             height={103}
             priority
-            className="h-10 md:h-11 w-auto"
+            className="h-8 w-auto"
           />
         </Link>
         <nav className="ml-4 flex items-center gap-6 text-sm font-semibold uppercase tracking-wide">
