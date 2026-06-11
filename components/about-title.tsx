@@ -42,7 +42,7 @@ export function AboutTitle() {
   return (
     <h1
       ref={titleRef}
-      className="select-none whitespace-nowrap text-center font-inter font-semibold uppercase leading-[0.85] tracking-[-0.04em] text-zinc-200 text-[30vw] md:text-[28vw] lg:text-[22rem]"
+      className="select-none whitespace-nowrap text-center font-inter font-semibold uppercase leading-[0.85] tracking-[-0.04em] text-zinc-200 text-[24vw] xl:text-[22rem]"
     >
       About
     </h1>

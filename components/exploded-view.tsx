@@ -6,16 +6,16 @@ import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
 import CaddieExplodeCanvas from "@/components/CaddieExplodeCanvas";
+import { PRODUCT } from "@/lib/products";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger, SplitText);
 
 // The 30% spec strip — hard numbers as proof, kept in one contained zone so the
-// warm copy above stays warm. SAMPLE VALUES — swap for confirmed manufacturing facts.
+// warm copy above stays warm. Values come from lib/products.ts so this stays in
+// sync with the buy page.
 const SPECS: { stat: string; label: string }[] = [
-  { stat: "6061-T6", label: "Billet" },
-  { stat: "62g", label: "Weight" },
-  { stat: "±0.05", label: "mm tol." },
-  { stat: "4", label: "Colours" },
+  ...PRODUCT.specs.map((s) => ({ stat: s.value, label: s.label })),
+  { stat: String(PRODUCT.colors.length), label: "Colours" },
 ];
 
 export default function ExplodedView() {
@@ -85,14 +85,14 @@ export default function ExplodedView() {
           </h2>
           {/* The 70% — warm craftsmanship story. SAMPLE COPY (voice B, golfer-leaning). */}
           <p className="mt-5 max-w-lg font-inter text-zinc-300 text-sm md:text-base leading-[1.65]">
-            No castings, no stamped parts. Each Caddie is machined from one
-            block of aircraft aluminium and finished by hand, folded down
-            small enough to forget, built to hold up season after season in
-            the bottom of your bag.
+            No castings, no stamped parts. Each Caddie Companion pairs a
+            stainless steel inner shell and tools with a hand-finished
+            anodized aluminum exterior, folded down small enough to forget,
+            built to hold up season after season in the bottom of your bag.
           </p>
 
           {/* The 30% — contained spec strip. */}
-          <dl className="mt-8 grid max-w-sm grid-cols-4 gap-4 border-t border-white/10 pt-5">
+          <dl className="mt-8 grid max-w-md grid-cols-3 gap-4 border-t border-white/10 pt-5">
             {SPECS.map(({ stat, label }) => (
               <div key={label}>
                 <dt className="font-inter text-base font-medium tracking-tight text-white md:text-lg">
@@ -104,6 +104,23 @@ export default function ExplodedView() {
               </div>
             ))}
           </dl>
+
+          {/* Materials, same contained zone as the spec strip. */}
+          <div className="mt-6 max-w-md">
+            <p className="font-mono text-[9px] uppercase tracking-[0.12em] text-zinc-500">
+              Materials
+            </p>
+            <ul className="mt-2 space-y-1">
+              {PRODUCT.materials.map((m) => (
+                <li
+                  key={m}
+                  className="font-inter text-sm leading-[1.6] text-zinc-300"
+                >
+                  {m}
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
 
         {/* Right column — the dotted technical panel holding the live 3D model.

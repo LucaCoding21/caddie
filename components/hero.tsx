@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useRef } from "react";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
@@ -49,20 +50,17 @@ export default function Hero() {
   return (
     <section
       ref={sectionRef}
-      className="sticky top-0 h-screen w-full overflow-hidden bg-black"
+      className="sticky top-0 h-svh w-full overflow-hidden bg-black"
     >
-      {/* Hero video — poster is the video's own first frame so there's no
-          shot mismatch while it loads. */}
-      <video
-        className="absolute inset-0 h-full w-full object-cover"
-        autoPlay
-        muted
-        loop
-        playsInline
-        poster="/hero-poster.jpg"
-      >
-        <source src="/hero.mp4" type="video/mp4" />
-      </video>
+      {/* Hero image */}
+      <Image
+        src="/hero-caddie2.png"
+        alt=""
+        fill
+        preload
+        sizes="100vw"
+        className="absolute inset-0 h-full w-full object-contain object-top sm:object-cover sm:object-[20%_center]"
+      />
 
       {/* Subtle bottom gradient for text legibility */}
       <div
@@ -70,11 +68,11 @@ export default function Hero() {
         className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/60 via-black/20 to-transparent"
       />
 
-      <div className="relative z-10 flex min-h-screen items-end justify-end px-6 pb-12 md:px-16 md:pb-16">
+      <div className="relative z-10 flex min-h-svh items-end justify-end px-6 pb-12 md:px-16 md:pb-16">
         <div className="text-right">
           <h1
             ref={headingRef}
-            className="font-brand font-medium uppercase text-white text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-[0.95] tracking-tight"
+            className="font-brand font-bold uppercase text-white text-4xl min-[420px]:text-5xl sm:text-6xl md:text-7xl lg:text-8xl leading-[0.95] tracking-tight"
           >
             Everything
             <br />

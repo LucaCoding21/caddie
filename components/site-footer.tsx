@@ -15,18 +15,19 @@ export default function SiteFooter() {
         src="/footer-clubs-v2.jpg"
         alt="Golf clubs against a blue sky"
         fill
-        priority
+        preload
         sizes="100vw"
         className="select-none object-cover object-[center_15%]"
       />
 
-      {/* Wordmark, centered over the photo. */}
-      <h2 className="relative z-10 select-none font-brand text-8xl font-bold uppercase tracking-tight text-white md:text-[11rem]">
-        Caddie
+      {/* Wordmark, centered over the photo. Steps with the viewport so the
+          two words stay on one line from tablet up without overflowing. */}
+      <h2 className="relative z-10 select-none px-6 text-center font-brand text-4xl font-bold uppercase tracking-tight text-white sm:text-6xl md:text-7xl xl:text-[6.5rem]">
+        Caddie Companion
       </h2>
 
-      <p className="absolute bottom-6 z-10 font-inter text-xs text-white/80">
-        © 2026 Caddie. Designed for the walk from tee to green.
+      <p className="absolute bottom-6 z-10 px-6 text-center font-inter text-xs text-white/80">
+        © 2026 Caddie Companion. Designed for the walk from tee to green.
       </p>
     </footer>
   );

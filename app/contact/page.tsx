@@ -4,14 +4,14 @@ import { AboutNav } from "@/components/about-nav";
 import { FloatingPill } from "@/components/floating-pill";
 
 export const metadata: Metadata = {
-  title: "Contact | Caddie",
+  title: "Contact | Caddie Companion",
   description:
-    "Questions about an order, wholesale, or press? Reach the people who machined your Caddie.",
+    "Questions about an order, wholesale, or press? Reach the people who machined your Caddie Companion.",
 };
 
 export default function ContactPage() {
   return (
-    <main className="flex min-h-screen flex-col bg-[#fafaf7] text-black">
+    <main className="flex min-h-svh flex-col bg-[#fafaf7] text-black">
       {/* Nav bar, fixed at the top; both halves reappear whenever you scroll
           back up. Left: wordmark + links. Right: the product pill. Same as the
           home and About pages. */}

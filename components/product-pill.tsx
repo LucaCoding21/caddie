@@ -7,19 +7,25 @@ import Link from "next/link";
  */
 export function ProductPill() {
   return (
-    <div className="pointer-events-auto flex items-center gap-4 rounded-full bg-white/95 py-2 pl-5 pr-2 shadow-[0_4px_24px_-4px_rgba(0,0,0,0.25)] backdrop-blur">
+    <div className="pointer-events-auto flex items-center gap-2 rounded-full bg-white/95 py-1.5 pl-3 pr-1.5 shadow-[0_4px_24px_-4px_rgba(0,0,0,0.25)] backdrop-blur sm:gap-4 sm:py-2 sm:pl-5 sm:pr-2">
+      {/* Name + price collapse away on narrow screens so the pill never
+          collides with the wordmark + links on the left of the nav. */}
       <span className="flex items-center gap-1.5">
-        <span className="text-base font-medium text-black">Caddie Companion</span>
-        <span className="text-zinc-300" aria-hidden>
+        <span className="hidden text-base font-medium text-black md:inline">
+          Caddie Companion
+        </span>
+        <span className="hidden text-zinc-300 md:inline" aria-hidden>
           ·
         </span>
-        <span className="text-base tabular-nums text-zinc-600">$29</span>
+        <span className="hidden text-sm tabular-nums text-zinc-600 sm:inline sm:text-base">
+          $29
+        </span>
       </span>
       <Link
         href="/select-color"
-        className="ml-1 inline-flex items-center rounded-full bg-accent px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-accent-hover"
+        className="inline-flex items-center rounded-full bg-accent px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-accent-hover sm:ml-1 sm:px-5 sm:py-2.5"
       >
-        Order now
+        Order<span className="hidden sm:inline">&nbsp;now</span>
       </Link>
     </div>
   );

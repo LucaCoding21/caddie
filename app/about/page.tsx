@@ -9,7 +9,7 @@ import { AboutNav } from "@/components/about-nav";
 import SiteFooter from "@/components/site-footer";
 
 export const metadata: Metadata = {
-  title: "About | Caddie",
+  title: "About | Caddie Companion",
   description:
     "Why we machined the six tools every golfer carries into one pocket-sized frame.",
 };
@@ -30,20 +30,20 @@ export default function AboutPage() {
       >
       {/* Hero — oversized wordmark with the tool laid flat across it, editorial
           product-poster style. Letters are kept light so the near-black tool
-          reads clearly in front of them; multiply drops the product shot's
-          white background out against the page while keeping its baked-in
-          shadow. */}
+          reads clearly in front of them; the tool is matted onto pure white
+          (no shadow), so mix-blend-multiply drops the background out against
+          the page. */}
       <section className="relative overflow-hidden px-6 pt-32 pb-16 md:pt-44 md:pb-24">
         <div className="relative mx-auto flex max-w-6xl items-center justify-center">
           <AboutTitle />
           <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
             <Image
-              src="/about-hero.jpeg"
-              alt="The Caddie multi-tool, folded"
-              width={1400}
-              height={756}
-              priority
-              className="w-[60%] max-w-2xl translate-y-[28%] mix-blend-multiply"
+              src="/about-hero-v4.png"
+              alt="The Caddie Companion multi-tool, folded"
+              width={1376}
+              height={768}
+              preload
+              className="w-[78%] max-w-4xl translate-y-[28%] mix-blend-multiply"
             />
           </div>
         </div>

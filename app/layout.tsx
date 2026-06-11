@@ -3,8 +3,8 @@ import { geistSans, geistMono, brandSans, inter } from "@/lib/fonts";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Caddie",
-  description: "Caddie",
+  title: "Caddie Companion",
+  description: "Caddie Companion",
 };
 
 export default function RootLayout({

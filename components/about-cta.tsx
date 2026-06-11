@@ -77,7 +77,7 @@ export default function AboutCta() {
           <div className="px-8 py-10 md:px-12 md:py-12">
             <h2
               ref={titleRef}
-              className="max-w-md font-brand text-2xl font-medium tracking-[-0.02em] text-black md:text-[2rem] md:leading-[1.1]"
+              className="max-w-md font-brand text-3xl font-medium tracking-[-0.02em] text-black md:text-[2.5rem] md:leading-[1.1]"
             >
               Ready to clean up
               <br />
@@ -85,7 +85,7 @@ export default function AboutCta() {
             </h2>
             <p
               ref={copyRef}
-              className="mt-4 max-w-xs font-inter text-sm leading-[1.6] text-zinc-600"
+              className="mt-4 max-w-xs font-inter text-base leading-[1.6] text-zinc-600"
             >
               Six tools machined into one pocket-sized frame. Pick your finish
               and trade the gadget drawer for something built to last.
@@ -95,7 +95,7 @@ export default function AboutCta() {
               href="/select-color"
               className="mt-8 inline-flex items-center rounded-md bg-accent px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-accent-hover"
             >
-              Get your Caddie
+              Get your Caddie Companion
             </Link>
           </div>
 

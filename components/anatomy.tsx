@@ -359,15 +359,39 @@ export default function Anatomy() {
                     c.imgBelow ? "top-full mt-2" : "bottom-full mb-2"
                   } ${right ? "left-0" : "right-0"}`}
                 />
-                <div className="anatomy-label-line font-mono text-xs font-medium uppercase leading-tight text-zinc-900 md:text-sm">
+                <div className="anatomy-label-line font-mono text-sm font-medium uppercase leading-tight text-zinc-900 md:text-base">
                   {c.title}
                 </div>
-                <div className="anatomy-label-line mt-1 font-mono text-[11px] leading-tight text-zinc-500 md:text-xs">
+                <div className="anatomy-label-line mt-1 font-mono text-xs leading-tight text-zinc-500 md:text-sm">
                   {c.desc}
                 </div>
               </div>
             );
           })}
+        </div>
+
+        {/* Mobile / tablet legend — the callout overlay above needs the wide
+            side gutters, so below lg the six tools list out under the photo
+            instead, keeping the same numbered mono voice. */}
+        <div className="mt-12 grid grid-cols-2 gap-x-6 gap-y-10 px-6 sm:grid-cols-3 lg:hidden">
+          {CALLOUTS.map((c) => (
+            <div key={c.n}>
+              <Image
+                src={c.src}
+                alt=""
+                width={120}
+                height={120}
+                className="h-16 w-16 object-contain"
+              />
+              <div className="mt-3 font-mono text-sm font-medium uppercase leading-tight text-zinc-900">
+                <span className="mr-1.5 text-zinc-400">{c.n}</span>
+                {c.title}
+              </div>
+              <div className="mt-1 font-mono text-xs leading-tight text-zinc-500">
+                {c.desc}
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </section>

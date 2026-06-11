@@ -31,7 +31,7 @@ export function FloatingPill() {
 
   return (
     <div
-      className={`pointer-events-none fixed right-5 top-6 z-50 transition-all duration-300 sm:right-8 ${
+      className={`pointer-events-none fixed right-4 top-5 z-50 transition-all duration-300 sm:right-8 sm:top-6 ${
         show
           ? "translate-y-0 opacity-100"
           : "-translate-y-6 opacity-0"

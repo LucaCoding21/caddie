@@ -33,24 +33,24 @@ export function AboutNav() {
 
   return (
     <div
-      className={`fixed left-5 top-6 z-50 transition-all duration-300 sm:left-8 ${
+      className={`fixed left-4 top-5 z-50 transition-all duration-300 sm:left-8 sm:top-6 ${
         show
           ? "translate-y-0 opacity-100"
           : "pointer-events-none -translate-y-6 opacity-0"
       }`}
     >
-      <div className="flex items-center gap-6 text-black">
+      <div className="flex items-center gap-3 text-black sm:gap-6">
         <Link href="/" aria-label="Caddie Companion home" className="block">
           <Image
             src="/caddie-logo.png"
             alt="Caddie Companion"
             width={305}
             height={103}
-            priority
-            className="h-8 w-auto"
+            preload
+            className="h-6 w-auto sm:h-8"
           />
         </Link>
-        <nav className="ml-4 flex items-center gap-6 text-sm font-semibold uppercase tracking-wide">
+        <nav className="flex items-center gap-3 text-xs font-semibold uppercase tracking-wide sm:ml-4 sm:gap-6 sm:text-sm">
           <Link href="/about" className="hover:underline underline-offset-4">
             About
           </Link>

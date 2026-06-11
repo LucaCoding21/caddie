@@ -51,9 +51,9 @@ export default function SiteHeader() {
   }, []);
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 px-5 sm:px-8 py-6 flex items-center justify-between gap-4 pointer-events-none">
+    <header className="fixed top-0 left-0 right-0 z-50 px-4 sm:px-8 py-5 sm:py-6 flex items-center justify-between gap-3 sm:gap-4 pointer-events-none">
       <div
-        className={`flex items-center gap-6 self-start transition-all duration-300 ${
+        className={`flex items-center gap-3 sm:gap-6 self-start transition-all duration-300 ${
           pastHero && !overDark ? "text-zinc-900" : "text-white"
         } ${
           showLogo
@@ -69,14 +69,14 @@ export default function SiteHeader() {
             alt="Caddie Companion"
             width={305}
             height={103}
-            priority
-            className={`h-8 w-auto transition-[filter] duration-300 ${
+            preload
+            className={`h-6 w-auto transition-[filter] duration-300 sm:h-8 ${
               pastHero && !overDark ? "" : "brightness-0 invert"
             }`}
           />
         </Link>
 
-        <nav className="ml-4 flex items-center gap-6 text-sm font-semibold uppercase tracking-wide">
+        <nav className="flex items-center gap-3 text-xs font-semibold uppercase tracking-wide sm:ml-4 sm:gap-6 sm:text-sm">
           <Link href="/about" className="hover:underline underline-offset-4">
             About
           </Link>

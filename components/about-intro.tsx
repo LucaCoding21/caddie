@@ -9,7 +9,7 @@ import { SplitText } from "gsap/SplitText";
 gsap.registerPlugin(useGSAP, ScrollTrigger, SplitText);
 
 /**
- * The hero intro copy ("Caddie started with a pocket full…"). Server text lives
+ * The hero intro copy ("Caddie Companion started with a pocket full…"). Server text lives
  * here in a client wrapper so the page can stay a server component and keep
  * exporting metadata — same split as AboutTitle. The eyebrow fades up, then each
  * paragraph's lines rise out of a mask, the house idiom used across the site.
@@ -61,7 +61,7 @@ export function AboutIntro() {
   );
 
   return (
-    <div ref={rootRef} className="mx-auto mt-10 max-w-2xl text-center md:mt-14">
+    <div ref={rootRef} className="mx-auto mt-28 max-w-2xl text-center md:mt-40">
       <p
         ref={eyebrowRef}
         className="font-mono text-[11px] font-medium uppercase tracking-[0.18em] text-zinc-400"
@@ -73,7 +73,8 @@ export function AboutIntro() {
         className="mt-5 space-y-5 font-inter text-zinc-600 text-base leading-[1.6] md:text-lg"
       >
         <p>
-          Caddie started with a pocket full of single-use gadgets and one simple
+          Caddie Companion started with a pocket full of single-use gadgets and
+          one simple
           idea: fold the six tools every golfer actually reaches for into one
           frame, machined to last a lifetime of rounds.
         </p>

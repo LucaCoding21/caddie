@@ -141,11 +141,11 @@ export default function SixIntoOne() {
                   className="object-contain p-3 pb-8"
                   sizes="(max-width: 768px) 30vw, 16vw"
                 />
-                <figcaption className="absolute inset-x-0 bottom-0 p-2.5">
-                  <span className="block font-inter text-[10px] font-medium uppercase tracking-wide text-zinc-500">
+                <figcaption className="absolute inset-x-0 bottom-0 p-3">
+                  <span className="block font-inter text-xs font-medium uppercase tracking-wide text-zinc-500 md:text-sm">
                     {label}
                   </span>
-                  <span className="mt-0.5 block translate-y-1 font-inter text-[10px] leading-snug text-zinc-400 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+                  <span className="mt-0.5 block translate-y-1 font-inter text-[11px] leading-snug text-zinc-400 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 md:text-xs">
                     {desc}
                   </span>
                 </figcaption>

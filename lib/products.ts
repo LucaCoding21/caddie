@@ -5,10 +5,36 @@ export type ProductColor = {
   variantId: string | null;
 };
 
+export type ProductAddon = {
+  id: string;
+  name: string;
+  description: string;
+  priceCents: number;
+  variantId: string | null;
+};
+
 export const PRODUCT = {
   title: "Caddie Companion",
   priceCents: 2900,
-  currency: "CAD",
+  currency: "USD",
+  materials: [
+    "Stainless steel inner shell",
+    "Stainless steel tools",
+    "Anodized aluminum exterior",
+  ],
+  specs: [
+    { label: "Dimensions", value: '1" × 1" × 5"' },
+    { label: "Weight", value: "12 oz" },
+  ],
+  addons: [
+    {
+      id: "wire-brush-head",
+      name: "Replaceable wire brush head",
+      description: "A spare brush head that twists on when the original wears down.",
+      priceCents: 900,
+      variantId: null,
+    },
+  ] as ProductAddon[],
   colors: [
     {
       id: "black",

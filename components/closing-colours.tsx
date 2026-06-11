@@ -114,7 +114,7 @@ export default function ClosingColours() {
           </p>
           <h2
             ref={titleRef}
-            className="mt-5 whitespace-nowrap font-inter font-medium text-black text-3xl sm:text-4xl md:text-5xl lg:text-[3.5rem] leading-[1.05] tracking-tight"
+            className="mt-5 sm:whitespace-nowrap font-inter font-medium text-black text-3xl sm:text-4xl md:text-5xl lg:text-[3.5rem] leading-[1.05] tracking-tight"
           >
             {PRODUCT.title}
           </h2>
@@ -207,7 +207,7 @@ export default function ClosingColours() {
               fill
               sizes="(max-width: 1024px) 92vw, 720px"
               className="scale-[1.08] object-contain"
-              priority
+              preload
             />
           </div>
         </div>
