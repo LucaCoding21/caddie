@@ -31,7 +31,7 @@ export default function Faq() {
   return (
     <section
       id="faq"
-      className="relative z-20 w-full scroll-mt-24 bg-[#fafaf7] px-6 md:px-12 py-24 md:py-32"
+      className="relative z-20 -mt-px w-full scroll-mt-24 bg-[#fafaf7] px-6 md:px-12 py-24 md:py-32"
     >
       <div className="mx-auto grid max-w-[1440px] gap-12 lg:grid-cols-[minmax(0,0.7fr)_minmax(0,1.3fr)] lg:gap-20">
         <div>

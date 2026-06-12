@@ -95,10 +95,10 @@ export default function ExplodedView() {
           <dl className="mt-8 grid max-w-md grid-cols-3 gap-4 border-t border-white/10 pt-5">
             {SPECS.map(({ stat, label }) => (
               <div key={label}>
-                <dt className="font-inter text-base font-medium tracking-tight text-white md:text-lg">
+                <dt className="font-inter text-xl font-medium tracking-tight text-white lg:text-lg">
                   {stat}
                 </dt>
-                <dd className="mt-1 font-mono text-[9px] uppercase tracking-[0.12em] text-zinc-500">
+                <dd className="mt-1 font-mono text-[11px] uppercase tracking-[0.12em] text-zinc-500 lg:text-[9px]">
                   {label}
                 </dd>
               </div>
@@ -107,7 +107,7 @@ export default function ExplodedView() {
 
           {/* Materials, same contained zone as the spec strip. */}
           <div className="mt-6 max-w-md">
-            <p className="font-mono text-[9px] uppercase tracking-[0.12em] text-zinc-500">
+            <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-zinc-500 lg:text-[9px]">
               Materials
             </p>
             <ul className="mt-2 space-y-1">

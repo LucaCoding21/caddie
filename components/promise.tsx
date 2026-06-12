@@ -98,7 +98,29 @@ export default function Promise() {
         scrollTrigger: trigger,
       });
 
-      return () => split.revert();
+      // Mobile photo stack: each frame rises + scales in as it scrolls into
+      // view, one at a time. Scoped to the single-column mobile layout — on
+      // desktop these photos are display:none (the parallax cluster shows
+      // instead), so there's nothing to animate.
+      const mm = gsap.matchMedia();
+      mm.add("(max-width: 1023px)", () => {
+        const q = gsap.utils.selector(sectionRef);
+        q(".promise-photo").forEach((photo) => {
+          gsap.from(photo, {
+            opacity: 0,
+            y: 60,
+            scale: 0.96,
+            duration: 1,
+            ease: "power3.out",
+            scrollTrigger: { trigger: photo, start: "top 85%", once: true },
+          });
+        });
+      });
+
+      return () => {
+        split.revert();
+        mm.revert();
+      };
     },
     { scope: sectionRef }
   );
@@ -131,7 +153,7 @@ export default function Promise() {
   return (
     <section
       ref={sectionRef}
-      className="relative z-20 rounded-t-[2rem] lg:rounded-t-[2.5rem] shadow-[0_-24px_48px_-24px_rgba(0,0,0,0.5)] min-h-[115vh] w-full overflow-hidden bg-[#fafaf7] px-6 pt-24 pb-16 lg:py-0 flex flex-col items-center justify-center"
+      className="relative z-20 rounded-t-[2rem] lg:rounded-t-[2.5rem] shadow-[0_-24px_48px_-24px_rgba(0,0,0,0.5)] lg:min-h-[115vh] w-full overflow-hidden bg-[#fafaf7] px-6 pt-24 pb-16 lg:py-0 flex flex-col items-center justify-center"
     >
       {/* Scattered photos — desktop only, positioned around the centered text */}
       <div aria-hidden className="hidden lg:block">
@@ -145,21 +167,6 @@ export default function Promise() {
             className={`absolute ${pos} ${size} h-auto rounded-sm will-change-transform`}
             style={{ transform: `translate3d(0, ${offset * speed}px, 0)` }}
             sizes={sizes}
-          />
-        ))}
-      </div>
-
-      {/* Photos — mobile / tablet fallback row above the text */}
-      <div className="lg:hidden grid grid-cols-2 gap-3 w-full max-w-xs mb-14">
-        {PHOTOS.map(({ src }) => (
-          <Image
-            key={src}
-            src={src}
-            alt=""
-            width={1122}
-            height={1402}
-            className="w-full aspect-[4/5] object-cover rounded-sm"
-            sizes="30vw"
           />
         ))}
       </div>
@@ -187,6 +194,23 @@ export default function Promise() {
         >
           Order now
         </Link>
+      </div>
+
+      {/* Photos — mobile / tablet, stacked one at a time. Each frame rises and
+          fades in on scroll (see the matchMedia block in useGSAP). Desktop
+          shows the scattered parallax cluster above instead. */}
+      <div className="lg:hidden flex flex-col items-center gap-6 w-full max-w-sm mt-14">
+        {PHOTOS.slice(0, 2).map(({ src }) => (
+          <Image
+            key={src}
+            src={src}
+            alt=""
+            width={1122}
+            height={1402}
+            className="promise-photo w-full aspect-[4/5] object-cover rounded-sm"
+            sizes="(max-width: 1024px) 90vw, 24rem"
+          />
+        ))}
       </div>
     </section>
   );

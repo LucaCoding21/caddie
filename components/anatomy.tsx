@@ -203,12 +203,16 @@ export default function Anatomy() {
         // The line fades in (autoAlpha) while the plugin churns random glyphs
         // and resolves them left-to-right into the captured text. Each label is
         // two lines (title + desc), so step the timeline by two per callout.
+        // Step the callouts 0.2s apart (not 0.1) and keep each scramble to
+        // 1.2s, so only ~2-3 callouts churn text at once instead of all six —
+        // ScrambleText rewrites textContent every frame, and overlapping all
+        // twelve labels spikes the main thread enough to drop scroll frames.
         labelLines.forEach((el, i) => {
           tl.to(
             el,
             {
               autoAlpha: 1,
-              duration: 1.6,
+              duration: 1.2,
               ease: "power2.out",
               scrambleText: {
                 text: finalText[i],
@@ -216,7 +220,7 @@ export default function Anatomy() {
                 speed: 0.3,
               },
             },
-            0.25 + Math.floor(i / 2) * 0.1
+            0.25 + Math.floor(i / 2) * 0.2
           );
         });
 
@@ -225,7 +229,7 @@ export default function Anatomy() {
           tl.to(
             el,
             { autoAlpha: 1, duration: 0.6, ease: "power2.out" },
-            0.25 + j * 0.1
+            0.25 + j * 0.2
           );
         });
 
@@ -249,17 +253,17 @@ export default function Anatomy() {
   return (
     <section
       ref={sectionRef}
-      className="relative z-20 w-full bg-[#fafaf7] pt-32 md:pt-44 pb-24 md:pb-32 lg:grid lg:grid-cols-[minmax(0,1fr)_auto] lg:grid-rows-[auto_auto_auto] lg:items-center lg:gap-x-8 lg:gap-y-0 lg:pt-28 lg:pb-24"
+      className="relative z-20 -mt-px w-full bg-[#fafaf7] pt-20 md:pt-28 pb-24 md:pb-32 lg:grid lg:grid-cols-[minmax(0,1fr)_auto] lg:grid-rows-[auto_auto_auto] lg:items-center lg:gap-x-8 lg:gap-y-0 lg:pt-28 lg:pb-24"
     >
       {/* Section heading + intro, on top of the diagram. */}
-      <div className="w-full max-w-5xl px-6 lg:pl-28 mb-16 md:mb-24 lg:mb-0 text-left lg:col-start-1 lg:row-start-1 lg:self-end">
+      <div className="w-full max-w-5xl px-6 lg:pl-28 mb-4 md:mb-16 lg:mb-0 text-left lg:col-start-1 lg:row-start-1 lg:self-end">
         <h2
           ref={titleRef}
-          className="font-inter font-medium text-black text-3xl sm:text-4xl md:text-5xl lg:text-5xl leading-[1.05] tracking-tight"
+          className="font-inter font-medium text-black text-4xl sm:text-5xl md:text-6xl lg:text-6xl leading-[1.05] tracking-tight"
         >
           Six tools every golfer carries.
           <br className="hidden sm:block" />
-          <span className="text-[#768dc5]"> Now it&apos;s just this.</span>
+          <span className="whitespace-nowrap text-[#768dc5]"> Now it&apos;s just this.</span>
         </h2>
         <p className="mt-8 md:mt-10 max-w-2xl font-inter text-zinc-600 text-base md:text-lg leading-[1.5]">
           Every tool swings out of a single milled frame. Repair a pitch mark,
@@ -268,19 +272,9 @@ export default function Anatomy() {
         </p>
       </div>
 
-      {/* Closing line — replaces the old spec strip. Anchored in the section's
-          bottom-right gutter (third grid row); on smaller screens it stacks
-          under the diagram. */}
-      <div className="w-full max-w-md px-6 mt-12 lg:mt-0 lg:px-0 lg:pr-28 lg:w-[36rem] lg:max-w-none lg:col-start-2 lg:row-start-3 lg:self-start lg:justify-self-end">
-        <p className="font-inter text-base leading-[1.5] text-zinc-600 md:text-lg lg:text-right">
-          It all folds into one piece, small enough for a pocket. Nothing to
-          rattle, nothing to lose.
-        </p>
-      </div>
-
       {/* Relative wrapper sized to the image — annotations are absolutely
           positioned in here, so percentage coords map onto the photo. */}
-      <div ref={diagramRef} className="relative mx-auto mt-24 mb-32 md:mt-36 md:mb-48 lg:mt-12 lg:mb-20 w-full max-w-5xl lg:max-w-[112vh] lg:col-span-2 lg:row-start-2 lg:self-center lg:justify-self-center">
+      <div ref={diagramRef} className="relative mx-auto mt-0 mb-32 md:mt-16 md:mb-48 lg:mt-12 lg:mb-20 w-full max-w-5xl lg:max-w-[112vh] lg:col-span-2 lg:row-start-2 lg:self-center lg:justify-self-center">
         <Image
           src="/caddie-companion.png"
           alt="Caddie Companion folded fully open, every tool fanned out"
@@ -379,9 +373,9 @@ export default function Anatomy() {
               <Image
                 src={c.src}
                 alt=""
-                width={120}
-                height={120}
-                className="h-16 w-16 object-contain"
+                width={200}
+                height={200}
+                className="h-24 w-24 object-contain sm:h-20 sm:w-20"
               />
               <div className="mt-3 font-mono text-sm font-medium uppercase leading-tight text-zinc-900">
                 <span className="mr-1.5 text-zinc-400">{c.n}</span>
@@ -393,6 +387,16 @@ export default function Anatomy() {
             </div>
           ))}
         </div>
+      </div>
+
+      {/* Closing line — replaces the old spec strip. Anchored in the section's
+          bottom-right gutter (third grid row); on smaller screens it stacks
+          under the diagram. */}
+      <div className="w-full max-w-md px-6 mt-12 lg:mt-0 lg:px-0 lg:pr-28 lg:w-[36rem] lg:max-w-none lg:col-start-2 lg:row-start-3 lg:self-start lg:justify-self-end">
+        <p className="font-inter text-base leading-[1.5] text-zinc-600 md:text-lg lg:text-right">
+          It all folds into one piece, small enough for a pocket. Nothing to
+          rattle, nothing to lose.
+        </p>
       </div>
     </section>
   );

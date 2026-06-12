@@ -104,7 +104,7 @@ export function ContactContent() {
     <div ref={rootRef}>
       <h1
         ref={titleRef}
-        className="mt-20 select-none text-left font-inter text-6xl font-semibold uppercase leading-[0.85] tracking-[-0.04em] text-zinc-200 sm:text-7xl lg:mt-28 lg:text-8xl"
+        className="mt-10 select-none text-left font-inter text-6xl font-semibold uppercase leading-[0.85] tracking-[-0.04em] text-zinc-200 sm:text-7xl lg:mt-28 lg:text-8xl"
       >
         Contact
       </h1>

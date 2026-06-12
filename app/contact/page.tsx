@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { ContactContent } from "@/components/contact-content";
-import { AboutNav } from "@/components/about-nav";
-import { FloatingPill } from "@/components/floating-pill";
+import SiteHeader from "@/components/site-header";
 
 export const metadata: Metadata = {
   title: "Contact | Caddie Companion",
@@ -12,11 +11,10 @@ export const metadata: Metadata = {
 export default function ContactPage() {
   return (
     <main className="flex min-h-svh flex-col bg-[#fafaf7] text-black">
-      {/* Nav bar, fixed at the top; both halves reappear whenever you scroll
-          back up. Left: wordmark + links. Right: the product pill. Same as the
-          home and About pages. */}
-      <AboutNav />
-      <FloatingPill />
+      {/* Same persistent nav as every other page: logo + links + order pill,
+          with the fullscreen menu on mobile. Solid (dark logo) since this page
+          has no dark hero. */}
+      <SiteHeader solid />
 
       {/* Body. The oversized wordmark sits above a two-column split: intro +
           direct lines on the left, form on the right. The whole block reveals

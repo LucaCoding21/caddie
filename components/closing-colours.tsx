@@ -47,10 +47,10 @@ export default function ClosingColours() {
   // TEST: real studio shots in as they're shot; finishes without one yet fall back
   // to the old cut-outs. Fold these into products.ts once all four are in.
   const STUDIO_SHOTS: Record<string, string> = {
-    black: "/black-product-v2.png",
-    blue: "/blue-product-v2.png",
-    green: "/green-product-v2.png",
-    red: "/red-product-v2.png",
+    black: "/product-colours/black-nobg.png",
+    blue: "/product-colours/blue-nobg.png",
+    green: "/product-colours/green-nobg.png",
+    red: "/product-colours/red-nobg.png",
   };
   const heroSrc = STUDIO_SHOTS[activeColor.id] ?? activeColor.image;
 
@@ -101,11 +101,12 @@ export default function ClosingColours() {
   return (
     <section
       ref={sectionRef}
-      className="relative z-20 w-full bg-[#fafaf7] px-6 md:px-12 py-32 md:py-44"
+      className="relative z-20 -mt-px w-full bg-[#f6f6f6] px-6 md:px-12 py-32 md:py-44"
     >
-      <div className="mx-auto grid max-w-[1100px] items-center gap-12 lg:grid-cols-[1.55fr_1fr] lg:gap-36">
-        {/* Decision panel — content on the right; image is the payoff on the left. */}
-        <div className="order-2 lg:order-2">
+      <div className="mx-auto grid max-w-[1340px] items-center gap-12 lg:grid-cols-[1.85fr_1fr] lg:gap-x-48 lg:gap-y-10">
+        {/* Header — sits above the photo on mobile; on desktop it rejoins the
+            top of the right column. */}
+        <div className="order-1 lg:col-start-2 lg:row-start-1">
           <p
             ref={eyebrowRef}
             className="font-mono text-[11px] font-medium uppercase tracking-[0.18em] text-zinc-400"
@@ -122,10 +123,14 @@ export default function ClosingColours() {
             The all-in-one golf multi-tool. Clean clubs, fix divots, and be
             ready for anything, in the finish that suits your bag.
           </p>
+        </div>
 
+        {/* Decision panel — finish picker, price, and buy. Below the photo on
+            mobile; under the header in the right column on desktop. */}
+        <div className="order-3 lg:col-start-2 lg:row-start-2">
           {/* Finish list — name on the left, swatch dot on the right, one row each.
               The active row's dot sits in a black ring and drives the hero. */}
-          <div className="mt-10 max-w-md">
+          <div className="max-w-md">
             <p className="font-mono text-[11px] font-medium uppercase tracking-[0.18em] text-zinc-400">
               Finish
             </p>
@@ -153,7 +158,7 @@ export default function ClosingColours() {
                         aria-hidden
                         className={`h-4 w-4 rounded-full transition-all ${
                           selected
-                            ? "ring-2 ring-accent ring-offset-2 ring-offset-[#fafaf7]"
+                            ? "ring-2 ring-accent ring-offset-2 ring-offset-[#f6f6f6]"
                             : ""
                         }`}
                         style={{ backgroundColor: FINISH[c.id]?.hex }}
@@ -198,15 +203,17 @@ export default function ClosingColours() {
         {/* Hero — swaps to the selected finish, so "four ways to carry" is shown, not told.
             Landscape product shots: the frame ratio matches the source (2000×1545) and
             object-contain shows the whole tool, uncropped and at native resolution. */}
-        <div className="order-1 lg:order-1">
-          <div className="relative aspect-[2000/1545] w-full rounded-lg">
+        <div className="order-2 lg:col-start-1 lg:row-start-1 lg:row-span-2">
+          <div className="relative mx-auto aspect-[4/3] w-full rounded-lg lg:w-full">
             <Image
               key={activeColor.id}
               src={heroSrc}
               alt={`Caddie Companion multi-tool in ${activeColor.name}`}
               fill
               sizes="(max-width: 1024px) 92vw, 720px"
-              className="scale-[1.08] object-contain"
+              className={`object-contain ${
+                activeColor.id === "red" ? "lg:scale-[0.97] lg:-translate-x-[10px] lg:-translate-y-[10px]" : ""
+              } ${activeColor.id === "green" ? "scale-[0.95] lg:scale-[0.97]" : ""}`}
               preload
             />
           </div>

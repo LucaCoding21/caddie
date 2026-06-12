@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import SiteHeader from "@/components/site-header";
 import { PRODUCT } from "@/lib/products";
 
 // Swatch dot colour + a one-line finish blurb, keyed by colour id. Mirrors the
@@ -105,28 +106,9 @@ export default function SelectColorPage() {
 
   return (
     <div className="flex min-h-svh flex-col bg-white text-black lg:h-dvh">
-      <header className="flex items-center justify-between border-b border-black/10 px-5 py-3.5 sm:px-8">
-        <Link href="/" aria-label="Caddie Companion" className="flex items-center">
-          <Image
-            src="/caddie-logo.png"
-            alt="Caddie Companion"
-            width={160}
-            height={50}
-            loading="eager"
-            className="h-8 w-auto"
-          />
-        </Link>
-        <p className="hidden font-mono text-[11px] font-medium uppercase tracking-[0.18em] text-zinc-400 sm:block">
-          We ship worldwide
-        </p>
-        <Link
-          href="/"
-          aria-label="Close"
-          className="flex h-9 w-9 items-center justify-center text-zinc-500 transition-colors hover:text-black"
-        >
-          ✕
-        </Link>
-      </header>
+      {/* Same persistent nav as every other page (solid: dark logo over the
+          light buy flow). The logo and menu carry the way back home. */}
+      <SiteHeader solid />
 
       <div className="flex flex-1 flex-col lg:min-h-0 lg:flex-row">
         {/* Gallery — the selected finish on the warm editorial surface, framed
@@ -153,7 +135,7 @@ export default function SelectColorPage() {
         {/* Configurator — same voice as the home closing section: mono eyebrow,
             big Inter heading, finish rows with dividers, accent on the buy. */}
         <div className="flex flex-1 flex-col border-t border-black/10 lg:w-[45%] lg:overflow-y-auto lg:border-l lg:border-t-0">
-          <div className="flex flex-1 flex-col px-6 py-9 sm:px-10 lg:px-14 lg:py-5">
+          <div className="flex flex-1 flex-col px-6 py-9 sm:px-10 lg:px-14 lg:pb-5 lg:pt-20">
             <div className="mx-auto my-auto w-full max-w-md">
               {/* Title block — the product, said the way the home page says it. */}
               <div className="pb-6">

@@ -22,7 +22,7 @@ export default function SiteFooter() {
 
       {/* Wordmark, centered over the photo. Steps with the viewport so the
           two words stay on one line from tablet up without overflowing. */}
-      <h2 className="relative z-10 select-none px-6 text-center font-brand text-4xl font-bold uppercase tracking-tight text-white sm:text-6xl md:text-7xl xl:text-[6.5rem]">
+      <h2 className="relative z-10 mb-44 select-none px-6 text-center font-brand text-5xl font-bold uppercase tracking-tight text-white sm:text-7xl md:text-8xl xl:text-[7.5rem]">
         Caddie Companion
       </h2>
 

@@ -42,6 +42,17 @@ body {
   color: var(--foreground);
 }
 
+/* Guard against horizontal bleed on mobile: GSAP reveals (yPercent/scale/
+   clip-path wipes) and the 3D canvas can momentarily push content past the
+   viewport edge, which on narrow screens shows up as a stray right-hand gutter
+   exposing the sections/footer behind. `clip` (not `hidden`) contains it
+   without creating a scroll container, so ScrollTrigger pinning and the fixed
+   footer reveal keep working. */
+html,
+body {
+  overflow-x: clip;
+}
+
 /* Initial-load entrance: fade up from below. */
 @keyframes hero-rise {
   from {

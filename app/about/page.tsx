@@ -4,8 +4,7 @@ import { AboutTitle } from "@/components/about-title";
 import { AboutIntro } from "@/components/about-intro";
 import AboutDetails from "@/components/about-details";
 import AboutCta from "@/components/about-cta";
-import { FloatingPill } from "@/components/floating-pill";
-import { AboutNav } from "@/components/about-nav";
+import SiteHeader from "@/components/site-header";
 import SiteFooter from "@/components/site-footer";
 
 export const metadata: Metadata = {
@@ -17,10 +16,10 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <>
-      {/* Nav bar, fixed at the top; both halves reappear whenever you scroll
-          back up. Left: wordmark + links. Right: the product pill. */}
-      <AboutNav />
-      <FloatingPill />
+      {/* Same persistent nav as every other page: logo + links + order pill,
+          with the fullscreen menu on mobile. Solid (dark logo) since this page
+          has no dark hero. */}
+      <SiteHeader solid />
 
       {/* Opaque content layer that scrolls over the fixed footer; the bottom
           margin reserves exactly the footer's height so it reveals on scroll. */}
@@ -33,7 +32,7 @@ export default function AboutPage() {
           reads clearly in front of them; the tool is matted onto pure white
           (no shadow), so mix-blend-multiply drops the background out against
           the page. */}
-      <section className="relative overflow-hidden px-6 pt-32 pb-16 md:pt-44 md:pb-24">
+      <section className="relative overflow-hidden px-6 pt-60 pb-16 md:pt-60 md:pb-24">
         <div className="relative mx-auto flex max-w-6xl items-center justify-center">
           <AboutTitle />
           <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
@@ -43,7 +42,7 @@ export default function AboutPage() {
               width={1376}
               height={768}
               preload
-              className="w-[78%] max-w-4xl translate-y-[28%] mix-blend-multiply"
+              className="w-[115%] max-w-none translate-y-[28%] mix-blend-multiply"
             />
           </div>
         </div>
