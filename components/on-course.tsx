@@ -11,7 +11,7 @@ import { SplitText } from "gsap/SplitText";
 gsap.registerPlugin(useGSAP, ScrollTrigger, SplitText);
 
 // Lifestyle proof — the tool out in the world, not on a studio sweep. Two
-// portrait frames: out at the 19th hole, and riding along on the course.
+// portrait frames: clipped to the bag, and riding along on the course.
 type Shot = {
   alt: string;
   title: string;
@@ -23,10 +23,10 @@ type Shot = {
 
 const SHOTS: Shot[] = [
   {
-    src: "/caddie-companion-bottle-opener-ice-bucket.webp",
-    alt: "Blue Caddie Companion golf tool resting in an ice bucket of beers with a white golf glove, whisky glass, and golf balls on the turf",
-    title: "The 19th hole",
-    desc: "There's an opener folded into the frame, for the part of golf that isn't golf.",
+    src: "/bag-clip-v7.webp",
+    alt: "Caddie Companion golf tool clipped by its carabiner to the side of a black golf bag on the course",
+    title: "Hangs on your bag",
+    desc: "Clips on by its carabiner and rides along, the easiest thing to grab between shots.",
   },
   {
     video: { mp4: "/pocket.mp4", webm: "/pocket.webm", poster: "/pocket-poster.jpg" },
@@ -192,11 +192,11 @@ export default function OnCourse() {
           ))}
         </div>
 
-        {/* Action clip beside a portrait still: the divot tool doing the one
-            job a photo can't show, paired with the tool clipped and ready. */}
-        <div className="mt-8 md:mt-10 grid gap-8 md:gap-10 md:grid-cols-3 md:items-start">
+        {/* Action clip, full width: the divot tool doing the one job a photo
+            can't show, given room so the motion reads large. */}
+        <div className="mt-8 md:mt-10">
           {/* Divot clip — muted autoplay loop, same idiom as the hero video. */}
-          <figure className="shot md:col-span-2">
+          <figure className="shot">
             <div className="relative aspect-[3/2] w-full overflow-hidden rounded-md bg-[#efeeea] ring-1 ring-black/5">
               <video
                 className="absolute inset-0 h-full w-full object-cover"
@@ -216,27 +216,6 @@ export default function OnCourse() {
               </span>
               <span className="mt-1 block font-inter text-zinc-500 text-sm md:text-base leading-[1.5]">
                 The divot tool that leaves the green better than you found it.
-              </span>
-            </figcaption>
-          </figure>
-
-          {/* Bag-clip still on the right, portrait to balance the wide clip. */}
-          <figure className="shot">
-            <div className="relative aspect-[3/4] w-full overflow-hidden rounded-md bg-[#efeeea] ring-1 ring-black/5">
-              <Image
-                src="/bag-clip-v7.webp"
-                alt="Caddie Companion golf tool clipped by its carabiner to the side of a black golf bag on the course"
-                fill
-                className="object-cover"
-                sizes="(max-width: 768px) 90vw, 30vw"
-              />
-            </div>
-            <figcaption className="mt-5 max-w-sm">
-              <span className="block font-inter text-lg md:text-xl font-medium text-black tracking-tight">
-                Always within reach
-              </span>
-              <span className="mt-1 block font-inter text-zinc-500 text-sm md:text-base leading-[1.5]">
-                Clips to the bag so it's the easiest thing to grab on the course.
               </span>
             </figcaption>
           </figure>
