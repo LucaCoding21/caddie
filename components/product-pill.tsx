@@ -13,7 +13,7 @@ import Link from "next/link";
  */
 export function ProductPill({ light = false }: { light?: boolean }) {
   return (
-    <div className="pointer-events-auto flex items-center rounded-full sm:gap-4 sm:bg-white/95 sm:py-2 sm:pl-5 sm:pr-2 sm:shadow-[0_4px_24px_-4px_rgba(0,0,0,0.25)] sm:backdrop-blur">
+    <div className="pointer-events-auto flex items-center rounded-full sm:gap-4 sm:bg-white/95 sm:py-2 sm:pl-5 sm:pr-2 sm:shadow-[0_3px_16px_-4px_rgba(0,0,0,0.2)] sm:backdrop-blur">
       {/* Name + price collapse away on narrow screens so the pill never
           collides with the wordmark + links on the left of the nav. On mobile
           the whole span is dropped (not just its contents) so it doesn't leave

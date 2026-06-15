@@ -6,6 +6,7 @@ import OnCourse from "@/components/on-course";
 import ExplodedView from "@/components/exploded-view";
 import ClosingColours from "@/components/closing-colours";
 import Faq from "@/components/faq";
+import AboutCta from "@/components/about-cta";
 import SiteFooter from "@/components/site-footer";
 
 export default function Home() {
@@ -35,7 +36,10 @@ export default function Home() {
         {/* 6. Colour picker — choose a finish, then buy */}
         <ClosingColours />
 
-        {/* 7. FAQ */}
+        {/* 7. Closing CTA — "Ready to clean up your carry?" banner */}
+        <AboutCta />
+
+        {/* 8. FAQ */}
         <Faq />
       </main>
       </div>

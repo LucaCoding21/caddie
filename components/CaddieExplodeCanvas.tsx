@@ -232,6 +232,12 @@ export default function CaddieExplodeCanvas({
         end: canPin ? "+=85%" : "bottom top",
         pin: canPin ? pinEl : false,
         anticipatePin: 1,
+        // This pin is created late (after the GLB loads), out of DOM order
+        // relative to scroll triggers further down the page (e.g. the CTA fan).
+        // A positive refreshPriority makes ScrollTrigger process this pin first
+        // on every refresh so its pin-spacing is baked in before those later
+        // triggers measure — otherwise they land ~85vh too early.
+        refreshPriority: 1,
         scrub: 0.6,
         onUpdate: (self) => {
           target.p = self.progress;

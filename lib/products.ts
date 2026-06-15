@@ -31,7 +31,7 @@ export const PRODUCT = {
       id: "wire-brush-head",
       name: "Replaceable wire brush head",
       description: "A spare brush head that twists on when the original wears down.",
-      priceCents: 900,
+      priceCents: 400,
       variantId: null,
     },
   ] as ProductAddon[],

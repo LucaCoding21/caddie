@@ -10,20 +10,20 @@ import { SplitText } from "gsap/SplitText";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger, SplitText);
 
-const BAG = "/usefulphotos/ChatGPT%20Image%20May%2025%2C%202026%2C%2001_09_21%20PM.png";
+const BAG = "/red-caddie-companion-bag.png";
 const TORX = "/usefulphotos/ChatGPT%20Image%20May%2025%2C%202026%2C%2001_23_27%20PM.png";
-const GRASS = "/usefulphotos/ChatGPT%20Image%20May%2025%2C%202026%2C%2001_56_38%20PM.png";
-const OPENER = "/usefulphotos/ChatGPT%20Image%20May%2025%2C%202026%2C%2002_30_32%20PM.png";
+const GRASS = "/caddie-divot-grass.png";
+const OPENER = "/bottle-opener-caddie.png";
 
 // Scattered desktop photos. Two big (top-left, bottom-right) and two small
 // (bottom-left, top-right) on a diagonal for depth. `speed` is the parallax
 // factor: how many px the photo shifts per px the section moves off center.
 // Mixed signs make the cluster drift apart as you scroll.
 const PHOTOS = [
-  { src: BAG, pos: "top-[5%] left-[4%]", size: "w-72 xl:w-80", sizes: "(max-width: 1280px) 18rem, 20rem", speed: 0 },
-  { src: TORX, pos: "bottom-[10%] left-[13%]", size: "w-48 xl:w-56", sizes: "(max-width: 1280px) 12rem, 14rem", speed: -0.06 },
-  { src: GRASS, pos: "top-[10%] right-[11%]", size: "w-48 xl:w-56", sizes: "(max-width: 1280px) 12rem, 14rem", speed: 0.07 },
-  { src: OPENER, pos: "bottom-[6%] right-[6%]", size: "w-72 xl:w-80", sizes: "(max-width: 1280px) 18rem, 20rem", speed: 0 },
+  { src: BAG, pos: "top-[5%] left-[4%]", size: "w-80 xl:w-96", sizes: "(max-width: 1280px) 20rem, 24rem", speed: 0 },
+  { src: TORX, pos: "bottom-[10%] left-[13%]", size: "w-64 xl:w-72", sizes: "(max-width: 1280px) 16rem, 18rem", speed: -0.06 },
+  { src: GRASS, pos: "top-[10%] right-[11%]", size: "w-64 xl:w-72", sizes: "(max-width: 1280px) 16rem, 18rem", speed: 0.07 },
+  { src: OPENER, pos: "bottom-[6%] right-[6%]", size: "w-80 xl:w-96", sizes: "(max-width: 1280px) 20rem, 24rem", speed: 0, square: true },
 ];
 
 export default function Promise() {
@@ -117,6 +117,30 @@ export default function Promise() {
         });
       });
 
+      // Desktop scattered cluster: each photo rises + scales out of a blur as
+      // the section comes into view, dealt with a slight stagger. The reveal
+      // transform lives on the inner element so it composes with — rather than
+      // overwrites — the parallax transform React drives on the wrapper.
+      mm.add("(min-width: 1024px)", () => {
+        const q = gsap.utils.selector(sectionRef);
+        q(".promise-photo-desktop").forEach((photo, i) => {
+          gsap.from(photo, {
+            opacity: 0,
+            y: 50,
+            scale: 0.94,
+            filter: "blur(8px)",
+            duration: 1.1,
+            ease: "power3.out",
+            delay: i * 0.12,
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: "top 60%",
+              once: true,
+            },
+          });
+        });
+      });
+
       return () => {
         split.revert();
         mm.revert();
@@ -153,21 +177,34 @@ export default function Promise() {
   return (
     <section
       ref={sectionRef}
-      className="relative z-20 rounded-t-[2rem] lg:rounded-t-[2.5rem] shadow-[0_-24px_48px_-24px_rgba(0,0,0,0.5)] lg:min-h-[115vh] w-full overflow-hidden bg-[#fafaf7] px-6 pt-24 pb-16 lg:py-0 flex flex-col items-center justify-center"
+      className="relative z-20 rounded-t-[2rem] lg:rounded-t-[2.5rem] shadow-[0_-24px_48px_-24px_rgba(0,0,0,0.5)] lg:min-h-[135vh] w-full overflow-hidden bg-[#fafaf7] px-6 pt-24 pb-16 lg:py-0 flex flex-col items-center justify-center"
     >
-      {/* Scattered photos — desktop only, positioned around the centered text */}
+      {/* Scattered photos — desktop only, positioned around the centered text.
+          Outer wrapper owns the React-driven parallax transform; the inner
+          `.promise-photo-desktop` element carries the GSAP reveal transform, so
+          the two never fight over `transform`. */}
       <div aria-hidden className="hidden lg:block">
-        {PHOTOS.map(({ src, pos, size, sizes, speed }) => (
-          <Image
+        {PHOTOS.map(({ src, pos, size, sizes, speed, square }) => (
+          <div
             key={src}
-            src={src}
-            alt=""
-            width={1122}
-            height={1402}
-            className={`absolute ${pos} ${size} h-auto rounded-sm will-change-transform`}
+            className={`absolute ${pos} ${size} will-change-transform`}
             style={{ transform: `translate3d(0, ${offset * speed}px, 0)` }}
-            sizes={sizes}
-          />
+          >
+            {square ? (
+              <div className="promise-photo-desktop aspect-[4/5] w-full overflow-hidden rounded-sm will-change-transform">
+                <Image src={src} alt="" fill className="object-cover" sizes={sizes} />
+              </div>
+            ) : (
+              <Image
+                src={src}
+                alt=""
+                width={1122}
+                height={1402}
+                className="promise-photo-desktop h-auto w-full rounded-sm will-change-transform"
+                sizes={sizes}
+              />
+            )}
+          </div>
         ))}
       </div>
 

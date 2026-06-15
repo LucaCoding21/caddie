@@ -69,7 +69,7 @@ export default function AboutCta() {
   return (
     <section
       ref={sectionRef}
-      className="mx-auto max-w-[1440px] px-6 pt-16 pb-28 md:px-12 md:pt-32 md:pb-36"
+      className="relative z-10 w-full bg-[#fafaf7] px-6 pt-16 pb-28 md:px-12 md:pt-32 md:pb-36"
     >
       <div className="relative mx-auto max-w-6xl rounded-md bg-[#EAEAEA]">
         <div className="grid items-center gap-8 md:grid-cols-2">

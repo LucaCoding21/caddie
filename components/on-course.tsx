@@ -23,8 +23,8 @@ type Shot = {
 
 const SHOTS: Shot[] = [
   {
-    src: "/bag-clip-v7.webp",
-    alt: "Caddie Companion golf tool clipped by its carabiner to the side of a black golf bag on the course",
+    src: "/caddie-onbag.png",
+    alt: "Green Caddie Companion golf tool clipped by its carabiner to the side of a black golf bag on the course",
     title: "Hangs on your bag",
     desc: "Clips on by its carabiner and rides along, the easiest thing to grab between shots.",
   },

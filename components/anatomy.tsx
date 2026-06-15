@@ -65,8 +65,8 @@ const CALLOUTS: Callout[] = [
     title: "T25 Torx Driver",
     desc: "Tunes adjustable clubs",
     src: "/6v1/torx-driver-nobg.png",
-    node: [72, 35],
-    points: "72,35 72,20 99,20",
+    node: [72, 30],
+    points: "72,30 72,20 99,20",
     label: { x: 99, y: 20, side: "left", maxWidth: "22rem" },
   },
   {
@@ -276,10 +276,10 @@ export default function Anatomy() {
           positioned in here, so percentage coords map onto the photo. */}
       <div ref={diagramRef} className="relative mx-auto mt-0 mb-32 md:mt-16 md:mb-48 lg:mt-12 lg:mb-20 w-full max-w-5xl lg:max-w-[112vh] lg:col-span-2 lg:row-start-2 lg:self-center lg:justify-self-center">
         <Image
-          src="/caddie-companion.png"
+          src="/caddie-companion-blue-tools-v2.png"
           alt="Caddie Companion folded fully open, every tool fanned out"
-          width={1080}
-          height={1080}
+          width={1999}
+          height={1545}
           className="mx-auto block h-auto w-full lg:w-[70%]"
           sizes="(max-width: 1024px) 100vw, 56rem"
         />
