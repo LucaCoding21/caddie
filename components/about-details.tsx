@@ -105,13 +105,14 @@ export default function AboutDetails() {
           alone overflows a 768px viewport. */}
       <div className="grid grid-cols-1 gap-12 md:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] md:items-center md:gap-16">
         {/* Copy — quiet column on the left, vertically centred against the
-            cluster so the empty space around it does the work. */}
-        <div>
+            cluster so the empty space around it does the work, then nudged up
+            a touch so it leads the eye into the photos. */}
+        <div className="md:-mt-32">
           <p
             ref={eyebrowRef}
             className="font-mono text-[11px] font-medium uppercase tracking-[0.28em] text-zinc-400"
           >
-            Caddie Companion
+            Designed With Intent
           </p>
           <h2
             ref={titleRef}
