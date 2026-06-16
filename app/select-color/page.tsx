@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import SiteHeader from "@/components/site-header";
@@ -39,10 +40,23 @@ const STUDIO_SHOTS: Record<string, string> = {
 // Trust line — same de-risking copy as the home buy moment.
 const TRUST = ["Free shipping", "30-day returns", "1-yr guarantee"];
 
-export default function SelectColorPage() {
-  const [activeColorId, setActiveColorId] = useState("black");
+function SelectColorConfigurator() {
+  const searchParams = useSearchParams();
+
+  // Open pre-configured when arriving from the home buy moment, which passes
+  // the chosen finish + add-ons as query params. Fall back to defaults.
+  const initialColorId = PRODUCT.colors.some(
+    (c) => c.id === searchParams.get("color")
+  )
+    ? (searchParams.get("color") as string)
+    : "black";
+  const initialAddonIds = (searchParams.get("addons") ?? "")
+    .split(",")
+    .filter((id) => PRODUCT.addons.some((a) => a.id === id));
+
+  const [activeColorId, setActiveColorId] = useState(initialColorId);
   const [quantity, setQuantity] = useState(1);
-  const [addonIds, setAddonIds] = useState<string[]>([]);
+  const [addonIds, setAddonIds] = useState<string[]>(initialAddonIds);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -244,6 +258,13 @@ export default function SelectColorPage() {
                                 </svg>
                               )}
                             </span>
+                            <Image
+                              src={a.image}
+                              alt={a.name}
+                              width={112}
+                              height={84}
+                              className="h-12 w-14 shrink-0 object-contain"
+                            />
                             <span>
                               <span
                                 className={`block font-inter text-sm transition-colors ${
@@ -389,5 +410,16 @@ export default function SelectColorPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function SelectColorPage() {
+  // useSearchParams requires a Suspense boundary so the rest of the route can
+  // still be prerendered; the configurator is light enough that no visible
+  // fallback is needed.
+  return (
+    <Suspense>
+      <SelectColorConfigurator />
+    </Suspense>
   );
 }

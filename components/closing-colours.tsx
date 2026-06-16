@@ -42,7 +42,37 @@ const FINISH: Record<string, { hex: string; blurb: string }> = {
 
 export default function ClosingColours() {
   const [activeIdx, setActiveIdx] = useState(0);
+  const [addonIds, setAddonIds] = useState<string[]>([]);
+  // Which image the big frame is previewing — null means the active finish,
+  // otherwise an add-on id. Independent of what's checked/added (addonIds).
+  const [previewAddonId, setPreviewAddonId] = useState<string | null>(null);
   const activeColor = PRODUCT.colors[activeIdx];
+
+  // Checking the box adds/removes the add-on; it does not change the preview.
+  function toggleAddon(id: string) {
+    setAddonIds((ids) =>
+      ids.includes(id) ? ids.filter((x) => x !== id) : [...ids, id]
+    );
+  }
+
+  // Clicking a finish or an add-on name only changes what's previewed.
+  function previewColor(idx: number) {
+    setActiveIdx(idx);
+    setPreviewAddonId(null);
+  }
+  function previewAddon(id: string) {
+    setPreviewAddonId((prev) => (prev === id ? null : id));
+  }
+
+  // Carry the colour + any add-ons into the configurator so the buy page opens
+  // pre-configured to match what was chosen here.
+  const buyHref = {
+    pathname: "/select-color",
+    query: {
+      color: activeColor.id,
+      ...(addonIds.length ? { addons: addonIds.join(",") } : {}),
+    },
+  };
 
   // TEST: real studio shots in as they're shot; finishes without one yet fall back
   // to the old cut-outs. Fold these into products.ts once all four are in.
@@ -52,6 +82,9 @@ export default function ClosingColours() {
     green: "/product-colours/green-nobg.png",
     red: "/product-colours/red-nobg.png",
   };
+  // The big frame previews whatever's selected for preview: an add-on if one
+  // is being previewed, otherwise the active finish.
+  const previewedAddon = PRODUCT.addons.find((a) => a.id === previewAddonId);
   const heroSrc = STUDIO_SHOTS[activeColor.id] ?? activeColor.image;
 
   const sectionRef = useRef<HTMLElement>(null);
@@ -141,7 +174,7 @@ export default function ClosingColours() {
                   <li key={c.id} className="border-t border-black/10 last:border-b">
                     <button
                       type="button"
-                      onClick={() => setActiveIdx(idx)}
+                      onClick={() => previewColor(idx)}
                       aria-pressed={selected}
                       className="flex w-full cursor-pointer items-center justify-between py-3.5 text-left"
                     >
@@ -173,6 +206,66 @@ export default function ClosingColours() {
             <p className="mt-4 font-inter text-sm leading-[1.5] text-zinc-500">
               {FINISH[activeColor.id]?.blurb}
             </p>
+
+            {/* Add-ons — same row idiom as the finish list, with a thumbnail of
+                the part. Selection carries through to the buy page. */}
+            <p className="mt-8 font-mono text-[11px] font-medium uppercase tracking-[0.18em] text-zinc-400">
+              Add-ons
+            </p>
+            <ul className="mt-4">
+              {PRODUCT.addons.map((a) => {
+                const selected = addonIds.includes(a.id);
+                return (
+                  <li key={a.id} className="border-t border-black/10 last:border-b">
+                    <div className="flex items-center gap-3 py-3.5">
+                      {/* The box is the only thing that adds/removes the add-on. */}
+                      <button
+                        type="button"
+                        onClick={() => toggleAddon(a.id)}
+                        aria-pressed={selected}
+                        aria-label={`Add ${a.name}`}
+                        className="shrink-0 cursor-pointer"
+                      >
+                        <span
+                          aria-hidden
+                          className={`flex h-4 w-4 items-center justify-center border transition-colors ${
+                            selected ? "border-black bg-black" : "border-black/25"
+                          }`}
+                        >
+                          {selected && (
+                            <svg
+                              width="10"
+                              height="10"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="white"
+                              strokeWidth="3"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            >
+                              <path d="M20 6L9 17l-5-5" />
+                            </svg>
+                          )}
+                        </span>
+                      </button>
+                      {/* The name only previews the add-on image, no checking. */}
+                      <button
+                        type="button"
+                        onClick={() => previewAddon(a.id)}
+                        className="flex min-w-0 flex-1 cursor-pointer items-center justify-between gap-3 text-left"
+                      >
+                        <span className="min-w-0 flex-1 font-inter text-sm font-medium text-zinc-600 transition-colors hover:text-black">
+                          {a.name}
+                        </span>
+                        <span className="shrink-0 font-inter text-sm tabular-nums text-zinc-400">
+                          +${(a.priceCents / 100).toFixed(0)}
+                        </span>
+                      </button>
+                    </div>
+                  </li>
+                );
+              })}
+            </ul>
           </div>
 
           {/* Price. */}
@@ -183,7 +276,7 @@ export default function ClosingColours() {
           </div>
 
           <Link
-            href="/select-color"
+            href={buyHref}
             className="mt-5 inline-flex items-center bg-black px-9 py-3.5 font-inter text-sm font-medium text-white transition-colors hover:bg-zinc-800"
           >
             Buy Caddie Companion
@@ -204,18 +297,31 @@ export default function ClosingColours() {
             Landscape product shots: the frame ratio matches the source (2000×1545) and
             object-contain shows the whole tool, uncropped and at native resolution. */}
         <div className="order-2 lg:col-start-1 lg:row-start-1 lg:row-span-2">
+          {/* Single frame: shows the active finish, or swaps to an add-on while
+              it's being previewed so it shows fully and on its own. */}
           <div className="relative mx-auto aspect-[4/3] w-full rounded-lg lg:w-full">
-            <Image
-              key={activeColor.id}
-              src={heroSrc}
-              alt={`Caddie Companion multi-tool in ${activeColor.name}`}
-              fill
-              sizes="(max-width: 1024px) 92vw, 720px"
-              className={`object-contain ${
-                activeColor.id === "red" ? "lg:scale-[0.97] lg:-translate-x-[10px] lg:-translate-y-[10px]" : ""
-              } ${activeColor.id === "green" ? "scale-[0.95] lg:scale-[0.97]" : ""}`}
-              preload
-            />
+            {previewedAddon ? (
+              <Image
+                key={previewedAddon.id}
+                src={previewedAddon.image}
+                alt={previewedAddon.name}
+                fill
+                sizes="(max-width: 1024px) 92vw, 720px"
+                className="object-contain"
+              />
+            ) : (
+              <Image
+                key={activeColor.id}
+                src={heroSrc}
+                alt={`Caddie Companion multi-tool in ${activeColor.name}`}
+                fill
+                sizes="(max-width: 1024px) 92vw, 720px"
+                className={`object-contain ${
+                  activeColor.id === "red" ? "lg:scale-[0.97] lg:-translate-x-[10px] lg:-translate-y-[10px]" : ""
+                } ${activeColor.id === "green" ? "scale-[0.95] lg:scale-[0.97]" : ""}`}
+                preload
+              />
+            )}
           </div>
         </div>
       </div>

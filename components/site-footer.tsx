@@ -10,21 +10,15 @@ export default function SiteFooter() {
       className="fixed inset-x-0 bottom-0 z-0 flex flex-col items-center justify-center overflow-hidden bg-white"
       style={{ height: "var(--footer-h)" }}
     >
-      {/* Full-bleed backdrop: golf clubs against the sky. */}
+      {/* Full-bleed backdrop: the four Caddie tools on a bed of golf balls. */}
       <Image
-        src="/footer-clubs-v2.jpg"
-        alt="Golf clubs against a blue sky"
+        src="/footer-balls.png"
+        alt="Caddie Companion tools in green, black, blue, and red resting on golf balls"
         fill
         preload
         sizes="100vw"
-        className="select-none object-cover object-[center_15%]"
+        className="select-none object-cover object-[center_30%]"
       />
-
-      {/* Wordmark, centered over the photo. Steps with the viewport so the
-          two words stay on one line from tablet up without overflowing. */}
-      <h2 className="relative z-10 mb-44 select-none px-6 text-center font-brand text-5xl font-bold uppercase tracking-tight text-white sm:text-7xl md:text-8xl xl:text-[7.5rem]">
-        Caddie Companion
-      </h2>
 
       <p className="absolute bottom-6 z-10 px-6 text-center font-inter text-xs text-white/80">
         © 2026 Caddie Companion. Designed for the walk from tee to green.

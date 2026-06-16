@@ -11,6 +11,7 @@ export type ProductAddon = {
   description: string;
   priceCents: number;
   variantId: string | null;
+  image: string;
 };
 
 export const PRODUCT = {
@@ -33,6 +34,7 @@ export const PRODUCT = {
       description: "A spare brush head that twists on when the original wears down.",
       priceCents: 400,
       variantId: null,
+      image: "/caddie-brush-nobg.png",
     },
   ] as ProductAddon[],
   colors: [

@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -16,14 +16,12 @@ const GRASS = "/caddie-divot-grass.png";
 const OPENER = "/bottle-opener-caddie.png";
 
 // Scattered desktop photos. Two big (top-left, bottom-right) and two small
-// (bottom-left, top-right) on a diagonal for depth. `speed` is the parallax
-// factor: how many px the photo shifts per px the section moves off center.
-// Mixed signs make the cluster drift apart as you scroll.
+// (bottom-left, top-right) on a diagonal for depth.
 const PHOTOS = [
-  { src: BAG, pos: "top-[5%] left-[4%]", size: "w-80 xl:w-96", sizes: "(max-width: 1280px) 20rem, 24rem", speed: 0 },
-  { src: TORX, pos: "bottom-[10%] left-[13%]", size: "w-64 xl:w-72", sizes: "(max-width: 1280px) 16rem, 18rem", speed: -0.06 },
-  { src: GRASS, pos: "top-[10%] right-[11%]", size: "w-64 xl:w-72", sizes: "(max-width: 1280px) 16rem, 18rem", speed: 0.07 },
-  { src: OPENER, pos: "bottom-[6%] right-[6%]", size: "w-80 xl:w-96", sizes: "(max-width: 1280px) 20rem, 24rem", speed: 0, square: true },
+  { src: BAG, pos: "top-[5%] left-[4%]", size: "w-80 xl:w-96", sizes: "(max-width: 1280px) 20rem, 24rem" },
+  { src: TORX, pos: "bottom-[10%] left-[13%]", size: "w-64 xl:w-72", sizes: "(max-width: 1280px) 16rem, 18rem" },
+  { src: GRASS, pos: "top-[10%] right-[11%]", size: "w-64 xl:w-72", sizes: "(max-width: 1280px) 16rem, 18rem" },
+  { src: OPENER, pos: "bottom-[6%] right-[6%]", size: "w-80 xl:w-96", sizes: "(max-width: 1280px) 20rem, 24rem", square: true },
 ];
 
 export default function Promise() {
@@ -32,9 +30,6 @@ export default function Promise() {
   const eyebrowRef = useRef<HTMLParagraphElement>(null);
   const paraRef = useRef<HTMLParagraphElement>(null);
   const ctaRef = useRef<HTMLAnchorElement>(null);
-  // Signed distance (px) between the section's center and the viewport
-  // center. 0 when the section is centered; grows as it scrolls past.
-  const [offset, setOffset] = useState(0);
 
   // Scroll reveal: eyebrow rises in, then the paragraph resolves word by
   // word out of a blur. Triggered once when the text scrolls into view.
@@ -98,39 +93,29 @@ export default function Promise() {
         scrollTrigger: trigger,
       });
 
-      // Mobile photo stack: each frame rises + scales in as it scrolls into
-      // view, one at a time. Scoped to the single-column mobile layout — on
-      // desktop these photos are display:none (the parallax cluster shows
-      // instead), so there's nothing to animate.
+      // Photos simply fade in as they enter view — no movement, scale, or
+      // blur. Mobile fades each frame on its own trigger; desktop fades the
+      // scattered cluster in together with a slight stagger.
       const mm = gsap.matchMedia();
       mm.add("(max-width: 1023px)", () => {
         const q = gsap.utils.selector(sectionRef);
         q(".promise-photo").forEach((photo) => {
           gsap.from(photo, {
             opacity: 0,
-            y: 60,
-            scale: 0.96,
             duration: 1,
-            ease: "power3.out",
+            ease: "power2.out",
             scrollTrigger: { trigger: photo, start: "top 85%", once: true },
           });
         });
       });
 
-      // Desktop scattered cluster: each photo rises + scales out of a blur as
-      // the section comes into view, dealt with a slight stagger. The reveal
-      // transform lives on the inner element so it composes with — rather than
-      // overwrites — the parallax transform React drives on the wrapper.
       mm.add("(min-width: 1024px)", () => {
         const q = gsap.utils.selector(sectionRef);
         q(".promise-photo-desktop").forEach((photo, i) => {
           gsap.from(photo, {
             opacity: 0,
-            y: 50,
-            scale: 0.94,
-            filter: "blur(8px)",
             duration: 1.1,
-            ease: "power3.out",
+            ease: "power2.out",
             delay: i * 0.12,
             scrollTrigger: {
               trigger: sectionRef.current,
@@ -149,49 +134,21 @@ export default function Promise() {
     { scope: sectionRef }
   );
 
-  useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-
-    let raf = 0;
-    const update = () => {
-      raf = 0;
-      const el = sectionRef.current;
-      if (!el) return;
-      const rect = el.getBoundingClientRect();
-      setOffset(window.innerHeight / 2 - (rect.top + rect.height / 2));
-    };
-    const onScroll = () => {
-      if (!raf) raf = requestAnimationFrame(update);
-    };
-
-    update();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
-      if (raf) cancelAnimationFrame(raf);
-    };
-  }, []);
-
   return (
     <section
       ref={sectionRef}
       className="relative z-20 rounded-t-[2rem] lg:rounded-t-[2.5rem] shadow-[0_-24px_48px_-24px_rgba(0,0,0,0.5)] lg:min-h-[135vh] w-full overflow-hidden bg-[#fafaf7] px-6 pt-24 pb-16 lg:py-0 flex flex-col items-center justify-center"
     >
       {/* Scattered photos — desktop only, positioned around the centered text.
-          Outer wrapper owns the React-driven parallax transform; the inner
-          `.promise-photo-desktop` element carries the GSAP reveal transform, so
-          the two never fight over `transform`. */}
+          The inner `.promise-photo-desktop` element carries the GSAP fade. */}
       <div aria-hidden className="hidden lg:block">
-        {PHOTOS.map(({ src, pos, size, sizes, speed, square }) => (
+        {PHOTOS.map(({ src, pos, size, sizes, square }) => (
           <div
             key={src}
-            className={`absolute ${pos} ${size} will-change-transform`}
-            style={{ transform: `translate3d(0, ${offset * speed}px, 0)` }}
+            className={`absolute ${pos} ${size}`}
           >
             {square ? (
-              <div className="promise-photo-desktop aspect-[4/5] w-full overflow-hidden rounded-sm will-change-transform">
+              <div className="promise-photo-desktop aspect-[4/5] w-full overflow-hidden rounded-sm">
                 <Image src={src} alt="" fill className="object-cover" sizes={sizes} />
               </div>
             ) : (
@@ -200,7 +157,7 @@ export default function Promise() {
                 alt=""
                 width={1122}
                 height={1402}
-                className="promise-photo-desktop h-auto w-full rounded-sm will-change-transform"
+                className="promise-photo-desktop h-auto w-full rounded-sm"
                 sizes={sizes}
               />
             )}

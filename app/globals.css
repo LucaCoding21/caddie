@@ -14,12 +14,12 @@
 
   /* Height of the reveal footer. Drives both the fixed footer and the scroll
      space reserved above it, so the two can't drift apart. */
-  --footer-h: 92vh;
+  --footer-h: 60vh;
 }
 
 @media (max-width: 640px) {
   :root {
-    --footer-h: 64vh;
+    --footer-h: 42vh;
   }
 }
 
