@@ -161,7 +161,7 @@ export default function Anatomy() {
       // breakpoint — matchMedia cleans the timeline up if the viewport drops
       // below it (where the lines/labels are display:none and undrawable).
       const mm = gsap.matchMedia();
-      mm.add("(min-width: 1024px)", () => {
+      mm.add("(min-width: 1280px)", () => {
         const q = gsap.utils.selector(diagramRef);
 
         // Capture each label's final text, then hide it — the scramble tween
@@ -253,19 +253,19 @@ export default function Anatomy() {
   return (
     <section
       ref={sectionRef}
-      className="relative z-20 -mt-px w-full bg-[#fafaf7] pt-20 md:pt-28 pb-24 md:pb-32 lg:grid lg:grid-cols-[minmax(0,1fr)_auto] lg:grid-rows-[auto_auto_auto] lg:items-center lg:gap-x-8 lg:gap-y-0 lg:pt-28 lg:pb-24"
+      className="relative z-20 -mt-px w-full bg-[#fafaf7] pt-20 md:pt-28 pb-24 md:pb-32 xl:grid xl:grid-cols-[minmax(0,1fr)_auto] xl:grid-rows-[auto_auto_auto] xl:items-center xl:gap-x-8 xl:gap-y-0 xl:pt-28 xl:pb-24"
     >
       {/* Section heading + intro, on top of the diagram. */}
-      <div className="w-full max-w-5xl px-6 lg:pl-28 mb-4 md:mb-16 lg:mb-0 text-left lg:col-start-1 lg:row-start-1 lg:self-end">
+      <div className="w-full max-w-7xl px-6 xl:pl-28 mb-4 md:mb-16 xl:mb-0 text-left xl:col-start-1 xl:row-start-1 xl:self-end">
         <h2
           ref={titleRef}
-          className="font-inter font-medium text-black text-4xl sm:text-5xl md:text-6xl lg:text-6xl leading-[1.05] tracking-tight"
+          className="font-inter font-medium text-black text-4xl xl:text-6xl leading-[1.05] tracking-tight"
         >
           Six tools every golfer carries.
-          <br className="hidden sm:block" />
+          <br className="hidden xl:block" />
           <span className="whitespace-nowrap text-[#768dc5]"> Now it&apos;s just this.</span>
         </h2>
-        <p className="mt-8 md:mt-10 max-w-2xl font-inter text-zinc-600 text-base md:text-lg leading-[1.5]">
+        <p className="mt-8 md:mt-10 max-w-3xl font-inter text-zinc-600 text-base md:text-lg leading-[1.5]">
           Every tool swings out of a single milled frame. Repair a pitch mark,
           clean your grooves, mark your line, tune your driver, cut, and crack
           one at the turn.
@@ -274,13 +274,13 @@ export default function Anatomy() {
 
       {/* Relative wrapper sized to the image — annotations are absolutely
           positioned in here, so percentage coords map onto the photo. */}
-      <div ref={diagramRef} className="relative mx-auto mt-0 mb-32 md:mt-16 md:mb-48 lg:mt-12 lg:mb-20 w-full max-w-5xl lg:max-w-[112vh] lg:col-span-2 lg:row-start-2 lg:self-center lg:justify-self-center">
+      <div ref={diagramRef} className="relative mx-auto mt-0 mb-32 md:mt-16 md:mb-48 xl:mt-12 xl:mb-20 w-full max-w-5xl xl:max-w-[112vh] xl:col-span-2 xl:row-start-2 xl:self-center xl:justify-self-center">
         <Image
           src="/caddie-companion-blue-tools-v2.png"
           alt="Caddie Companion folded fully open, every tool fanned out"
           width={1999}
           height={1545}
-          className="mx-auto block h-auto w-full lg:w-[70%]"
+          className="mx-auto block h-auto w-full xl:w-[70%]"
           sizes="(max-width: 1024px) 100vw, 56rem"
         />
 
@@ -289,7 +289,7 @@ export default function Anatomy() {
             Hidden on small screens — see the mobile legend below. */}
         <svg
           aria-hidden
-          className="pointer-events-none absolute inset-0 hidden h-full w-full overflow-visible text-zinc-500/40 lg:block"
+          className="pointer-events-none absolute inset-0 hidden h-full w-full overflow-visible text-zinc-500/40 xl:block"
           viewBox="0 0 100 100"
           preserveAspectRatio="none"
           fill="none"
@@ -309,7 +309,7 @@ export default function Anatomy() {
         </svg>
 
         {/* Nodes (square markers on each part) */}
-        <div aria-hidden className="absolute inset-0 hidden lg:block">
+        <div aria-hidden className="absolute inset-0 hidden xl:block">
           {CALLOUTS.map((c) => (
             <span
               key={c.n}
@@ -320,7 +320,7 @@ export default function Anatomy() {
         </div>
 
         {/* Labels */}
-        <div className="absolute inset-0 hidden lg:block">
+        <div className="absolute inset-0 hidden xl:block">
           {CALLOUTS.map((c) => {
             const right = c.label.side === "right";
             return (
@@ -367,7 +367,7 @@ export default function Anatomy() {
         {/* Mobile / tablet legend — the callout overlay above needs the wide
             side gutters, so below lg the six tools list out under the photo
             instead, keeping the same numbered mono voice. */}
-        <div className="mt-12 grid grid-cols-2 gap-x-6 gap-y-10 px-6 sm:grid-cols-3 lg:hidden">
+        <div className="mt-12 grid grid-cols-2 gap-x-6 gap-y-10 px-6 sm:grid-cols-3 sm:gap-x-12 sm:gap-y-14 xl:hidden mx-auto max-w-md sm:max-w-3xl justify-items-center text-center">
           {CALLOUTS.map((c) => (
             <div key={c.n}>
               <Image
@@ -375,7 +375,7 @@ export default function Anatomy() {
                 alt=""
                 width={200}
                 height={200}
-                className="h-24 w-24 object-contain sm:h-20 sm:w-20"
+                className="mx-auto h-24 w-24 object-contain sm:h-20 sm:w-20"
               />
               <div className="mt-3 font-mono text-sm font-medium uppercase leading-tight text-zinc-900">
                 <span className="mr-1.5 text-zinc-400">{c.n}</span>
@@ -392,8 +392,8 @@ export default function Anatomy() {
       {/* Closing line — replaces the old spec strip. Anchored in the section's
           bottom-right gutter (third grid row); on smaller screens it stacks
           under the diagram. */}
-      <div className="w-full max-w-md px-6 mt-12 lg:mt-0 lg:px-0 lg:pr-28 lg:w-[36rem] lg:max-w-none lg:col-start-2 lg:row-start-3 lg:self-start lg:justify-self-end">
-        <p className="font-inter text-base leading-[1.5] text-zinc-600 md:text-lg lg:text-right">
+      <div className="w-full max-w-md px-6 mt-12 mx-auto xl:mx-0 xl:mt-0 xl:px-0 xl:pr-28 xl:w-[36rem] xl:max-w-none xl:col-start-2 xl:row-start-3 xl:self-start xl:justify-self-end">
+        <p className="font-inter text-base leading-[1.5] text-zinc-600 md:text-lg text-center xl:text-right">
           It all folds into one piece, small enough for a pocket. Nothing to
           rattle, nothing to lose.
         </p>

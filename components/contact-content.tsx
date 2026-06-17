@@ -12,10 +12,13 @@ gsap.registerPlugin(useGSAP, ScrollTrigger, SplitText);
 // Direct lines, kept short and factual, the same engineered, quiet voice as
 // the rest of the site. SAMPLE COPY, confirm before ship.
 const DETAILS: { label: string; value: string; href?: string }[] = [
-  { label: "Email", value: "hello@caddie.golf", href: "mailto:hello@caddie.golf" },
+  {
+    label: "Email",
+    value: "info@caddiecompanion.com",
+    href: "mailto:info@caddiecompanion.com",
+  },
   { label: "Orders", value: "Track or change at the link in your receipt." },
-  { label: "Hours", value: "Mon-Fri · 9-5 PT" },
-  { label: "Workshop", value: "Vancouver, BC" },
+  { label: "Workshop", value: "Yakima, WA USA" },
 ];
 
 /**

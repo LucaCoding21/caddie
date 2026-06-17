@@ -83,10 +83,10 @@ export function AboutIntro() {
         </div>
 
         {/* Copy — on the right, left-aligned beside the film. */}
-        <div className="text-left">
+        <div className="pt-16 text-left lg:pt-24">
           <p
             ref={eyebrowRef}
-            className="mb-6 font-mono text-[11px] font-medium uppercase tracking-[0.18em] text-zinc-400"
+            className="mb-6 py-6 font-mono text-[11px] font-medium uppercase tracking-[0.18em] text-zinc-400"
           >
             Caddie Companion
           </p>

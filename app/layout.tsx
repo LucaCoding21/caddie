@@ -2,9 +2,26 @@ import type { Metadata } from "next";
 import { geistSans, geistMono, brandSans, inter } from "@/lib/fonts";
 import "./globals.css";
 
+const siteUrl = "https://caddie-pink.vercel.app";
+
+const description =
+  "The six-in-one golf multi-tool that earns its place in the bag.";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
   title: "Caddie Companion",
-  description: "Caddie Companion",
+  description,
+  openGraph: {
+    title: "Caddie Companion",
+    description,
+    siteName: "Caddie Companion",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Caddie Companion",
+    description,
+  },
 };
 
 export default function RootLayout({

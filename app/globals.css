@@ -36,6 +36,18 @@
   --font-inter: var(--font-inter);
 }
 
+/* iPad portrait should read as the phone layout, not a half-desktop one.
+   The site's real mobile→desktop divider is `lg` (1024px) — every layout
+   swap and JS matchMedia already pivots there. The only things leaking the
+   desktop treatment into the 768–1023px iPad range were the intermediate
+   `sm` (640px) and `md` (768px) tweaks (bigger type, wider padding, the
+   header's full nav). Collapsing both up to 1024px makes phone styling carry
+   straight through iPad portrait, with no change to phone or desktop. */
+@theme {
+  --breakpoint-sm: 64rem;
+  --breakpoint-md: 64rem;
+}
+
 /* Brand is always light. No prefers-color-scheme override. */
 body {
   background: var(--background);

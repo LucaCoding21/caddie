@@ -63,15 +63,17 @@ export default function Hero() {
       ref={sectionRef}
       className="sticky top-0 h-svh w-full overflow-hidden bg-black"
     >
-      {/* Hero image — a dedicated portrait crop on mobile, the wide shot on
-          larger screens. */}
+      {/* Hero image — selected by viewport orientation, not width: any portrait
+          viewport (phone or tablet held tall) gets the dedicated portrait crop,
+          since the wide shot zooms in and crops the tool. Landscape viewports
+          (tablet landscape, laptops, desktops) get the wide shot. */}
       <Image
         src="/caddie-mobile-hero.png"
         alt=""
         fill
         preload
         sizes="100vw"
-        className="absolute inset-0 h-full w-full object-cover object-center sm:hidden"
+        className="absolute inset-0 h-full w-full object-cover object-center landscape:hidden"
       />
       <Image
         src="/hero-caddie2.png"
@@ -79,7 +81,7 @@ export default function Hero() {
         fill
         preload
         sizes="100vw"
-        className="absolute inset-0 hidden h-full w-full object-cover object-[20%_center] sm:block"
+        className="absolute inset-0 hidden h-full w-full object-cover object-[20%_center] landscape:block"
       />
 
       {/* Subtle top gradient */}

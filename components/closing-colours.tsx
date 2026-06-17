@@ -136,10 +136,10 @@ export default function ClosingColours() {
       ref={sectionRef}
       className="relative z-20 -mt-px w-full bg-[#f6f6f6] px-6 md:px-12 py-32 md:py-44"
     >
-      <div className="mx-auto grid max-w-[1340px] items-center gap-12 lg:grid-cols-[1.85fr_1fr] lg:gap-x-48 lg:gap-y-10">
+      <div className="mx-auto grid max-w-[1340px] items-center gap-12 xl:grid-cols-[1.85fr_1fr] xl:gap-x-48 xl:gap-y-10">
         {/* Header — sits above the photo on mobile; on desktop it rejoins the
             top of the right column. */}
-        <div className="order-1 lg:col-start-2 lg:row-start-1">
+        <div className="order-1 lg:order-2 lg:mx-auto lg:w-full lg:max-w-2xl xl:max-w-none xl:col-start-2 xl:row-start-1">
           <p
             ref={eyebrowRef}
             className="font-mono text-[11px] font-medium uppercase tracking-[0.18em] text-zinc-400"
@@ -152,7 +152,7 @@ export default function ClosingColours() {
           >
             {PRODUCT.title}
           </h2>
-          <p className="mt-6 max-w-md font-inter text-zinc-600 text-base md:text-lg leading-[1.5]">
+          <p className="mt-6 max-w-md lg:max-w-2xl xl:max-w-md font-inter text-zinc-600 text-base md:text-lg leading-[1.5]">
             The all-in-one golf multi-tool. Clean clubs, fix divots, and be
             ready for anything, in the finish that suits your bag.
           </p>
@@ -160,10 +160,10 @@ export default function ClosingColours() {
 
         {/* Decision panel — finish picker, price, and buy. Below the photo on
             mobile; under the header in the right column on desktop. */}
-        <div className="order-3 lg:col-start-2 lg:row-start-2">
+        <div className="order-3 lg:order-3 lg:mx-auto lg:w-full lg:max-w-2xl xl:max-w-none xl:col-start-2 xl:row-start-2">
           {/* Finish list — name on the left, swatch dot on the right, one row each.
               The active row's dot sits in a black ring and drives the hero. */}
-          <div className="max-w-md">
+          <div className="max-w-md lg:max-w-2xl xl:max-w-md">
             <p className="font-mono text-[11px] font-medium uppercase tracking-[0.18em] text-zinc-400">
               Finish
             </p>
@@ -296,7 +296,7 @@ export default function ClosingColours() {
         {/* Hero — swaps to the selected finish, so "four ways to carry" is shown, not told.
             Landscape product shots: the frame ratio matches the source (2000×1545) and
             object-contain shows the whole tool, uncropped and at native resolution. */}
-        <div className="order-2 lg:col-start-1 lg:row-start-1 lg:row-span-2">
+        <div className="order-2 lg:order-1 lg:mx-auto lg:w-full lg:max-w-2xl xl:max-w-none xl:col-start-1 xl:row-start-1 xl:row-span-2">
           {/* Single frame: shows the active finish, or swaps to an add-on while
               it's being previewed so it shows fully and on its own. */}
           <div className="relative mx-auto aspect-[4/3] w-full rounded-lg lg:w-full">
@@ -317,8 +317,8 @@ export default function ClosingColours() {
                 fill
                 sizes="(max-width: 1024px) 92vw, 720px"
                 className={`object-contain ${
-                  activeColor.id === "red" ? "lg:scale-[0.97] lg:-translate-x-[10px] lg:-translate-y-[10px]" : ""
-                } ${activeColor.id === "green" ? "scale-[0.95] lg:scale-[0.97]" : ""}`}
+                  activeColor.id === "red" ? "xl:scale-[0.97] xl:-translate-x-[10px] xl:-translate-y-[10px]" : ""
+                } ${activeColor.id === "green" ? "scale-[0.95] xl:scale-[0.97]" : ""}`}
                 preload
               />
             )}
