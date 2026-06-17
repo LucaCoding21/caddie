@@ -9,13 +9,6 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-// On touch devices (incl. iPad) the browser address bar shows/hides as you
-// scroll, which changes 100vh and made ScrollTrigger re-measure mid-scroll —
-// that's what caused the exploded-view pin to lurch / jump back on unpin.
-// Telling ScrollTrigger to ignore those toolbar-driven resizes keeps the pin
-// smooth. It's a global, idempotent setting; safe to call here.
-ScrollTrigger.config({ ignoreMobileResize: true });
-
 /**
  * Canvas-only variant of the caddie-site CaddieExplode (the three.js + GSAP
  * logic is 1:1). It fills whatever box it's dropped into (the right column),
@@ -172,31 +165,7 @@ export default function CaddieExplodeCanvas({
       return t * t * (3 - 2 * t);
     };
 
-    // Create the pin NOW, on mount — in natural DOM order with the page's
-    // other ScrollTriggers — so its pin-spacing is measured once and stays put.
-    // Previously this was created late, inside the model's load .then(), which
-    // forced a ScrollTrigger.refresh() after the user may have already scrolled
-    // in; that recalculation is what made the pin lock early and lurch the
-    // scroll back to the lock point on release. The model only feeds the
-    // explosion progress (`target.p`) and doesn't affect layout, so the pin
-    // doesn't need to wait for it.
-    const st = ScrollTrigger.create({
-      trigger: pinEl,
-      start: "top top",
-      // canPin: pin the one-fold section; scrolling +=85% of the viewport
-      // scrubs the explosion 0 → 1, then it releases. Narrow: just scrub past.
-      end: canPin ? "+=85%" : "bottom top",
-      pin: canPin ? pinEl : false,
-      anticipatePin: 1,
-      // Keep this pin's spacing resolved before later triggers measure.
-      refreshPriority: 1,
-      scrub: 0.6,
-      onUpdate: (self) => {
-        target.p = self.progress;
-        setProgress(self.progress);
-        wake();
-      },
-    });
+    let st: ScrollTrigger | null = null;
 
     Promise.all([
       new GLTFLoader().loadAsync("/models/caddie_exploded_engraved.glb"),
@@ -255,13 +224,29 @@ export default function CaddieExplodeCanvas({
 
       setLoaded(true);
 
-      // Size the renderer to the (now-populated) canvas box. Loading the model
-      // doesn't change page layout — the canvas fills a fixed box and the
-      // "loading" overlay is absolutely positioned — so the pin created on
-      // mount needs NO ScrollTrigger.refresh() here. Refreshing at this point
-      // (after the user has scrolled in) is exactly what jumped the scroll
-      // before; a plain renderer resize is enough.
+      // Pin the whole one-fold section in place; scrolling 420% of viewport
+      // scrubs the explosion 0 → 1, then the section releases and scrolls on.
+      st = ScrollTrigger.create({
+        trigger: pinEl,
+        start: "top top",
+        end: canPin ? "+=85%" : "bottom top",
+        pin: canPin ? pinEl : false,
+        anticipatePin: 1,
+        // This pin is created late (after the GLB loads), out of DOM order
+        // relative to scroll triggers further down the page (e.g. the CTA fan).
+        // A positive refreshPriority makes ScrollTrigger process this pin first
+        // on every refresh so its pin-spacing is baked in before those later
+        // triggers measure — otherwise they land ~85vh too early.
+        refreshPriority: 1,
+        scrub: 0.6,
+        onUpdate: (self) => {
+          target.p = self.progress;
+          setProgress(self.progress);
+          wake();
+        },
+      });
       resize();
+      ScrollTrigger.refresh();
     });
 
     window.addEventListener("resize", resize);
