@@ -9,6 +9,14 @@ import { SplitText } from "gsap/SplitText";
 
 gsap.registerPlugin(useGSAP, SplitText);
 
+// Tiny (16px) blurred previews, inlined so they paint instantly while the
+// full hero downloads — no blank black frame on first load. Generated from the
+// source images with sharp.
+const MOBILE_BLUR =
+  "data:image/webp;base64,UklGRmQAAABXRUJQVlA4IFgAAACwAwCdASoQABwAPu1iqU2ppaOiMAgBMB2JYgC7ACHfhmljLxm0AAD+2M6u0jXOQ3/h3Cq1gwjyhOvmy/BskGQfcrQ8a19kSr45UbfsbipSkoFgW6Ng8sQA";
+const DESKTOP_BLUR =
+  "data:image/webp;base64,UklGRjwAAABXRUJQVlA4IDAAAADQAQCdASoQAAkAA4BaJZgCdAEPAg/zAAD+6+GQhfXBU7t9dXsUzBpjw7c2RD5YAAA=";
+
 export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
@@ -67,19 +75,28 @@ export default function Hero() {
           viewport (phone or tablet held tall) gets the dedicated portrait crop,
           since the wide shot zooms in and crops the tool. Landscape viewports
           (tablet landscape, laptops, desktops) get the wide shot. */}
+      {/* fetchPriority="high" (not preload) is the right hint here: only one of
+          these two is ever visible per viewport, so preloading both would fetch
+          a hidden image. The off-orientation image stays lazy and never loads;
+          the visible one — already in the viewport — loads eagerly at high
+          priority. */}
       <Image
-        src="/caddie-mobile-hero.png"
+        src="/caddie-mobile-hero.webp"
         alt=""
         fill
-        preload
+        fetchPriority="high"
+        placeholder="blur"
+        blurDataURL={MOBILE_BLUR}
         sizes="100vw"
         className="absolute inset-0 h-full w-full object-cover object-center landscape:hidden"
       />
       <Image
-        src="/hero-caddie2.png"
+        src="/hero-caddie2.webp"
         alt=""
         fill
-        preload
+        fetchPriority="high"
+        placeholder="blur"
+        blurDataURL={DESKTOP_BLUR}
         sizes="100vw"
         className="absolute inset-0 hidden h-full w-full object-cover object-[20%_center] landscape:block"
       />

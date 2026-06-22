@@ -6,10 +6,10 @@ const nextConfig: NextConfig = {
     root: path.resolve(__dirname),
   },
   images: {
-    // Serve WebP (smaller than the original PNG/JPG at the same quality, and
-    // fast to encode). Source files in public/ are untouched — this only
-    // affects the optimized variants Next generates and serves.
-    formats: ["image/webp"],
+    // Serve AVIF to browsers that support it (~20% smaller than WebP at equal
+    // quality), falling back to WebP, then the original. Order matters: the
+    // first format the browser's Accept header matches wins.
+    formats: ["image/avif", "image/webp"],
     // Cache optimized variants for 31 days instead of the 4-hour default, so
     // repeat visits and warm CDNs re-serve them without re-encoding.
     minimumCacheTTL: 60 * 60 * 24 * 31,
