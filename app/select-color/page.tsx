@@ -55,9 +55,24 @@ function SelectColorConfigurator() {
     .split(",")
     .filter((id) => PRODUCT.addons.some((a) => a.id === id));
 
+  // Per-colour quantities, keyed by colour id (a colour absent from the map is
+  // simply 0). Seed the colour we arrived on at 1 if it's actually orderable.
+  const initialColor = PRODUCT.colors.find((c) => c.id === initialColorId);
+  const [quantities, setQuantities] = useState<Record<string, number>>(() =>
+    initialColor?.variantId ? { [initialColorId]: 1 } : {}
+  );
+  // The finish the gallery is previewing — whichever row was last touched.
   const [activeColorId, setActiveColorId] = useState(initialColorId);
-  const [quantity, setQuantity] = useState(1);
-  const [addonIds, setAddonIds] = useState<string[]>(initialAddonIds);
+  // Add-on quantities, keyed by add-on id (absent = 0). Seed any add-on passed
+  // in the query at 1.
+  const [addonQty, setAddonQty] = useState<Record<string, number>>(() => {
+    const seed: Record<string, number> = {};
+    for (const id of initialAddonIds) seed[id] = 1;
+    return seed;
+  });
+  // When set, the gallery previews this add-on instead of the active finish.
+  // Touching any finish clears it back to the colour preview.
+  const [previewAddonId, setPreviewAddonId] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -66,41 +81,88 @@ function SelectColorConfigurator() {
     PRODUCT.colors.findIndex((c) => c.id === activeColorId)
   );
   const activeColor = PRODUCT.colors[activeIdx];
-  const unavailable = !activeColor.variantId;
-  const selectedAddons = PRODUCT.addons.filter((a) => addonIds.includes(a.id));
-  const totalCents =
-    quantity * PRODUCT.priceCents +
-    selectedAddons.reduce((sum, a) => sum + a.priceCents, 0);
-  const heroSrc = STUDIO_SHOTS[activeColor.id] ?? activeColor.image;
+  const totalUnits = PRODUCT.colors.reduce(
+    (sum, c) => sum + (quantities[c.id] ?? 0),
+    0
+  );
+  const addonsCents = PRODUCT.addons.reduce(
+    (sum, a) => sum + (addonQty[a.id] ?? 0) * a.priceCents,
+    0
+  );
+  const totalCents = totalUnits * PRODUCT.priceCents + addonsCents;
 
-  function selectColor(id: string) {
+  // Gallery preview: an add-on if one is selected for preview, else the active
+  // finish's studio shot.
+  const previewAddon = previewAddonId
+    ? PRODUCT.addons.find((a) => a.id === previewAddonId)
+    : null;
+  const heroSrc = previewAddon
+    ? previewAddon.image
+    : STUDIO_SHOTS[activeColor.id] ?? activeColor.image;
+  const heroAlt = previewAddon
+    ? previewAddon.name
+    : `Caddie Companion multi-tool in ${activeColor.name}`;
+  const heroKey = previewAddon ? `addon-${previewAddon.id}` : activeColor.id;
+
+  // Tap a row to preview that finish in the gallery, without changing its qty.
+  function previewColor(id: string) {
     setActiveColorId(id);
+    setPreviewAddonId(null);
     setError(null);
   }
 
-  function toggleAddon(id: string) {
-    setAddonIds((ids) =>
-      ids.includes(id) ? ids.filter((x) => x !== id) : [...ids, id]
-    );
+  // Preview an add-on's image in the gallery, without changing its qty.
+  function previewAddonImage(id: string) {
+    setPreviewAddonId(id);
+    setError(null);
+  }
+
+  // Adjust one colour's quantity; clamp at 0 and drop the key when it hits 0 so
+  // the map only ever holds colours actually in the cart. Also previews it.
+  function changeQty(id: string, delta: number) {
+    setQuantities((q) => {
+      const next = Math.max(0, (q[id] ?? 0) + delta);
+      const copy = { ...q };
+      if (next === 0) delete copy[id];
+      else copy[id] = next;
+      return copy;
+    });
+    setActiveColorId(id);
+    setPreviewAddonId(null);
+    setError(null);
+  }
+
+  // Same clamp-and-drop pattern as the colours, for add-on quantities. Also
+  // previews the add-on in the gallery.
+  function changeAddonQty(id: string, delta: number) {
+    setAddonQty((q) => {
+      const next = Math.max(0, (q[id] ?? 0) + delta);
+      const copy = { ...q };
+      if (next === 0) delete copy[id];
+      else copy[id] = next;
+      return copy;
+    });
+    setPreviewAddonId(id);
     setError(null);
   }
 
   async function checkout() {
+    if (totalUnits === 0) return;
     setLoading(true);
     setError(null);
     try {
-      if (!activeColor.variantId) {
-        throw new Error(`${activeColor.name} isn't available yet`);
-      }
+      const colorLines = PRODUCT.colors
+        .filter((c) => c.variantId && (quantities[c.id] ?? 0) > 0)
+        .map((c) => ({ variantId: c.variantId, quantity: quantities[c.id] }));
       const res = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           lines: [
-            { variantId: activeColor.variantId, quantity },
-            ...selectedAddons
-              .filter((a) => a.variantId)
-              .map((a) => ({ variantId: a.variantId, quantity: 1 })),
+            ...colorLines,
+            ...PRODUCT.addons
+              .filter((a) => a.variantId && (addonQty[a.id] ?? 0) > 0)
+              .map((a) => ({ variantId: a.variantId, quantity: addonQty[a.id] })),
           ],
         }),
       });
@@ -133,9 +195,9 @@ function SelectColorConfigurator() {
         <div className="relative flex min-h-[46svh] items-center justify-center overflow-hidden bg-[#f6f6f6] p-5 sm:p-8 lg:min-h-0 lg:w-[55%]">
           <div className="relative aspect-[1200/896] w-full max-w-[840px]">
             <Image
-              key={activeColor.id}
+              key={heroKey}
               src={heroSrc}
-              alt={`Caddie Companion multi-tool in ${activeColor.name}`}
+              alt={heroAlt}
               fill
               sizes="(max-width: 1024px) 92vw, 840px"
               className="hero-rise object-cover"
@@ -167,28 +229,33 @@ function SelectColorConfigurator() {
                 ready for anything, in the finish that suits your bag.
               </p>
 
-              {/* Finish — divider rows, name left, swatch dot right. Same list
-                  the home page closes on, so the flow reads as one brand. */}
+              {/* Finish — divider rows: swatch + name on the left (tap to
+                  preview in the gallery), a per-colour quantity stepper on the
+                  right so a single order can mix finishes. */}
               <section className="mt-7">
                 <p className="font-mono text-[11px] font-medium uppercase tracking-[0.18em] text-zinc-400">
                   Finish
                 </p>
                 <ul className="mt-3">
                   {PRODUCT.colors.map((c) => {
-                    const selected = activeColorId === c.id;
+                    const active = activeColorId === c.id;
+                    const qty = quantities[c.id] ?? 0;
                     const soon = !c.variantId;
                     return (
-                      <li key={c.id} className="border-t border-black/8 last:border-b">
+                      <li
+                        key={c.id}
+                        className="flex items-center gap-3 border-t border-black/8 py-2.5 last:border-b"
+                      >
                         <button
                           type="button"
-                          onClick={() => selectColor(c.id)}
-                          aria-pressed={selected}
-                          className="flex w-full cursor-pointer items-center gap-3 py-4 text-left"
+                          onClick={() => previewColor(c.id)}
+                          aria-pressed={active}
+                          className="flex flex-1 cursor-pointer items-center gap-3 py-1.5 text-left"
                         >
                           <span
                             aria-hidden
                             className={`h-4 w-4 shrink-0 rounded-full transition-all ${
-                              selected
+                              active
                                 ? "ring-2 ring-accent ring-offset-2 ring-offset-white"
                                 : ""
                             }`}
@@ -196,95 +263,119 @@ function SelectColorConfigurator() {
                           />
                           <span
                             className={`font-inter text-sm transition-colors ${
-                              selected
+                              qty > 0 || active
                                 ? "font-semibold text-black"
                                 : "font-medium text-zinc-600 hover:text-black"
                             }`}
                           >
                             {c.name}
-                            {soon && (
-                              <span className="ml-2 font-normal text-zinc-400">
-                                Coming soon
-                              </span>
-                            )}
                           </span>
                         </button>
+                        {soon ? (
+                          <span className="font-inter text-xs text-zinc-400">
+                            Coming soon
+                          </span>
+                        ) : (
+                          <div className="flex shrink-0 items-center">
+                            <button
+                              type="button"
+                              onClick={() => changeQty(c.id, -1)}
+                              disabled={qty <= 0}
+                              aria-label={`Decrease ${c.name} quantity`}
+                              className="flex h-9 w-8 items-center justify-center text-base text-zinc-500 transition-colors hover:text-black disabled:opacity-25"
+                            >
+                              −
+                            </button>
+                            <span className="w-7 text-center font-inter text-sm font-medium tabular-nums">
+                              {qty}
+                            </span>
+                            <button
+                              type="button"
+                              onClick={() => changeQty(c.id, 1)}
+                              aria-label={`Increase ${c.name} quantity`}
+                              className="flex h-9 w-8 items-center justify-center text-base text-zinc-500 transition-colors hover:text-black"
+                            >
+                              +
+                            </button>
+                          </div>
+                        )}
                       </li>
                     );
                   })}
                 </ul>
               </section>
 
-              {/* Add-ons — same divider-row idiom, square check on the left. */}
+              {/* Add-ons — same divider-row idiom as the finishes: thumbnail +
+                  name/price/blurb on the left, a quantity stepper on the right
+                  so spares can be ordered in multiples. */}
               <section className="mt-7">
                 <p className="font-mono text-[11px] font-medium uppercase tracking-[0.18em] text-zinc-400">
                   Add-ons
                 </p>
                 <ul className="mt-3">
                   {PRODUCT.addons.map((a) => {
-                    const selected = addonIds.includes(a.id);
+                    const qty = addonQty[a.id] ?? 0;
                     const soon = !a.variantId;
                     return (
-                      <li key={a.id} className="border-t border-black/8 first:border-t-0">
+                      <li
+                        key={a.id}
+                        className="flex items-center gap-3 border-t border-black/8 py-3 first:border-t-0"
+                      >
                         <button
                           type="button"
-                          onClick={() => toggleAddon(a.id)}
-                          disabled={soon}
-                          aria-pressed={selected}
-                          className={`flex w-full items-center justify-between gap-4 py-3 text-left ${
-                            soon ? "cursor-not-allowed opacity-40" : "cursor-pointer"
-                          }`}
+                          onClick={() => previewAddonImage(a.id)}
+                          aria-pressed={previewAddonId === a.id}
+                          className="flex min-w-0 flex-1 cursor-pointer items-center gap-3 text-left"
                         >
-                          <span className="flex items-center gap-3">
+                          <Image
+                            src={a.image}
+                            alt={a.name}
+                            width={112}
+                            height={84}
+                            className="h-12 w-14 shrink-0 object-contain"
+                          />
+                          <span className="min-w-0 flex-1">
                             <span
-                              aria-hidden
-                              className={`flex h-4 w-4 shrink-0 items-center justify-center border transition-colors ${
-                                selected
-                                  ? "border-black bg-black"
-                                  : "border-black/25"
+                              className={`block font-inter text-sm transition-colors ${
+                                qty > 0 || previewAddonId === a.id
+                                  ? "font-semibold text-black"
+                                  : "font-medium text-zinc-600 hover:text-black"
                               }`}
                             >
-                              {selected && (
-                                <svg
-                                  width="10"
-                                  height="10"
-                                  viewBox="0 0 24 24"
-                                  fill="none"
-                                  stroke="white"
-                                  strokeWidth="3"
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                >
-                                  <path d="M20 6L9 17l-5-5" />
-                                </svg>
-                              )}
-                            </span>
-                            <Image
-                              src={a.image}
-                              alt={a.name}
-                              width={112}
-                              height={84}
-                              className="h-12 w-14 shrink-0 object-contain"
-                            />
-                            <span>
-                              <span
-                                className={`block font-inter text-sm transition-colors ${
-                                  selected
-                                    ? "font-semibold text-black"
-                                    : "font-medium text-zinc-600"
-                                }`}
-                              >
-                                {a.name}
-                              </span>
-                              <span className="mt-0.5 block font-inter text-xs leading-[1.5] text-zinc-400">
-                                {soon ? "Coming soon" : a.description}
+                              {a.name}
+                              <span className="ml-1.5 font-normal tabular-nums text-zinc-400">
+                                +${(a.priceCents / 100).toFixed(0)}
                               </span>
                             </span>
-                          </span>
-                          <span className="shrink-0 font-inter text-sm tabular-nums text-zinc-600">
-                            +${(a.priceCents / 100).toFixed(0)}
+                            <span className="mt-0.5 block font-inter text-xs leading-[1.5] text-zinc-400">
+                              {soon ? "Coming soon" : a.description}
+                            </span>
                           </span>
                         </button>
+                        {soon ? null : (
+                          <div className="flex shrink-0 items-center self-center">
+                            <button
+                              type="button"
+                              onClick={() => changeAddonQty(a.id, -1)}
+                              disabled={qty <= 0}
+                              aria-label={`Decrease ${a.name} quantity`}
+                              className="flex h-9 w-8 items-center justify-center text-base text-zinc-500 transition-colors hover:text-black disabled:opacity-25"
+                            >
+                              −
+                            </button>
+                            <span className="w-7 text-center font-inter text-sm font-medium tabular-nums">
+                              {qty}
+                            </span>
+                            <button
+                              type="button"
+                              onClick={() => changeAddonQty(a.id, 1)}
+                              aria-label={`Increase ${a.name} quantity`}
+                              className="flex h-9 w-8 items-center justify-center text-base text-zinc-500 transition-colors hover:text-black"
+                            >
+                              +
+                            </button>
+                          </div>
+                        )}
                       </li>
                     );
                   })}
@@ -314,68 +405,43 @@ function SelectColorConfigurator() {
                     <path d="M6 9l6 6 6-6" />
                   </svg>
                 </summary>
-                <ul className="pb-1">
+                <ul className="list-disc space-y-1.5 pb-2 pl-5 marker:text-zinc-300">
                   {PRODUCT.materials.map((m) => (
-                    <li
-                      key={m}
-                      className="border-t border-black/8 py-2.5 font-inter text-sm text-zinc-600"
-                    >
+                    <li key={m} className="font-inter text-sm text-zinc-600">
                       {m}
                     </li>
                   ))}
-                  <li className="border-t border-black/8 py-2.5 font-inter text-sm tabular-nums text-zinc-600">
+                  <li className="font-inter text-sm tabular-nums text-zinc-600">
                     {PRODUCT.specs.map((s) => s.value).join(" — ")}
                   </li>
                 </ul>
               </details>
 
-              {/* Buy row — accent is reserved sitewide for exactly this moment. */}
+              {/* Buy row — accent is reserved sitewide for exactly this moment.
+                  Quantity now lives per-colour in the finish rows, so this is
+                  just the full-width CTA summing every finish + add-ons. */}
               <section className="mt-7">
-                <div className="flex items-stretch gap-3">
-                  <div className="flex shrink-0 items-center border border-black/15">
-                    <button
-                      type="button"
-                      onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-                      disabled={quantity <= 1}
-                      className="flex h-11 w-9 items-center justify-center text-lg text-zinc-500 transition-colors hover:text-black disabled:opacity-25 sm:w-10"
-                      aria-label="Decrease quantity"
-                    >
-                      −
-                    </button>
-                    <span className="w-7 text-center font-inter text-sm font-medium tabular-nums">
-                      {quantity}
-                    </span>
-                    <button
-                      type="button"
-                      onClick={() => setQuantity((q) => q + 1)}
-                      className="flex h-11 w-9 items-center justify-center text-lg text-zinc-500 transition-colors hover:text-black sm:w-10"
-                      aria-label="Increase quantity"
-                    >
-                      +
-                    </button>
-                  </div>
-                  <button
-                    onClick={checkout}
-                    disabled={loading || unavailable}
-                    className="flex min-w-0 flex-1 items-center justify-center gap-2 bg-accent px-3 font-inter text-sm font-medium text-white transition-colors hover:bg-accent-hover disabled:opacity-40 disabled:hover:bg-accent sm:gap-2.5 sm:px-6"
-                  >
-                    {loading ? (
-                      "Loading…"
-                    ) : unavailable ? (
-                      `${activeColor.name} — coming soon`
-                    ) : (
-                      <>
-                        <span>Add to cart</span>
-                        <span aria-hidden className="text-white/50">
-                          —
-                        </span>
-                        <span className="tabular-nums">
-                          ${(totalCents / 100).toFixed(2)}
-                        </span>
-                      </>
-                    )}
-                  </button>
-                </div>
+                <button
+                  onClick={checkout}
+                  disabled={loading || totalUnits === 0}
+                  className="flex w-full min-w-0 items-center justify-center gap-2 bg-accent px-3 py-3 font-inter text-sm font-medium text-white transition-colors hover:bg-accent-hover disabled:opacity-40 disabled:hover:bg-accent sm:gap-2.5 sm:px-6"
+                >
+                  {loading ? (
+                    "Loading…"
+                  ) : totalUnits === 0 ? (
+                    "Add to cart"
+                  ) : (
+                    <>
+                      <span>Add to cart</span>
+                      <span aria-hidden className="text-white/50">
+                        —
+                      </span>
+                      <span className="tabular-nums">
+                        ${(totalCents / 100).toFixed(2)}
+                      </span>
+                    </>
+                  )}
+                </button>
 
                 {error && (
                   <p className="mt-3 break-words font-inter text-sm text-red-600">
@@ -383,20 +449,11 @@ function SelectColorConfigurator() {
                   </p>
                 )}
 
-                {/* Bundle deal — centered under the CTA specifically: an
-                    invisible spacer mirrors the quantity stepper's width so the
-                    text lines up with the button, not the whole row. Shipping
-                    is free only on 2-packs. */}
-                <div className="mt-4 flex gap-3">
-                  <div aria-hidden className="invisible flex shrink-0 border">
-                    <span className="w-9 sm:w-10" />
-                    <span className="w-7" />
-                    <span className="w-9 sm:w-10" />
-                  </div>
-                  <p className="flex-1 text-center font-inter text-xs text-zinc-500">
-                    Buy 2, get FREE shipping
-                  </p>
-                </div>
+                {/* Bundle deal — centered under the full-width CTA. Shipping is
+                    free only on 2-packs (counted across finishes). */}
+                <p className="mt-4 text-center font-inter text-xs text-zinc-500">
+                  Buy 2, get FREE shipping
+                </p>
               </section>
 
             </div>
