@@ -21,6 +21,7 @@ export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const subRef = useRef<HTMLParagraphElement>(null);
+  const promoRef = useRef<HTMLParagraphElement>(null);
   const ctaRef = useRef<HTMLDivElement>(null);
 
   useGSAP(
@@ -52,13 +53,23 @@ export default function Hero() {
         delay: 0.8,
       });
 
+      // Shipping-incentive eyebrow leads the reveal, fading in just before the
+      // headline lines rise up beneath it.
+      gsap.from(promoRef.current, {
+        opacity: 0,
+        y: 20,
+        duration: 0.8,
+        ease: "power2.out",
+        delay: 0,
+      });
+
       // CTA fades up a beat after the subtitle (mobile only — it's hidden at sm+).
       gsap.from(ctaRef.current, {
         opacity: 0,
         y: 20,
         duration: 0.8,
         ease: "power2.out",
-        delay: 1.05,
+        delay: 1.2,
       });
 
       return () => split.revert();
@@ -115,6 +126,14 @@ export default function Hero() {
 
       <div className="relative z-10 flex min-h-svh items-end justify-end px-6 pb-12 md:px-16 md:pb-16">
         <div className="text-right">
+          {/* Shipping incentive — a restrained brand-voice eyebrow above the
+              headline. Shipping is free only on 2-packs, so it's a real nudge. */}
+          <p
+            ref={promoRef}
+            className="mb-4 font-brand text-sm font-semibold uppercase tracking-[0.18em] text-white [text-shadow:0_1px_8px_rgba(0,0,0,0.5)]"
+          >
+            Buy 2, get free shipping
+          </p>
           <h1
             ref={headingRef}
             className="font-brand font-bold uppercase text-white text-4xl min-[420px]:text-5xl sm:text-6xl md:text-7xl lg:text-8xl leading-[0.95] tracking-tight"

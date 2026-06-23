@@ -37,8 +37,9 @@ const STUDIO_SHOTS: Record<string, string> = {
   red: "/product-colours/red.jpg",
 };
 
-// Trust line — same de-risking copy as the home buy moment.
-const TRUST = ["Free shipping", "30-day returns", "1-yr guarantee"];
+// Trust line — same de-risking copy as the home buy moment. Shipping is no
+// longer listed here: it's free only on 2-packs, surfaced as the buy-2 deal.
+const TRUST = ["30-day returns", "1-yr guarantee"];
 
 function SelectColorConfigurator() {
   const searchParams = useSearchParams();
@@ -150,7 +151,7 @@ function SelectColorConfigurator() {
             big Inter heading, finish rows with dividers, accent on the buy. */}
         <div className="flex flex-1 flex-col border-t border-black/10 lg:w-[45%] lg:overflow-y-auto lg:border-l lg:border-t-0">
           <div className="flex flex-1 flex-col px-6 py-9 sm:px-10 lg:px-14 lg:pb-5 lg:pt-20">
-            <div className="mx-auto my-auto w-full max-w-md">
+            <div className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center">
               {/* Title block — the product, said the way the home page says it. */}
               <div className="pb-6">
                 <h1 className="font-inter text-3xl font-medium leading-[1.05] tracking-tight text-black sm:text-4xl">
@@ -234,10 +235,10 @@ function SelectColorConfigurator() {
                             soon ? "cursor-not-allowed opacity-40" : "cursor-pointer"
                           }`}
                         >
-                          <span className="flex items-start gap-3">
+                          <span className="flex items-center gap-3">
                             <span
                               aria-hidden
-                              className={`mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center border transition-colors ${
+                              className={`flex h-4 w-4 shrink-0 items-center justify-center border transition-colors ${
                                 selected
                                   ? "border-black bg-black"
                                   : "border-black/25"
@@ -382,29 +383,46 @@ function SelectColorConfigurator() {
                   </p>
                 )}
 
-                {/* Trust line — de-risks the click, same copy as the home page. */}
-                <div className="mt-4 flex flex-wrap items-center justify-between gap-x-6 gap-y-1">
-                  <ul className="flex flex-wrap items-center gap-x-2.5 gap-y-1 font-inter text-xs text-zinc-500">
-                    {TRUST.map((item, idx) => (
-                      <li key={item} className="flex items-center gap-2.5">
-                        {idx > 0 && (
-                          <span aria-hidden className="text-zinc-300">
-                            ·
-                          </span>
-                        )}
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                  <Link
-                    href="/contact"
-                    className="font-inter text-xs text-zinc-500 underline underline-offset-4 transition-colors hover:text-black"
-                  >
-                    Questions?
-                  </Link>
+                {/* Bundle deal — centered under the CTA specifically: an
+                    invisible spacer mirrors the quantity stepper's width so the
+                    text lines up with the button, not the whole row. Shipping
+                    is free only on 2-packs. */}
+                <div className="mt-4 flex gap-3">
+                  <div aria-hidden className="invisible flex shrink-0 border">
+                    <span className="w-9 sm:w-10" />
+                    <span className="w-7" />
+                    <span className="w-9 sm:w-10" />
+                  </div>
+                  <p className="flex-1 text-center font-inter text-xs text-zinc-500">
+                    Buy 2, get FREE shipping
+                  </p>
                 </div>
               </section>
 
+            </div>
+
+            {/* Trust line — anchored to the bottom of the configurator column
+                and pushed out to its left/right corners (full width, no max-w
+                clamp), de-risking the buy without crowding the deal + CTA. */}
+            <div className="mt-8 flex w-full flex-wrap items-center justify-between gap-x-6 gap-y-1">
+              <ul className="flex flex-wrap items-center gap-x-2.5 gap-y-1 font-inter text-xs text-zinc-500">
+                {TRUST.map((item, idx) => (
+                  <li key={item} className="flex items-center gap-2.5">
+                    {idx > 0 && (
+                      <span aria-hidden className="text-zinc-300">
+                        ·
+                      </span>
+                    )}
+                    {item}
+                  </li>
+                ))}
+              </ul>
+              <Link
+                href="/contact"
+                className="font-inter text-xs text-zinc-500 underline underline-offset-4 transition-colors hover:text-black"
+              >
+                Questions?
+              </Link>
             </div>
           </div>
         </div>
