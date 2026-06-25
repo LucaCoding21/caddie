@@ -24,6 +24,9 @@ export async function generateMetadata({
   return {
     title: `${policy.title} | Caddie Companion`,
     description: `${policy.title} for Caddie Companion.`,
+    alternates: {
+      canonical: `/policies/${slug}`,
+    },
   };
 }
 

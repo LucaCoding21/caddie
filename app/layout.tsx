@@ -2,24 +2,27 @@ import type { Metadata } from "next";
 import { geistSans, geistMono, brandSans, inter } from "@/lib/fonts";
 import "./globals.css";
 
-const siteUrl = "https://caddie-pink.vercel.app";
+const siteUrl = "https://www.caddiecompanion.com";
 
 const description =
-  "The six-in-one golf multi-tool that earns its place in the bag.";
+  "Six golf tools in one machined frame. Divot repair, groove brush, ball markers, and more. Built to last, small enough to forget in your pocket. $29.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  title: "Caddie Companion",
+  title: "Caddie Companion | Golf Divot Tool & 6-in-1 Multi-Tool",
   description,
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
-    title: "Caddie Companion",
+    title: "Caddie Companion | Golf Divot Tool & 6-in-1 Multi-Tool",
     description,
     siteName: "Caddie Companion",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Caddie Companion",
+    title: "Caddie Companion | Golf Divot Tool & 6-in-1 Multi-Tool",
     description,
   },
 };

@@ -8,9 +8,12 @@ import SiteHeader from "@/components/site-header";
 import SiteFooter from "@/components/site-footer";
 
 export const metadata: Metadata = {
-  title: "About | Caddie Companion",
+  title: "About Caddie Companion | The Golfer's Pocket Tool",
   description:
-    "Why we machined the six tools every golfer carries into one pocket-sized frame.",
+    "Why we machined the six tools every golfer reaches for into one pocket-sized frame, built to last a lifetime of rounds.",
+  alternates: {
+    canonical: "/about",
+  },
 };
 
 export default function AboutPage() {

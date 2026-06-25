@@ -6,6 +6,9 @@ export const metadata: Metadata = {
   title: "Contact | Caddie Companion",
   description:
     "Questions about an order, wholesale, or press? Reach the people who machined your Caddie Companion.",
+  alternates: {
+    canonical: "/contact",
+  },
 };
 
 export default function ContactPage() {

@@ -8,10 +8,12 @@ import ClosingColours from "@/components/closing-colours";
 import Faq from "@/components/faq";
 import AboutCta from "@/components/about-cta";
 import SiteFooter from "@/components/site-footer";
+import ProductSchema from "@/components/product-schema";
 
 export default function Home() {
   return (
     <>
+      <ProductSchema />
       <SiteHeader />
       {/* Opaque layer that scrolls over the fixed footer. The bottom margin
           reserves scroll space exactly the footer's height, so the footer is
