@@ -9,11 +9,13 @@ import Faq from "@/components/faq";
 import AboutCta from "@/components/about-cta";
 import SiteFooter from "@/components/site-footer";
 import ProductSchema from "@/components/product-schema";
+import FaqSchema from "@/components/faq-schema";
 
 export default function Home() {
   return (
     <>
       <ProductSchema />
+      <FaqSchema />
       <SiteHeader />
       {/* Opaque layer that scrolls over the fixed footer. The bottom margin
           reserves scroll space exactly the footer's height, so the footer is

@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import SiteHeader from "@/components/site-header";
+import Faq from "@/components/faq";
 import { PRODUCT } from "@/lib/products";
 
 // Swatch dot colour + a one-line finish blurb, keyed by colour id. Mirrors the
@@ -182,6 +183,7 @@ function SelectColorConfigurator() {
   }
 
   return (
+    <>
     <div className="flex min-h-svh flex-col bg-white text-black lg:h-dvh">
       {/* Same persistent nav as every other page (solid: dark logo over the
           light buy flow). The logo and menu carry the way back home. */}
@@ -485,6 +487,12 @@ function SelectColorConfigurator() {
         </div>
       </div>
     </div>
+
+    {/* FAQ below the viewport-locked configurator — same answers as the home
+        page (shared from lib/faqs.ts), so buyers can settle questions without
+        leaving the buy flow. */}
+    <Faq />
+    </>
   );
 }
 

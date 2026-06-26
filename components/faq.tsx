@@ -1,49 +1,25 @@
 "use client";
 
 import { useRef, useState } from "react";
+import Link from "next/link";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
+import { FAQS, type Faq } from "@/lib/faqs";
 
 gsap.registerPlugin(useGSAP);
 
 // Closing FAQ. A controlled accordion (one open at a time) with the open/close
 // height driven by GSAP so it animates smoothly and consistently across
-// browsers.
-const FAQS: { q: string; a: string }[] = [
-  {
-    q: "What are the six tools?",
-    a: "Two magnetic ball markers, a T25 Torx driver for tuning adjustable clubs, a divot repair fork, a full-tang stainless knife, a bottle opener, and a brass wire brush for cleaning grooves. Every one folds out of a single milled frame.",
-  },
-  {
-    q: "Is it allowed on the course?",
-    a: "Yes. The Caddie Companion is built for exactly that. It clips to your bag by its carabiner and rides along every hole, ready the moment you are.",
-  },
-  {
-    q: "What's it made of?",
-    a: "A stainless steel inner shell and stainless steel tools, paired with a hand-finished anodized aluminum exterior. No castings, no stamped parts, just a build made to hold up season after season.",
-  },
-  {
-    q: "How big is it, and how much does it weigh?",
-    a: "It measures 1\" × 1\" × 5\" and weighs 12 oz, folding down to sit flat and unnoticed in your pocket.",
-  },
-  {
-    q: "What about shipping and returns?",
-    a: "Shipping is calculated based on where you live, and it's free when you order two or more. If you need to return it for any reason, we'll work with you to make it right.",
-  },
-  {
-    q: "Is there a warranty?",
-    a: "Yes. Every Caddie Companion comes with a one-year warranty.",
-  },
-];
+// browsers. Content lives in lib/faqs.ts so the FAQPage structured data stays
+// in sync with what's shown here.
 
 function AccordionItem({
   q,
   a,
+  link,
   isOpen,
   onToggle,
-}: {
-  q: string;
-  a: string;
+}: Faq & {
   isOpen: boolean;
   onToggle: () => void;
 }) {
@@ -91,9 +67,18 @@ function AccordionItem({
         </button>
       </dt>
       <dd ref={panelRef} className="h-0 overflow-hidden">
-        <p className="max-w-2xl pb-6 font-inter text-base leading-[1.6] text-zinc-500">
+        <p className="max-w-2xl font-inter text-base leading-[1.6] text-zinc-500">
           {a}
         </p>
+        {link && (
+          <Link
+            href={link.href}
+            className="mt-3 inline-block font-inter text-base font-medium text-accent underline underline-offset-4 transition-colors hover:text-accent-hover"
+          >
+            {link.text}
+          </Link>
+        )}
+        <div className="pb-6" />
       </dd>
     </div>
   );
@@ -118,11 +103,12 @@ export default function Faq() {
         </div>
 
         <dl className="border-t border-black/10">
-          {FAQS.map(({ q, a }, i) => (
+          {FAQS.map(({ q, a, link }, i) => (
             <AccordionItem
               key={q}
               q={q}
               a={a}
+              link={link}
               isOpen={openIndex === i}
               onToggle={() => setOpenIndex(openIndex === i ? null : i)}
             />
