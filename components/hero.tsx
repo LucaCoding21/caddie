@@ -135,13 +135,20 @@ export default function Hero() {
           <div ref={ctaRef} className="mt-6 sm:hidden">
             <Link
               href="/select-color"
-              className="inline-flex items-center gap-2 rounded-full bg-white px-7 py-3 text-base font-medium text-accent shadow-[0_8px_24px_-8px_rgba(0,0,0,0.5)] transition-colors active:bg-white/90"
+              className="inline-flex flex-col items-start gap-0.5 rounded-3xl bg-white py-2.5 pl-5 pr-7 text-accent shadow-[0_8px_24px_-8px_rgba(0,0,0,0.5)] transition-colors active:bg-white/90"
             >
-              Order now
-              <span className="text-accent/40" aria-hidden>
-                ·
+              <span className="flex items-center gap-2 text-base font-medium">
+                Order now
+                <span className="text-accent/40" aria-hidden>
+                  ·
+                </span>
+                <span className="tabular-nums">$29</span>
               </span>
-              <span className="tabular-nums">$29</span>
+              {/* Free-shipping nudge — desktop carries this inside the header
+                  pill, which is hidden on mobile, so tuck it into the CTA. */}
+              <span className="text-[0.625rem] font-semibold uppercase tracking-[0.14em] text-zinc-500">
+                Buy 2, get free shipping
+              </span>
             </Link>
           </div>
         </div>
