@@ -40,8 +40,8 @@ export default function AboutPage() {
           <AboutTitle />
           <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
             <Image
-              src="/about-hero-v4.png"
-              alt="The Caddie Companion multi-tool, folded"
+              src="/caddie-companion-golf-multi-tool-folded.png"
+              alt="The Caddie Companion 6-in-1 golf multi-tool, folded"
               width={1376}
               height={768}
               preload

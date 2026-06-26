@@ -141,7 +141,7 @@ export default function AboutDetails() {
             <div className="flex min-w-0 flex-col gap-6 md:gap-10">
               <figure className="about-detail-frame relative aspect-[4/3] w-full overflow-hidden bg-[#efeeea]">
                 <Image
-                  src="/caddie-about-golfers.png"
+                  src="/golfer-holding-black-caddie-companion-multi-tool.png"
                   alt="A smiling golfer in a cart holding up the black Caddie Companion multi-tool, playing partner beside him"
                   title="Made for the people who actually play the course"
                   fill
@@ -151,7 +151,7 @@ export default function AboutDetails() {
               </figure>
               <figure className="about-detail-frame relative aspect-square w-full overflow-hidden bg-[#efeeea]">
                 <Image
-                  src="/red-caddie-companion.png"
+                  src="/red-caddie-companion-divot-tool-with-golf-balls.png"
                   alt="The red Caddie Companion multi-tool resting against a range basket of golf balls"
                   title="Six tools, one machined frame"
                   fill
@@ -166,7 +166,7 @@ export default function AboutDetails() {
             <div className="flex min-w-0 flex-col gap-6 md:mt-28 md:gap-10">
               <figure className="about-detail-frame relative aspect-[3/4] w-full overflow-hidden bg-[#efeeea]">
                 <Image
-                  src="/caddie-companion-pocket-draw.png"
+                  src="/golfer-drawing-caddie-companion-from-pocket.png"
                   alt="A gloved golfer drawing the black Caddie Companion multi-tool from a trouser pocket on the course"
                   title="Pocket-sized and always within reach on the course"
                   fill
@@ -176,7 +176,7 @@ export default function AboutDetails() {
               </figure>
               <figure className="about-detail-frame relative aspect-[4/3] w-full overflow-hidden bg-[#efeeea]">
                 <Image
-                  src="/caddie-companion-golf-balls.png"
+                  src="/black-caddie-companion-multi-tool-on-golf-balls.png"
                   alt="The black Caddie Companion multi-tool laid across a bed of golf balls"
                   title="Built to live in the bag"
                   fill

@@ -77,10 +77,10 @@ export default function ClosingColours() {
   // TEST: real studio shots in as they're shot; finishes without one yet fall back
   // to the old cut-outs. Fold these into products.ts once all four are in.
   const STUDIO_SHOTS: Record<string, string> = {
-    black: "/product-colours/black-nobg.png",
-    blue: "/product-colours/blue-nobg.png",
-    green: "/product-colours/green-nobg.png",
-    red: "/product-colours/red-nobg.png",
+    black: "/product-colours/caddie-companion-multi-tool-black.png",
+    blue: "/product-colours/caddie-companion-multi-tool-blue.png",
+    green: "/product-colours/caddie-companion-multi-tool-green.png",
+    red: "/product-colours/caddie-companion-multi-tool-red.png",
   };
   // The big frame previews whatever's selected for preview: an add-on if one
   // is being previewed, otherwise the active finish.
@@ -313,7 +313,7 @@ export default function ClosingColours() {
               <Image
                 key={activeColor.id}
                 src={heroSrc}
-                alt={`Caddie Companion multi-tool in ${activeColor.name}`}
+                alt={`Caddie Companion golf multi-tool in ${activeColor.name}`}
                 fill
                 sizes="(max-width: 1024px) 92vw, 720px"
                 className={`object-contain ${

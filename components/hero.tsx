@@ -81,8 +81,8 @@ export default function Hero() {
           the visible one — already in the viewport — loads eagerly at high
           priority. */}
       <Image
-        src="/caddie-mobile-hero.webp"
-        alt=""
+        src="/caddie-companion-golf-multi-tool-mobile-hero.webp"
+        alt="Black Caddie Companion golf multi-tool open on the grass, its tools fanned out"
         fill
         fetchPriority="high"
         placeholder="blur"
@@ -91,8 +91,8 @@ export default function Hero() {
         className="absolute inset-0 h-full w-full object-cover object-center landscape:hidden"
       />
       <Image
-        src="/hero-caddie2.webp"
-        alt=""
+        src="/caddie-companion-golf-divot-tool-hero.webp"
+        alt="Black Caddie Companion golf multi-tool open on the grass, showing its divot fork, knife, and groove brush"
         fill
         fetchPriority="high"
         placeholder="blur"
@@ -127,7 +127,7 @@ export default function Hero() {
             ref={subRef}
             className="mt-4 text-white text-base md:text-base tracking-wide [text-shadow:0_1px_8px_rgba(0,0,0,0.5)]"
           >
-            The multi-tool that earns its place in the bag.
+            The golf multi-tool that earns its place in the bag.
           </p>
 
           {/* Mobile-only buy CTA. On desktop the persistent header pill carries

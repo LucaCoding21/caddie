@@ -10,18 +10,18 @@ import { SplitText } from "gsap/SplitText";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger, SplitText);
 
-const BAG = "/red-caddie-companion-bag.png";
-const TORX = "/usefulphotos/ChatGPT%20Image%20May%2025%2C%202026%2C%2001_23_27%20PM.png";
-const GRASS = "/caddie-divot-grass.png";
-const OPENER = "/bottle-opener-caddie.png";
+const BAG = "/caddie-companion-divot-tool-clipped-to-golf-bag.png";
+const TORX = "/usefulphotos/caddie-companion-torx-driver-adjusting-club.png";
+const GRASS = "/golf-divot-repair-tool-in-grass.png";
+const OPENER = "/caddie-companion-bottle-opener.png";
 
 // Scattered desktop photos. Two big (top-left, bottom-right) and two small
 // (bottom-left, top-right) on a diagonal for depth.
 const PHOTOS = [
-  { src: BAG, pos: "top-[5%] left-[4%]", size: "w-80 xl:w-96", sizes: "(max-width: 1280px) 20rem, 24rem" },
-  { src: TORX, pos: "bottom-[10%] left-[13%]", size: "w-64 xl:w-72", sizes: "(max-width: 1280px) 16rem, 18rem" },
-  { src: GRASS, pos: "top-[8%] right-[9%]", size: "w-72 xl:w-80", sizes: "(max-width: 1280px) 18rem, 20rem" },
-  { src: OPENER, pos: "bottom-[6%] right-[6%]", size: "w-80 xl:w-96", sizes: "(max-width: 1280px) 20rem, 24rem", square: true },
+  { src: BAG, alt: "Red Caddie Companion golf tool clipped to a golf bag", pos: "top-[5%] left-[4%]", size: "w-80 xl:w-96", sizes: "(max-width: 1280px) 20rem, 24rem" },
+  { src: TORX, alt: "Using the Caddie Companion's T25 Torx driver to adjust a golf club", pos: "bottom-[10%] left-[13%]", size: "w-64 xl:w-72", sizes: "(max-width: 1280px) 16rem, 18rem" },
+  { src: GRASS, alt: "Caddie Companion divot repair fork fixing a pitch mark in the grass", pos: "top-[8%] right-[9%]", size: "w-72 xl:w-80", sizes: "(max-width: 1280px) 18rem, 20rem" },
+  { src: OPENER, alt: "Caddie Companion's built-in bottle opener cracking a drink", pos: "bottom-[6%] right-[6%]", size: "w-80 xl:w-96", sizes: "(max-width: 1280px) 20rem, 24rem", square: true },
 ];
 
 export default function Promise() {
@@ -194,11 +194,11 @@ export default function Promise() {
           fades in on scroll (see the matchMedia block in useGSAP). Desktop
           shows the scattered parallax cluster above instead. */}
       <div className="xl:hidden mt-14 flex flex-col items-center gap-6 w-full max-w-sm min-[768px]:max-w-3xl min-[768px]:gap-12">
-        {PHOTOS.slice(0, 2).map(({ src }, i) => (
+        {PHOTOS.slice(0, 2).map(({ src, alt }, i) => (
           <Image
             key={src}
             src={src}
-            alt=""
+            alt={alt}
             width={1122}
             height={1402}
             className={`promise-photo w-full aspect-[4/5] object-cover rounded-sm min-[768px]:w-[62%] ${

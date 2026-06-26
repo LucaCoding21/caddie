@@ -9,23 +9,22 @@ import { SplitText } from "gsap/SplitText";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger, SplitText);
 
-const BRUSH =
-  "/6v1/ChatGPT%20Image%20May%2024%2C%202026%2C%2012_02_58%20AM-nobg.png";
-const DIVOT = "/6v1/divot-tool-nobg.png";
-const OPENER = "/6v1/bottle-opener-nobg.png";
-const MARKER = "/6v1/ball-marker-nobg.png";
-const KNIFE = "/6v1/pocket-knife-nobg.png";
-const DRIVER = "/6v1/torx-driver-nobg.png";
+const BRUSH = "/6v1/golf-club-groove-brush.png";
+const DIVOT = "/6v1/golf-divot-repair-tool.png";
+const OPENER = "/6v1/golf-bottle-opener-tool.png";
+const MARKER = "/6v1/magnetic-golf-ball-marker.png";
+const KNIFE = "/6v1/golf-pocket-knife.png";
+const DRIVER = "/6v1/t25-torx-driver.png";
 // Standalone studio shot of the real product (not in-hand).
-const PRODUCT = "/caddie-companion.png";
+const PRODUCT = "/caddie-companion-golf-divot-tool.png";
 
-const TOOLS: { label: string; src: string; desc: string }[] = [
-  { label: "Divot Tool", src: DIVOT, desc: "Repairs your pitch marks." },
-  { label: "Brush", src: BRUSH, desc: "Cleans out your grooves." },
-  { label: "Ball Marker", src: MARKER, desc: "Magnetic, marks your line." },
-  { label: "T25 Torx Driver", src: DRIVER, desc: "Dials in your driver." },
-  { label: "Pocket Knife", src: KNIFE, desc: "Cuts tape and tags." },
-  { label: "Bottle Opener", src: OPENER, desc: "Cracks one on the turn." },
+const TOOLS: { label: string; src: string; desc: string; alt: string }[] = [
+  { label: "Divot Tool", src: DIVOT, desc: "Repairs your pitch marks.", alt: "Caddie Companion golf divot repair tool" },
+  { label: "Brush", src: BRUSH, desc: "Cleans out your grooves.", alt: "Brass wire brush for cleaning golf club grooves" },
+  { label: "Ball Marker", src: MARKER, desc: "Magnetic, marks your line.", alt: "Magnetic golf ball marker from the Caddie Companion" },
+  { label: "T25 Torx Driver", src: DRIVER, desc: "Dials in your driver.", alt: "T25 Torx driver for adjusting golf club settings" },
+  { label: "Pocket Knife", src: KNIFE, desc: "Cuts tape and tags.", alt: "Stainless steel pocket knife blade" },
+  { label: "Bottle Opener", src: OPENER, desc: "Cracks one on the turn.", alt: "Bottle opener built into the Caddie Companion golf tool" },
 ];
 
 export default function SixIntoOne() {
@@ -129,14 +128,14 @@ export default function SixIntoOne() {
               the label + function line slide up on hover, and hovering lifts
               the tile above its neighbours. */}
           <div ref={gridRef} className="grid grid-cols-3 gap-3 md:gap-4">
-            {TOOLS.map(({ label, src, desc }) => (
+            {TOOLS.map(({ label, src, desc, alt }) => (
               <figure
                 key={label}
                 className="tool-tile group relative aspect-square overflow-hidden rounded-2xl bg-[#efeeea] ring-1 ring-black/5 transition-transform duration-500 hover:z-20 hover:scale-[1.05]"
               >
                 <Image
                   src={src}
-                  alt={label}
+                  alt={alt}
                   fill
                   className="object-contain p-3 pb-8"
                   sizes="(max-width: 768px) 30vw, 16vw"
@@ -173,7 +172,7 @@ export default function SixIntoOne() {
           <figure className="hero-tile relative h-[20rem] md:h-[28rem] overflow-hidden rounded-2xl bg-white ring-1 ring-black/5">
             <Image
               src={PRODUCT}
-              alt="The Caddie Companion multi-tool"
+              alt="Caddie Companion 6-in-1 golf multi-tool, closed"
               fill
               className="object-contain p-8 md:p-12"
               sizes="(max-width: 768px) 100vw, 44vw"

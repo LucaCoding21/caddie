@@ -55,7 +55,7 @@ const CALLOUTS: Callout[] = [
     n: "01",
     title: "Magnetic Ball Markers",
     desc: "Two, seated in the body",
-    src: "/6v1/ball-marker-nobg.png",
+    src: "/6v1/magnetic-golf-ball-marker.png",
     node: [32, 45],
     points: "32,45 32,20 -12,20",
     label: { x: -12, y: 20, side: "right", maxWidth: "22rem" },
@@ -64,7 +64,7 @@ const CALLOUTS: Callout[] = [
     n: "02",
     title: "T25 Torx Driver",
     desc: "Tunes adjustable clubs",
-    src: "/6v1/torx-driver-nobg.png",
+    src: "/6v1/t25-torx-driver.png",
     node: [72, 30],
     points: "72,30 72,20 99,20",
     label: { x: 99, y: 20, side: "left", maxWidth: "22rem" },
@@ -73,7 +73,7 @@ const CALLOUTS: Callout[] = [
     n: "03",
     title: "Divot Repair Fork",
     desc: "Fixes pitch marks",
-    src: "/6v1/divot-tool-nobg.png",
+    src: "/6v1/golf-divot-repair-tool.png",
     node: [69, 57],
     points: "69,57 86,53 99,53",
     label: { x: 99, y: 53, side: "left" },
@@ -82,7 +82,7 @@ const CALLOUTS: Callout[] = [
     n: "04",
     title: "Knife",
     desc: "Full-tang, stainless",
-    src: "/6v1/pocket-knife-nobg.png",
+    src: "/6v1/golf-pocket-knife.png",
     node: [65, 73],
     points: "65,73 86,86 112,86",
     label: { x: 112, y: 86, side: "left" },
@@ -91,7 +91,7 @@ const CALLOUTS: Callout[] = [
     n: "05",
     title: "Bottle Opener",
     desc: "For the 19th hole",
-    src: "/6v1/bottle-opener-nobg.png",
+    src: "/6v1/golf-bottle-opener-tool.png",
     imgBelow: true,
     node: [55, 66],
     points: "55,66 27,91 1,91",
@@ -101,7 +101,7 @@ const CALLOUTS: Callout[] = [
     n: "06",
     title: "Brass Wire Brush",
     desc: "Cleans grooves",
-    src: "/6v1/ChatGPT%20Image%20May%2024%2C%202026%2C%2012_02_58%20AM-nobg.png",
+    src: "/6v1/golf-club-groove-brush.png",
     node: [32, 74],
     points: "32,74 32,60 1,60",
     label: { x: 1, y: 60, side: "right" },
@@ -276,7 +276,7 @@ export default function Anatomy() {
           positioned in here, so percentage coords map onto the photo. */}
       <div ref={diagramRef} className="relative mx-auto mt-0 mb-32 md:mt-16 md:mb-48 xl:mt-12 xl:mb-20 w-full max-w-5xl xl:max-w-[112vh] xl:col-span-2 xl:row-start-2 xl:self-center xl:justify-self-center">
         <Image
-          src="/caddie-companion-blue-tools-v2.png"
+          src="/caddie-companion-multi-tool-tools-fanned.png"
           alt="Caddie Companion folded fully open, every tool fanned out"
           width={1999}
           height={1545}
@@ -346,7 +346,7 @@ export default function Anatomy() {
                     lands on the text, not across the photo. */}
                 <Image
                   src={c.src}
-                  alt=""
+                  alt={`${c.title} — ${c.desc}`}
                   width={120}
                   height={120}
                   className={`anatomy-label-img absolute h-20 w-20 object-contain ${
@@ -372,7 +372,7 @@ export default function Anatomy() {
             <div key={c.n}>
               <Image
                 src={c.src}
-                alt=""
+                alt={`${c.title} — ${c.desc}`}
                 width={200}
                 height={200}
                 className="mx-auto h-24 w-24 object-contain sm:h-20 sm:w-20"

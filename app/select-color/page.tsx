@@ -31,10 +31,10 @@ const FINISH: Record<string, { hex: string; blurb: string }> = {
 // Studio photos, one per finish. Normalized so the tool sits at the same
 // size and position in every frame (see public/product-colours/).
 const STUDIO_SHOTS: Record<string, string> = {
-  black: "/product-colours/black.jpg",
-  blue: "/product-colours/blue.jpg",
-  green: "/product-colours/green.jpg",
-  red: "/product-colours/red.jpg",
+  black: "/product-colours/caddie-companion-divot-tool-black.jpg",
+  blue: "/product-colours/caddie-companion-divot-tool-blue.jpg",
+  green: "/product-colours/caddie-companion-divot-tool-green.jpg",
+  red: "/product-colours/caddie-companion-divot-tool-red.jpg",
 };
 
 // Trust line — same de-risking copy as the home buy moment. Shipping is no
@@ -101,7 +101,7 @@ function SelectColorConfigurator() {
     : STUDIO_SHOTS[activeColor.id] ?? activeColor.image;
   const heroAlt = previewAddon
     ? previewAddon.name
-    : `Caddie Companion multi-tool in ${activeColor.name}`;
+    : `Caddie Companion golf multi-tool in ${activeColor.name}`;
   const heroKey = previewAddon ? `addon-${previewAddon.id}` : activeColor.id;
 
   // Tap a row to preview that finish in the gallery, without changing its qty.

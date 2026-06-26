@@ -15,10 +15,10 @@ gsap.registerPlugin(useGSAP, ScrollTrigger);
 // carabiner head up) with only a slight symmetric tilt, and `x` staggers them
 // sideways so they overlap like a tight, near-parallel deck.
 const CARDS = [
-  { src: "/fan-red-v2.png", alt: "Caddie Companion in red", angle: 99, x: 62 },
-  { src: "/fan-green-v3.png", alt: "Caddie Companion in green", angle: 93, x: 21 },
-  { src: "/fan-blue-v2.png", alt: "Caddie Companion in blue", angle: 87, x: -21 },
-  { src: "/fan-black-v2.png", alt: "Caddie Companion in black", angle: 81, x: -62 },
+  { src: "/caddie-companion-golf-tool-red.png", alt: "Caddie Companion golf multi-tool in red", angle: 99, x: 62 },
+  { src: "/caddie-companion-golf-tool-green.png", alt: "Caddie Companion golf multi-tool in green", angle: 93, x: 21 },
+  { src: "/caddie-companion-golf-tool-blue.png", alt: "Caddie Companion golf multi-tool in blue", angle: 87, x: -21 },
+  { src: "/caddie-companion-golf-tool-black.png", alt: "Caddie Companion golf multi-tool in black", angle: 81, x: -62 },
 ];
 
 // Shared pivot at the tool's working end (the right end of the source image,

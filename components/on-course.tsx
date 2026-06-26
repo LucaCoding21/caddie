@@ -23,13 +23,13 @@ type Shot = {
 
 const SHOTS: Shot[] = [
   {
-    src: "/caddie-onbag.png",
+    src: "/golf-divot-tool-clipped-to-golf-bag.png",
     alt: "Green Caddie Companion golf tool clipped by its carabiner to the side of a black golf bag on the course",
     title: "Hangs on your bag",
     desc: "Clips on by its carabiner and rides along, the easiest thing to grab between shots.",
   },
   {
-    video: { mp4: "/pocket.mp4", webm: "/pocket.webm", poster: "/pocket-poster.jpg" },
+    video: { mp4: "/pocket.mp4", webm: "/pocket.webm", poster: "/caddie-companion-pocket-video-poster.jpg" },
     alt: "Green Caddie Companion tool with its groove brush deployed, clipped to a golf cart out on the course",
     title: "Rides with you",
     desc: "Clips on and comes along every hole, ready the moment you are.",
@@ -204,7 +204,7 @@ export default function OnCourse() {
                 muted
                 loop
                 playsInline
-                poster="/divot-poster.jpg"
+                poster="/golf-divot-tool-video-poster.jpg"
               >
                 <source src="/divot.webm" type="video/webm" />
                 <source src="/divot.mp4" type="video/mp4" />

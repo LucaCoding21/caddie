@@ -20,7 +20,7 @@ export default function SiteFooter() {
     >
       {/* Full-bleed backdrop: the four Caddie tools on a bed of golf balls. */}
       <Image
-        src="/footer-balls.png"
+        src="/golf-multi-tool-colors-on-golf-balls.png"
         alt="Caddie Companion tools in green, black, blue, and red resting on golf balls"
         fill
         preload
