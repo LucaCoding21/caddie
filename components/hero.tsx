@@ -41,7 +41,31 @@ export default function Hero() {
   });
 
   return (
-    <section className="sticky top-0 h-svh w-full overflow-hidden bg-black">
+    <>
+      {/* Preload the LCP hero in <head> (React 19 hoists these), so the browser
+          starts it before it has even parsed the body — earlier than the
+          <picture> preload scanner would find it. The `media` attribute means
+          only the matching orientation is ever preloaded, and the srcSet/sizes
+          match the <source> below exactly, so it's the same single request, just
+          kicked off first. This is what flips Lighthouse's "LCP request
+          discovery" audit green without touching image quality. */}
+      <link
+        rel="preload"
+        as="image"
+        fetchPriority="high"
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        {...({ imageSrcSet: portraitSrcSet, imageSizes: "100vw" } as any)}
+        media="(orientation: portrait)"
+      />
+      <link
+        rel="preload"
+        as="image"
+        fetchPriority="high"
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        {...({ imageSrcSet: landscapeSrcSet, imageSizes: "100vw" } as any)}
+        media="(orientation: landscape)"
+      />
+      <section className="sticky top-0 h-svh w-full overflow-hidden bg-black">
       {/* Blurred placeholders — one per orientation, so the right preview paints
           instantly behind the hero while it downloads. */}
       <div
@@ -92,6 +116,7 @@ export default function Hero() {
       />
 
       <HeroCopy />
-    </section>
+      </section>
+    </>
   );
 }

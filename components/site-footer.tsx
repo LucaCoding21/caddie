@@ -19,11 +19,13 @@ export default function SiteFooter() {
       style={{ height: "var(--footer-h)" }}
     >
       {/* Full-bleed backdrop: the four Caddie tools on a bed of golf balls. */}
+      {/* No preload: this footer is pinned at the very bottom and revealed only
+          after scrolling the whole page, so it must never compete with the hero
+          for first-paint bandwidth. Default lazy loading is correct here. */}
       <Image
         src="/golf-multi-tool-colors-on-golf-balls.png"
         alt="Caddie Companion tools in green, black, blue, and red resting on golf balls"
         fill
-        preload
         sizes="100vw"
         className="select-none object-cover object-[center_30%]"
       />

@@ -42,11 +42,15 @@ export default function RootLayout({
     >
       <body className="font-sans bg-background text-foreground antialiased">
         {children}
+        {/* lazyOnload (not afterInteractive): GA's ~160 KB script was loading at
+            high priority during the hero's first paint, starving the LCP image
+            of bandwidth on mobile. lazyOnload defers it to browser idle after
+            load — pageviews are still tracked, just a beat later. */}
         <Script
           src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
-          strategy="afterInteractive"
+          strategy="lazyOnload"
         />
-        <Script id="google-analytics" strategy="afterInteractive">
+        <Script id="google-analytics" strategy="lazyOnload">
           {`
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}

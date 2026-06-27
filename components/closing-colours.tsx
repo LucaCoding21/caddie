@@ -319,7 +319,6 @@ export default function ClosingColours() {
                 className={`object-contain ${
                   activeColor.id === "red" ? "xl:scale-[0.97] xl:-translate-x-[10px] xl:-translate-y-[10px]" : ""
                 } ${activeColor.id === "green" ? "scale-[0.95] xl:scale-[0.97]" : ""}`}
-                preload
               />
             )}
           </div>
