@@ -5,7 +5,7 @@ import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
-import CaddieExplodeCanvas from "@/components/CaddieExplodeCanvas";
+import CaddieExplodeCanvas from "@/components/CaddieExplodeCanvasLazy";
 import { PRODUCT } from "@/lib/products";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger, SplitText);

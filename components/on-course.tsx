@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import LazyVideo from "@/components/LazyVideo";
 import { useRef } from "react";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
@@ -158,18 +159,15 @@ export default function OnCourse() {
             >
               <div className="relative aspect-[3/4] w-full overflow-hidden rounded-md bg-[#efeeea] ring-1 ring-black/5">
                 {shot.video ? (
-                  <video
+                  <LazyVideo
                     className="pocket-parallax will-change-transform absolute inset-x-0 top-[-10%] h-[120%] w-full object-cover"
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
                     poster={shot.video.poster}
-                    aria-label={shot.alt}
-                  >
-                    <source src={shot.video.webm} type="video/webm" />
-                    <source src={shot.video.mp4} type="video/mp4" />
-                  </video>
+                    ariaLabel={shot.alt}
+                    sources={[
+                      { src: shot.video.webm, type: "video/webm" },
+                      { src: shot.video.mp4, type: "video/mp4" },
+                    ]}
+                  />
                 ) : (
                   <Image
                     src={shot.src}
@@ -198,17 +196,14 @@ export default function OnCourse() {
           {/* Divot clip — muted autoplay loop, same idiom as the hero video. */}
           <figure className="shot">
             <div className="relative aspect-[3/2] w-full overflow-hidden rounded-md bg-[#efeeea] ring-1 ring-black/5">
-              <video
+              <LazyVideo
                 className="absolute inset-0 h-full w-full object-cover"
-                autoPlay
-                muted
-                loop
-                playsInline
                 poster="/golf-divot-tool-video-poster.jpg"
-              >
-                <source src="/divot.webm" type="video/webm" />
-                <source src="/divot.mp4" type="video/mp4" />
-              </video>
+                sources={[
+                  { src: "/divot.webm", type: "video/webm" },
+                  { src: "/divot.mp4", type: "video/mp4" },
+                ]}
+              />
             </div>
             <figcaption className="mt-5 max-w-sm">
               <span className="block font-inter text-lg md:text-xl font-medium text-black tracking-tight">
