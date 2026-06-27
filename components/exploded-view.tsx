@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -22,6 +22,35 @@ export default function ExplodedView() {
   const sectionRef = useRef<HTMLElement>(null);
   const eyebrowRef = useRef<HTMLParagraphElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
+
+  // Defer mounting the Three.js canvas until this section is within ~one
+  // viewport of scrolling into view. The 3D lives four folds down, so loading
+  // its ~636 KB chunk + WebGL init + Draco GLB decode eagerly meant all of it
+  // ran on the main thread *during the hero's first paint* — the dominant cause
+  // of the mobile TBT (6.5s) and a blocked LCP. Gating the mount keeps Three.js
+  // off the critical path entirely: visitors who never reach this section never
+  // pay for it, and those who do get it loaded a screen ahead of arrival.
+  const [showCanvas, setShowCanvas] = useState(false);
+
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+    if (typeof IntersectionObserver === "undefined") {
+      setShowCanvas(true);
+      return;
+    }
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          setShowCanvas(true);
+          io.disconnect();
+        }
+      },
+      { rootMargin: "800px 0px" }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
 
   useGSAP(
     () => {
@@ -138,7 +167,7 @@ export default function ExplodedView() {
               }}
             />
             <div className="relative z-10 h-full w-full">
-              <CaddieExplodeCanvas pinRef={sectionRef} />
+              {showCanvas && <CaddieExplodeCanvas pinRef={sectionRef} />}
             </div>
           </div>
         </div>
