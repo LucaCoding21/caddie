@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, type RefObject } from "react";
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
+import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js";
 import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -167,8 +168,16 @@ export default function CaddieExplodeCanvas({
 
     let st: ScrollTrigger | null = null;
 
+    // The GLB is Draco-compressed (4.3 MB → 0.5 MB, visually lossless), so the
+    // loader needs the Draco decoder. It's self-hosted under /draco/ (no
+    // third-party CDN), and loaded lazily alongside this canvas.
+    const gltfLoader = new GLTFLoader();
+    const dracoLoader = new DRACOLoader();
+    dracoLoader.setDecoderPath("/draco/");
+    gltfLoader.setDRACOLoader(dracoLoader);
+
     Promise.all([
-      new GLTFLoader().loadAsync("/models/caddie_exploded_engraved.glb"),
+      gltfLoader.loadAsync("/models/caddie_exploded_engraved.glb"),
       fetch("/explode.json").then((r) => r.json() as Promise<ExplodeData>),
     ]).then(([gltf, data]) => {
       if (disposed) return;
@@ -311,6 +320,7 @@ export default function CaddieExplodeCanvas({
       envTex.dispose();
       pmrem.dispose();
       Object.values(matCache).forEach((m) => m.dispose());
+      dracoLoader.dispose();
       renderer.dispose();
       parts = [];
     };
