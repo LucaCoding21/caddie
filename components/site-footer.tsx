@@ -1,5 +1,8 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 const legalLinks = [
   { label: "Privacy Policy", slug: "privacy-policy" },
@@ -13,22 +16,48 @@ const legalLinks = [
 // uncovers this. Height is driven by --footer-h (see globals.css), which also
 // reserves the matching scroll space in page.tsx.
 export default function SiteFooter() {
+  // The backdrop photo is mounted only once the reader scrolls near the bottom.
+  // Reason: this footer is position:fixed, so even though it's hidden behind the
+  // opaque content at the top of the page, the browser still PAINTS it — and
+  // Chrome's LCP algorithm ignores occlusion, so this large photo was being
+  // picked as the Largest Contentful Paint instead of the hero, capping the LCP
+  // score on an image the user can't even see yet. Deferring the mount removes
+  // it as a paint candidate at load; it's mounted (and loaded) well before the
+  // reader actually scrolls the footer into view, so the reveal is unchanged.
+  const [showBackdrop, setShowBackdrop] = useState(false);
+
+  useEffect(() => {
+    const check = () => {
+      const nearBottom =
+        window.scrollY + window.innerHeight * 2 >=
+        document.documentElement.scrollHeight;
+      if (nearBottom) {
+        setShowBackdrop(true);
+        window.removeEventListener("scroll", check);
+      }
+    };
+    check();
+    window.addEventListener("scroll", check, { passive: true });
+    return () => window.removeEventListener("scroll", check);
+  }, []);
+
   return (
     <footer
       className="fixed inset-x-0 bottom-0 z-0 flex flex-col items-center justify-center overflow-hidden bg-white"
       style={{ height: "var(--footer-h)" }}
     >
-      {/* Full-bleed backdrop: the four Caddie tools on a bed of golf balls. */}
-      {/* No preload: this footer is pinned at the very bottom and revealed only
-          after scrolling the whole page, so it must never compete with the hero
-          for first-paint bandwidth. Default lazy loading is correct here. */}
-      <Image
-        src="/golf-multi-tool-colors-on-golf-balls.png"
-        alt="Caddie Companion tools in green, black, blue, and red resting on golf balls"
-        fill
-        sizes="100vw"
-        className="select-none object-cover object-[center_30%]"
-      />
+      {/* Full-bleed backdrop: the four Caddie tools on a bed of golf balls.
+          Mounted lazily (see note above) so it never competes with — or
+          masquerades as — the hero's LCP. */}
+      {showBackdrop && (
+        <Image
+          src="/golf-multi-tool-colors-on-golf-balls.png"
+          alt="Caddie Companion tools in green, black, blue, and red resting on golf balls"
+          fill
+          sizes="100vw"
+          className="select-none object-cover object-[center_30%]"
+        />
+      )}
 
       {/* Bottom-up white scrim: fades the busy golf-ball photo to solid white
           at the base so the black legal links and copyright read cleanly,
