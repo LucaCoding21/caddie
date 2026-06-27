@@ -2,11 +2,11 @@
 
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
+import { submitContact } from "@/app/contact/actions";
 import {
-  submitContact,
   initialContactState,
   type ContactState,
-} from "@/app/contact/actions";
+} from "@/app/contact/contact-state";
 
 const TOPICS = ["General", "My order", "Wholesale", "Press"] as const;
 

@@ -5,14 +5,7 @@
 
 import { Resend } from "resend";
 
-export type ContactState = {
-  ok: boolean;
-  message: string;
-  // Field-level errors, keyed by input name, so the form can mark each field.
-  errors?: Partial<Record<"name" | "email" | "topic" | "message", string>>;
-};
-
-export const initialContactState: ContactState = { ok: false, message: "" };
+import type { ContactState } from "./contact-state";
 
 const TOPICS = ["General", "My order", "Wholesale", "Press"] as const;
 
