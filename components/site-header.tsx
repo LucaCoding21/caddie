@@ -109,7 +109,10 @@ export default function SiteHeader({ solid = false }: { solid?: boolean }) {
             alt="Caddie Companion"
             width={305}
             height={103}
-            preload
+            // No preload: the logo isn't the LCP, so it shouldn't share the
+            // high-priority lane with the hero image during first paint. It's in
+            // the initial viewport, so it still loads right away — just behind
+            // the hero, which keeps the hero's LCP fast and consistent.
             // Serve the original PNG untouched. The default optimizer re-encodes
             // to WebP at quality 75, which softens the tiny "COMPANION" subtext.
             unoptimized
