@@ -17,11 +17,17 @@ const OPENER = "/caddie-companion-bottle-opener.png";
 
 // Scattered desktop photos. Two big (top-left, bottom-right) and two small
 // (bottom-left, top-right) on a diagonal for depth.
+//
+// Widths are fluid (clamp), not fixed. The photos are positioned at percentage
+// offsets from the viewport edges, so a fixed px width crowds the centered text
+// on narrower laptops (~1280-1600px) while sitting comfortably on wide monitors.
+// clamp() scales them with the viewport and caps at the wide-monitor sizes, so
+// the laptop view breathes and the monitor view is unchanged.
 const PHOTOS = [
-  { src: BAG, alt: "Red Caddie Companion golf tool clipped to a golf bag", pos: "top-[5%] left-[4%]", size: "w-80 xl:w-96", sizes: "(max-width: 1280px) 20rem, 24rem" },
-  { src: TORX, alt: "Using the Caddie Companion's T25 Torx driver to adjust a golf club", pos: "bottom-[10%] left-[13%]", size: "w-64 xl:w-72", sizes: "(max-width: 1280px) 16rem, 18rem" },
-  { src: GRASS, alt: "Caddie Companion divot repair fork fixing a pitch mark in the grass", pos: "top-[8%] right-[9%]", size: "w-72 xl:w-80", sizes: "(max-width: 1280px) 18rem, 20rem" },
-  { src: OPENER, alt: "Caddie Companion's built-in bottle opener cracking a drink", pos: "bottom-[6%] right-[6%]", size: "w-80 xl:w-96", sizes: "(max-width: 1280px) 20rem, 24rem", square: true },
+  { src: BAG, alt: "Red Caddie Companion golf tool clipped to a golf bag", pos: "top-[5%] left-[4%]", size: "w-[clamp(15rem,20vw,24rem)]", sizes: "24rem" },
+  { src: TORX, alt: "Using the Caddie Companion's T25 Torx driver to adjust a golf club", pos: "bottom-[10%] left-[13%]", size: "w-[clamp(12rem,15vw,18rem)]", sizes: "18rem" },
+  { src: GRASS, alt: "Caddie Companion divot repair fork fixing a pitch mark in the grass", pos: "top-[8%] right-[9%]", size: "w-[clamp(13rem,16vw,20rem)]", sizes: "20rem" },
+  { src: OPENER, alt: "Caddie Companion's built-in bottle opener cracking a drink", pos: "bottom-[6%] right-[6%]", size: "w-[clamp(15rem,20vw,24rem)]", sizes: "24rem", square: true },
 ];
 
 export default function Promise() {
