@@ -14,7 +14,7 @@ import FaqSchema from "@/components/faq-schema";
 export default function Home() {
   return (
     <>
-      <ProductSchema />
+      <ProductSchema includeReviews />
       <FaqSchema />
       <SiteHeader />
       {/* Opaque layer that scrolls over the fixed footer. The bottom margin

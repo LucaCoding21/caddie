@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import SiteHeader from "@/components/site-header";
 import SiteFooter from "@/components/site-footer";
+import BreadcrumbSchema from "@/components/breadcrumb-schema";
 import { getPolicy, isPolicySlug, POLICY_SLUGS } from "@/lib/policies";
 
 // Pre-render all four policy routes at build time; unknown slugs fall through
@@ -43,6 +44,12 @@ export default async function PolicyPage({
 
   return (
     <>
+      <BreadcrumbSchema
+        items={[
+          { name: "Home", path: "/" },
+          { name: policy.title, path: `/policies/${slug}` },
+        ]}
+      />
       {/* Same persistent nav as every other page. Solid (dark logo) since this
           page has no dark hero. */}
       <SiteHeader solid />

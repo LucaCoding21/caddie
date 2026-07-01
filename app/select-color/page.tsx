@@ -463,8 +463,8 @@ function SelectColorConfigurator() {
             {/* Trust line — anchored to the bottom of the configurator column
                 and pushed out to its left/right corners (full width, no max-w
                 clamp), de-risking the buy without crowding the deal + CTA. */}
-            <div className="mt-8 flex w-full flex-wrap items-center justify-between gap-x-6 gap-y-1">
-              <ul className="flex flex-wrap items-center gap-x-2.5 gap-y-1 font-inter text-xs text-zinc-500">
+            <div className="mt-12 flex w-full flex-wrap items-center justify-center gap-x-6 gap-y-1 sm:mt-8 sm:justify-between">
+              <ul className="flex flex-wrap items-center justify-center gap-x-2.5 gap-y-1 font-inter text-xs text-zinc-500 sm:justify-start">
                 {TRUST.map((item, idx) => (
                   <li key={item} className="flex items-center gap-2.5">
                     {idx > 0 && (
@@ -475,6 +475,19 @@ function SelectColorConfigurator() {
                     {item}
                   </li>
                 ))}
+                <li className="flex items-center gap-2.5">
+                  <span aria-hidden className="text-zinc-300">
+                    ·
+                  </span>
+                  <a
+                    href="https://www.amazon.com/Caddie-Companion-Golf-Multi-Tool-6/dp/B0GSS94XCD?th=1"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline underline-offset-4 transition-colors hover:text-black"
+                  >
+                    Also available on Amazon
+                  </a>
+                </li>
               </ul>
               <Link
                 href="/contact"

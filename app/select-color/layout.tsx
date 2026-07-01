@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import ProductSchema from "@/components/product-schema";
+import BreadcrumbSchema from "@/components/breadcrumb-schema";
 
 export const metadata: Metadata = {
   title: "Buy the Caddie Companion Golf Multi-Tool in 4 Colors | $29",
@@ -16,6 +17,12 @@ export default function SelectColorLayout({
   return (
     <>
       <ProductSchema />
+      <BreadcrumbSchema
+        items={[
+          { name: "Home", path: "/" },
+          { name: "Buy", path: "/select-color" },
+        ]}
+      />
       {children}
     </>
   );

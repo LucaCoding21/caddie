@@ -111,3 +111,19 @@ body {
     animation: none;
   }
 }
+
+/* Reviews marquee — same two-copy slide as the footer, right→left, and it
+   pauses when hovered so a card can be read. */
+.reviews-marquee-track {
+  animation: footer-marquee 60s linear infinite;
+}
+
+.reviews-marquee:hover .reviews-marquee-track {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reviews-marquee-track {
+    animation: none;
+  }
+}

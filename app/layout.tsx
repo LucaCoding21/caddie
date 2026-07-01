@@ -17,16 +17,43 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/",
   },
+  // Let Google use large image previews in Search & Discover. Without this,
+  // Google may fall back to a small thumbnail (or none). It does NOT choose
+  // WHICH image — Google still picks a prominent on-page image itself.
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-video-preview": -1,
+      "max-snippet": -1,
+    },
+  },
   openGraph: {
     title: "Caddie Companion | Golf Divot Tool & 6-in-1 Multi-Tool",
     description,
     siteName: "Caddie Companion",
     type: "website",
+    url: "/",
+    images: [
+      {
+        // Static asset in /public — served at a clean, hash-free URL.
+        // (The app/opengraph-image.png file convention appends a ?<hash>
+        // cache-buster to the URL, which we don't want here.)
+        url: "/opengraph-image.png",
+        width: 1731,
+        height: 909,
+        alt: "Caddie Companion 6-in-1 golf multi-tool",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Caddie Companion | Golf Divot Tool & 6-in-1 Multi-Tool",
     description,
+    images: ["/opengraph-image.png"],
   },
 };
 

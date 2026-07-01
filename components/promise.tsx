@@ -154,7 +154,7 @@ export default function Promise() {
             className={`absolute ${pos} ${size}`}
           >
             {square ? (
-              <div className="promise-photo-desktop aspect-[4/5] w-full overflow-hidden rounded-sm">
+              <div className="promise-photo-desktop relative aspect-[4/5] w-full overflow-hidden rounded-sm">
                 <Image src={src} alt="" fill className="object-cover" sizes={sizes} />
               </div>
             ) : (

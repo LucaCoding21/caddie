@@ -14,7 +14,7 @@ gsap.registerPlugin(useGSAP, SplitText);
 export default function HeroCopy() {
   const containerRef = useRef<HTMLDivElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
-  const subRef = useRef<HTMLParagraphElement>(null);
+  const taglineRef = useRef<HTMLParagraphElement>(null);
   const ctaRef = useRef<HTMLDivElement>(null);
 
   useGSAP(
@@ -37,13 +37,13 @@ export default function HeroCopy() {
           }),
       });
 
-      // Subtitle fades up just after the headline lines land.
-      gsap.from(subRef.current, {
+      // Tagline (former headline, now a subheading) fades up after the lines land.
+      gsap.from(taglineRef.current, {
         opacity: 0,
         y: 20,
         duration: 0.8,
         ease: "power2.out",
-        delay: 0.8,
+        delay: 0.7,
       });
 
       // CTA fades up a beat after the subtitle (mobile only — it's hidden at sm+).
@@ -70,15 +70,13 @@ export default function HeroCopy() {
           ref={headingRef}
           className="font-brand font-bold uppercase text-white text-4xl min-[420px]:text-5xl sm:text-6xl md:text-7xl lg:text-8xl leading-[0.95] tracking-tight"
         >
-          Everything
-          <br />
-          but the swing.
+          6-in-1 Golf Multi-Tool
         </h1>
         <p
-          ref={subRef}
-          className="mt-4 text-white text-base md:text-base tracking-wide [text-shadow:0_1px_8px_rgba(0,0,0,0.5)]"
+          ref={taglineRef}
+          className="mt-4 text-white text-xl md:text-2xl font-normal tracking-wide [text-shadow:0_1px_8px_rgba(0,0,0,0.5)]"
         >
-          The golf multi-tool that earns its place in the bag.
+          Everything but the swing.
         </p>
 
         {/* Mobile-only buy CTA. On desktop the persistent header pill carries

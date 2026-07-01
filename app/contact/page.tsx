@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { ContactContent } from "@/components/contact-content";
 import SiteHeader from "@/components/site-header";
+import BreadcrumbSchema from "@/components/breadcrumb-schema";
 
 export const metadata: Metadata = {
   title: "Contact | Caddie Companion",
@@ -14,6 +15,12 @@ export const metadata: Metadata = {
 export default function ContactPage() {
   return (
     <main className="flex min-h-svh flex-col bg-[#fafaf7] text-black">
+      <BreadcrumbSchema
+        items={[
+          { name: "Home", path: "/" },
+          { name: "Contact", path: "/contact" },
+        ]}
+      />
       {/* Same persistent nav as every other page: logo + links + order pill,
           with the fullscreen menu on mobile. Solid (dark logo) since this page
           has no dark hero. */}

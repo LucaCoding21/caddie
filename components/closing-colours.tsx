@@ -8,6 +8,7 @@ import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
 import { PRODUCT } from "@/lib/products";
+import Reviews from "@/components/reviews";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger, SplitText);
 
@@ -296,7 +297,7 @@ export default function ClosingColours() {
         {/* Hero — swaps to the selected finish, so "four ways to carry" is shown, not told.
             Landscape product shots: the frame ratio matches the source (2000×1545) and
             object-contain shows the whole tool, uncropped and at native resolution. */}
-        <div className="order-2 lg:order-1 lg:mx-auto lg:w-full lg:max-w-2xl xl:max-w-none xl:col-start-1 xl:row-start-1 xl:row-span-2">
+        <div className="order-2 min-w-0 lg:order-1 lg:mx-auto lg:w-full lg:max-w-2xl xl:max-w-none xl:col-start-1 xl:row-start-1 xl:row-span-2">
           {/* Single frame: shows the active finish, or swaps to an add-on while
               it's being previewed so it shows fully and on its own. */}
           <div className="relative mx-auto aspect-[4/3] w-full rounded-lg lg:w-full">
@@ -322,6 +323,11 @@ export default function ClosingColours() {
               />
             )}
           </div>
+
+          {/* Real customer reviews fill the left column below the product shot.
+              Their star ratings + aggregate are also emitted as Product JSON-LD
+              on this page (see ProductSchema includeReviews in app/page.tsx). */}
+          <Reviews />
         </div>
       </div>
     </section>

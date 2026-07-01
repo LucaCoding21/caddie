@@ -6,6 +6,7 @@ import AboutDetails from "@/components/about-details";
 import AboutCta from "@/components/about-cta";
 import SiteHeader from "@/components/site-header";
 import SiteFooter from "@/components/site-footer";
+import BreadcrumbSchema from "@/components/breadcrumb-schema";
 
 export const metadata: Metadata = {
   title: "About Caddie Companion | The Golfer's Pocket Tool",
@@ -19,6 +20,12 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <>
+      <BreadcrumbSchema
+        items={[
+          { name: "Home", path: "/" },
+          { name: "About", path: "/about" },
+        ]}
+      />
       {/* Same persistent nav as every other page: logo + links + order pill,
           with the fullscreen menu on mobile. Solid (dark logo) since this page
           has no dark hero. */}
