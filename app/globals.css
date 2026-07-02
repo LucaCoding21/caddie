@@ -86,6 +86,15 @@ body {
   animation-delay: 0.18s;
 }
 
+/* Homepage hero: tagline and CTA follow the (statically painted) headline. */
+.hero-rise-tagline {
+  animation-delay: 0.45s;
+}
+
+.hero-rise-cta {
+  animation-delay: 0.9s;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .hero-rise {
     animation: none;

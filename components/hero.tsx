@@ -18,7 +18,9 @@ export default function Hero() {
   // the initial HTML. That removes the "LCP image was lazily loaded" penalty
   // without ever downloading the off-orientation crop. Quality is unchanged:
   // still Next-optimized AVIF/WebP at the default quality, same source images.
-  const common = { sizes: "100vw" };
+  // quality 65: measurably smaller AVIF/WebP on the LCP request; visually
+  // indistinguishable on this dark photo (verify if the hero art ever changes).
+  const common = { sizes: "100vw", quality: 65 };
 
   const {
     props: { srcSet: portraitSrcSet },

@@ -116,6 +116,9 @@ export default function SiteHeader({ solid = false }: { solid?: boolean }) {
             // Serve the original PNG untouched. The default optimizer re-encodes
             // to WebP at quality 75, which softens the tiny "COMPANION" subtext.
             unoptimized
+            // Eager: it's in the first viewport; the default lazy adds an
+            // IntersectionObserver round-trip before the logo appears.
+            loading="eager"
             className={`h-8 w-auto transition-[filter] duration-300 ${
               pastHero && !overDark ? "" : "brightness-0 invert"
             }`}

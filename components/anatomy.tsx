@@ -6,16 +6,11 @@ import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
-import { DrawSVGPlugin } from "gsap/DrawSVGPlugin";
-import { ScrambleTextPlugin } from "gsap/ScrambleTextPlugin";
 
-gsap.registerPlugin(
-  useGSAP,
-  ScrollTrigger,
-  SplitText,
-  DrawSVGPlugin,
-  ScrambleTextPlugin
-);
+// DrawSVG + ScrambleText are deliberately NOT imported here: they only run in
+// the ≥1280px callout timeline, so they're dynamic-imported inside that
+// matchMedia block. Phones never download them.
+gsap.registerPlugin(useGSAP, ScrollTrigger, SplitText);
 
 /**
  * Tool callouts for the full-bleed anatomy photo.
@@ -161,12 +156,13 @@ export default function Anatomy() {
       // breakpoint — matchMedia cleans the timeline up if the viewport drops
       // below it (where the lines/labels are display:none and undrawable).
       const mm = gsap.matchMedia();
-      mm.add("(min-width: 1280px)", () => {
+      mm.add("(min-width: 1280px)", (ctx) => {
         const q = gsap.utils.selector(diagramRef);
 
         // Capture each label's final text, then hide it — the scramble tween
         // resolves back to this string. Read now, while the DOM still holds the
-        // real copy (before any scramble has overwritten it).
+        // real copy (before any scramble has overwritten it). This runs
+        // synchronously so nothing flashes while the plugins stream in below.
         const labelLines = q(".anatomy-label-line");
         const finalText = labelLines.map((el) => el.textContent ?? "");
         gsap.set(labelLines, { autoAlpha: 0 });
@@ -176,64 +172,82 @@ export default function Anatomy() {
         const labelImgs = q(".anatomy-label-img");
         gsap.set(labelImgs, { autoAlpha: 0 });
 
-        const tl = gsap.timeline({
-          scrollTrigger: {
-            trigger: diagramRef.current,
-            start: "top 70%",
-            once: true,
-          },
-        });
+        let cancelled = false;
 
-        // Nodes pop on first, then each line draws outward from its node.
-        tl.from(q(".anatomy-node"), {
-          autoAlpha: 0,
-          scale: 0,
-          transformOrigin: "center",
-          duration: 0.3,
-          ease: "back.out(2)",
-          stagger: 0.1,
-        }).from(
-          q(".anatomy-line"),
-          { drawSVG: 0, duration: 0.5, ease: "power2.out", stagger: 0.1 },
-          "<"
-        );
-
-        // Each label scrambles into place just as its line arrives — line i
-        // lands ~i*0.1s in, so kick off that label's scramble a beat after.
-        // The line fades in (autoAlpha) while the plugin churns random glyphs
-        // and resolves them left-to-right into the captured text. Each label is
-        // two lines (title + desc), so step the timeline by two per callout.
-        // Step the callouts 0.2s apart (not 0.1) and keep each scramble to
-        // 1.2s, so only ~2-3 callouts churn text at once instead of all six —
-        // ScrambleText rewrites textContent every frame, and overlapping all
-        // twelve labels spikes the main thread enough to drop scroll frames.
-        labelLines.forEach((el, i) => {
-          tl.to(
-            el,
-            {
-              autoAlpha: 1,
-              duration: 1.2,
-              ease: "power2.out",
-              scrambleText: {
-                text: finalText[i],
-                chars: "upperCase",
-                speed: 0.3,
-              },
+        const buildCalloutTimeline = () => {
+          const tl = gsap.timeline({
+            scrollTrigger: {
+              trigger: diagramRef.current,
+              start: "top 70%",
+              once: true,
             },
-            0.25 + Math.floor(i / 2) * 0.2
-          );
-        });
+          });
 
-        // Fade each thumbnail in on the same beat as its callout's text.
-        labelImgs.forEach((el, j) => {
-          tl.to(
-            el,
-            { autoAlpha: 1, duration: 0.6, ease: "power2.out" },
-            0.25 + j * 0.2
+          // Nodes pop on first, then each line draws outward from its node.
+          tl.from(q(".anatomy-node"), {
+            autoAlpha: 0,
+            scale: 0,
+            transformOrigin: "center",
+            duration: 0.3,
+            ease: "back.out(2)",
+            stagger: 0.1,
+          }).from(
+            q(".anatomy-line"),
+            { drawSVG: 0, duration: 0.5, ease: "power2.out", stagger: 0.1 },
+            "<"
           );
+
+          // Each label scrambles into place just as its line arrives — line i
+          // lands ~i*0.1s in, so kick off that label's scramble a beat after.
+          // The line fades in (autoAlpha) while the plugin churns random glyphs
+          // and resolves them left-to-right into the captured text. Each label is
+          // two lines (title + desc), so step the timeline by two per callout.
+          // Step the callouts 0.2s apart (not 0.1) and keep each scramble to
+          // 1.2s, so only ~2-3 callouts churn text at once instead of all six —
+          // ScrambleText rewrites textContent every frame, and overlapping all
+          // twelve labels spikes the main thread enough to drop scroll frames.
+          labelLines.forEach((el, i) => {
+            tl.to(
+              el,
+              {
+                autoAlpha: 1,
+                duration: 1.2,
+                ease: "power2.out",
+                scrambleText: {
+                  text: finalText[i],
+                  chars: "upperCase",
+                  speed: 0.3,
+                },
+              },
+              0.25 + Math.floor(i / 2) * 0.2
+            );
+          });
+
+          // Fade each thumbnail in on the same beat as its callout's text.
+          labelImgs.forEach((el, j) => {
+            tl.to(
+              el,
+              { autoAlpha: 1, duration: 0.6, ease: "power2.out" },
+              0.25 + j * 0.2
+            );
+          });
+        };
+
+        // The Club plugins are only needed by this desktop-only timeline, so
+        // pull them in here instead of the module top — keeps them out of the
+        // phone bundle entirely. ctx.add() registers the async-created tweens
+        // with matchMedia, so mm.revert() still cleans them up.
+        Promise.all([
+          import("gsap/DrawSVGPlugin"),
+          import("gsap/ScrambleTextPlugin"),
+        ]).then(([{ DrawSVGPlugin }, { ScrambleTextPlugin }]) => {
+          if (cancelled) return;
+          gsap.registerPlugin(DrawSVGPlugin, ScrambleTextPlugin);
+          ctx.add(buildCalloutTimeline);
         });
 
         return () => {
+          cancelled = true;
           gsap.set(labelImgs, { clearProps: "all" });
           gsap.set(labelLines, { clearProps: "all" });
           labelLines.forEach((el, i) => {

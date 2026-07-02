@@ -42,9 +42,11 @@ export const metadata: Metadata = {
         // Static asset in /public — served at a clean, hash-free URL.
         // (The app/opengraph-image.png file convention appends a ?<hash>
         // cache-buster to the URL, which we don't want here.)
-        url: "/opengraph-image.png",
-        width: 1731,
-        height: 909,
+        // JPEG at 1200x630: WhatsApp and some crawlers skip previews for
+        // images much over ~600 KB, and the old PNG was 1.9 MB.
+        url: "/opengraph-image.jpg",
+        width: 1200,
+        height: 630,
         alt: "Caddie Companion 6-in-1 golf multi-tool",
       },
     ],
@@ -53,7 +55,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Caddie Companion | Golf Divot Tool & 6-in-1 Multi-Tool",
     description,
-    images: ["/opengraph-image.png"],
+    images: ["/opengraph-image.jpg"],
   },
 };
 

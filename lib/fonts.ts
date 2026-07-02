@@ -17,10 +17,12 @@ export const geistMono = Geist_Mono({
   preload: false,
 });
 
-// Brand / display — Montserrat. 500 for headlines (per brand rule),
-// 900 reserved for logo-equivalent marks only.
+// Brand / display — Montserrat. 500 for headlines (per brand rule).
+// 400 stays because `font-brand font-light` (about-details) has no 300 cut and
+// resolves to 400. 900 was never used in markup (the logo mark is an image),
+// so it's not loaded.
 export const brandSans = Montserrat({
-  weight: ["400", "500", "700", "900"],
+  weight: ["400", "500", "700"],
   variable: "--font-brand-sans",
   subsets: ["latin"],
 });
