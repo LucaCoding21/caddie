@@ -6,6 +6,10 @@ const CART_CREATE = /* GraphQL */ `
       cart {
         id
         checkoutUrl
+        discountCodes {
+          code
+          applicable
+        }
       }
       userErrors {
         field
@@ -32,7 +36,13 @@ export async function POST(req: Request) {
 
   const body = (await req.json().catch(() => ({}))) as {
     lines?: Array<{ variantId?: unknown; quantity?: unknown }>;
+    discountCode?: unknown;
   };
+
+  // Optional promo code the shopper typed on the buy page. Shopify is the source
+  // of truth for whether it's valid — we pass it through and check `applicable`.
+  const discountCode =
+    typeof body.discountCode === "string" ? body.discountCode.trim() : "";
 
   let lines: Line[];
   if (Array.isArray(body.lines) && body.lines.length > 0) {
@@ -70,6 +80,7 @@ export async function POST(req: Request) {
               merchandiseId: l.variantId,
               quantity: l.quantity,
             })),
+            ...(discountCode ? { discountCodes: [discountCode] } : {}),
           },
         },
       }),
@@ -96,12 +107,28 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: userErrors }, { status: 400 });
   }
 
-  const checkoutUrl = json.data?.cartCreate?.cart?.checkoutUrl;
+  const cart = json.data?.cartCreate?.cart;
+  const checkoutUrl = cart?.checkoutUrl;
   if (!checkoutUrl) {
     return NextResponse.json(
       { error: "No checkoutUrl in response" },
       { status: 500 }
     );
+  }
+
+  // If a code was entered, confirm Shopify actually applied it. An unknown or
+  // expired code comes back with `applicable: false` (or absent entirely) — tell
+  // the shopper instead of sending them to checkout paying full price.
+  if (discountCode) {
+    const applied = (
+      cart.discountCodes as Array<{ code: string; applicable: boolean }> | undefined
+    )?.some((d) => d.applicable);
+    if (!applied) {
+      return NextResponse.json(
+        { error: "invalid_discount", checkoutUrl },
+        { status: 422 }
+      );
+    }
   }
 
   return NextResponse.json({ checkoutUrl });

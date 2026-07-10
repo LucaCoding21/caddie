@@ -76,6 +76,10 @@ function SelectColorConfigurator() {
   const [previewAddonId, setPreviewAddonId] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  // Optional promo code. `codeOpen` reveals the field so it stays out of the way
+  // until a shopper actually has a code to enter.
+  const [codeOpen, setCodeOpen] = useState(false);
+  const [discountCode, setDiscountCode] = useState("");
 
   const activeIdx = Math.max(
     0,
@@ -165,9 +169,17 @@ function SelectColorConfigurator() {
               .filter((a) => a.variantId && (addonQty[a.id] ?? 0) > 0)
               .map((a) => ({ variantId: a.variantId, quantity: addonQty[a.id] })),
           ],
+          discountCode: discountCode.trim() || undefined,
         }),
       });
       const json = await res.json();
+      // A bad promo code comes back 422 — keep the shopper here to fix it rather
+      // than sending them to checkout at full price.
+      if (res.status === 422 && json.error === "invalid_discount") {
+        setError("That code isn't valid. Check it and try again.");
+        setLoading(false);
+        return;
+      }
       if (!res.ok || !json.checkoutUrl) {
         throw new Error(
           typeof json.error === "string"
@@ -423,6 +435,39 @@ function SelectColorConfigurator() {
                   Quantity now lives per-colour in the finish rows, so this is
                   just the full-width CTA summing every finish + add-ons. */}
               <section className="mt-7">
+                {/* Promo code — hidden behind a link so it doesn't clutter the
+                    buy moment for the shopper who doesn't have one. Shopify
+                    validates the code; an invalid one surfaces below the CTA. */}
+                {codeOpen ? (
+                  <div className="mb-3 flex items-center gap-2">
+                    <input
+                      type="text"
+                      value={discountCode}
+                      onChange={(e) => {
+                        setDiscountCode(e.target.value);
+                        setError(null);
+                      }}
+                      placeholder="Discount code"
+                      autoCapitalize="characters"
+                      autoComplete="off"
+                      spellCheck={false}
+                      className="min-w-0 flex-1 border border-zinc-300 bg-white px-3 py-2.5 font-inter text-sm uppercase tracking-wide text-black placeholder:normal-case placeholder:tracking-normal placeholder:text-zinc-400 focus:border-black focus:outline-none"
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" && totalUnits > 0 && !loading)
+                          checkout();
+                      }}
+                    />
+                  </div>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => setCodeOpen(true)}
+                    className="mb-3 font-inter text-xs text-zinc-500 underline underline-offset-4 transition-colors hover:text-black"
+                  >
+                    Have a discount code?
+                  </button>
+                )}
+
                 <button
                   onClick={checkout}
                   disabled={loading || totalUnits === 0}
