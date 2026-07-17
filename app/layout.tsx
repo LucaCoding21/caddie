@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Script from "next/script";
 import { geistSans, geistMono, brandSans, inter } from "@/lib/fonts";
+import DiscountPopup from "@/components/discount-popup";
 import "./globals.css";
 
 const GA_MEASUREMENT_ID = "G-6XVN8BMLK0";
@@ -71,6 +72,7 @@ export default function RootLayout({
     >
       <body className="font-sans bg-background text-foreground antialiased">
         {children}
+        <DiscountPopup />
         {/* lazyOnload (not afterInteractive): GA's ~160 KB script was loading at
             high priority during the hero's first paint, starving the LCP image
             of bandwidth on mobile. lazyOnload defers it to browser idle after
