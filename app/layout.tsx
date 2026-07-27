@@ -9,7 +9,7 @@ const GA_MEASUREMENT_ID = "G-6XVN8BMLK0";
 const siteUrl = "https://www.caddiecompanion.com";
 
 const description =
-  "Six golf tools in one machined frame. Divot repair, groove brush, ball markers, and more. Built to last, small enough to forget in your pocket. $29.";
+  "Six golf tools in one machined frame. Divot repair, groove brush, ball markers, and more. Built to last, small enough to forget in your pocket. $49.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),

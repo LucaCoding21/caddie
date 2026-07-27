@@ -33,7 +33,7 @@ export default function HeroCopy() {
               <span className="text-accent/40" aria-hidden>
                 ·
               </span>
-              <span className="tabular-nums">$29</span>
+              <span className="tabular-nums">$49</span>
             </span>
             {/* Free-shipping nudge — desktop carries this inside the header
                 pill, which is hidden on mobile, so tuck it into the CTA. */}

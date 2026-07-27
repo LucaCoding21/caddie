@@ -3,9 +3,9 @@ import ProductSchema from "@/components/product-schema";
 import BreadcrumbSchema from "@/components/breadcrumb-schema";
 
 export const metadata: Metadata = {
-  title: "Buy the Caddie Companion Golf Multi-Tool in 4 Colors | $29",
+  title: "Buy the Caddie Companion Golf Multi-Tool in 4 Colors | $49",
   description:
-    "Order the Caddie Companion 6-in-1 golf tool. Divot repair, groove brush, ball markers, knife, and more. 4 colors, $29, free shipping on two.",
+    "Order the Caddie Companion 6-in-1 golf tool. Divot repair, groove brush, ball markers, knife, and more. 4 colors, $49, free shipping on two.",
   alternates: {
     canonical: "/select-color",
   },

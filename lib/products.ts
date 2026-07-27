@@ -16,7 +16,7 @@ export type ProductAddon = {
 
 export const PRODUCT = {
   title: "Caddie Companion",
-  priceCents: 2900,
+  priceCents: 4900,
   currency: "USD",
   materials: [
     "Stainless steel inner shell",

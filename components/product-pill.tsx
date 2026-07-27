@@ -42,7 +42,7 @@ export function ProductPill({ light = false }: { light?: boolean }) {
         </span>
         {/* Price tucked inside the button, to the right of the label. */}
         <span className="hidden tabular-nums font-semibold text-white sm:inline">
-          $29
+          $49
         </span>
       </Link>
     </div>

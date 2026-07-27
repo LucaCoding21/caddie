@@ -135,7 +135,7 @@ export function MobileMenu({ light }: { light: boolean }) {
             >
               Order now
               <span className="font-normal text-white/70">·</span>
-              <span className="tabular-nums font-medium text-white/90">$29</span>
+              <span className="tabular-nums font-medium text-white/90">$49</span>
             </Link>
           </div>
         </nav>
