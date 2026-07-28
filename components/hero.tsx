@@ -68,7 +68,13 @@ export default function Hero() {
         {...({ imageSrcSet: landscapeSrcSet, imageSizes: "100vw" } as any)}
         media="(orientation: landscape)"
       />
-      <section className="sticky top-0 h-svh w-full overflow-hidden bg-black">
+      <section className="sticky top-0 h-svh w-full overflow-hidden bg-black max-sm:flex max-sm:flex-col">
+      {/* Media frame. Desktop: full-bleed behind the overlay copy, as ever.
+          Mobile: the 16:9 video in a full-viewport portrait frame kept only the
+          middle third of every shot — whole seconds of empty turf — so it gets
+          the top 45svh (a mild ~1.15:1 crop) with the copy on a solid panel
+          below instead of over the footage. */}
+      <div className="relative max-sm:h-[45svh] max-sm:shrink-0 sm:absolute sm:inset-0">
       {/* Blurred placeholders — one per orientation, so the right preview paints
           instantly behind the hero while it downloads. */}
       <div
@@ -116,11 +122,13 @@ export default function Hero() {
         className="pointer-events-none absolute inset-x-0 top-0 h-1/5 bg-gradient-to-b from-black/60 via-black/10 to-transparent"
       />
 
-      {/* Subtle bottom gradient for text legibility */}
+      {/* Subtle bottom gradient for text legibility — desktop only; on mobile
+          the copy sits on its own panel, not over the footage. */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/60 via-black/20 to-transparent"
+        className="pointer-events-none absolute inset-x-0 bottom-0 hidden h-1/3 bg-gradient-to-t from-black/60 via-black/20 to-transparent sm:block"
       />
+      </div>
 
       <HeroCopy />
       </section>

@@ -1,25 +1,42 @@
 import Link from "next/link";
+import { Stars } from "@/components/reviews";
+import { AVERAGE_RATING, REVIEW_COUNT } from "@/lib/reviews";
 
-// The hero copy overlay. Deliberately a server component with NO JavaScript:
-// the H1 is the page's LCP element on mobile, and the previous GSAP SplitText
-// reveal kept it masked until the client bundle downloaded, hydrated, and ran
-// the animation — pushing LCP past 3s on throttled mobile. Now the headline is
-// painted in the initial HTML, and the tagline/CTA entrances are pure CSS
-// (they start at first paint, no hydration required) so the flourish survives
-// without touching the LCP.
+// The hero copy. Two layouts from one markup tree (so the H1 exists once):
+// desktop overlays the bottom-right of the full-bleed footage in white; mobile
+// is a solid panel under the 45svh media frame — dark type, stars, and the buy
+// CTA all in the first viewport, never fighting the video for contrast.
+//
+// Deliberately a server component with NO JavaScript: the H1 is the page's LCP
+// element on mobile, and the previous GSAP SplitText reveal kept it masked
+// until the client bundle downloaded, hydrated, and ran the animation —
+// pushing LCP past 3s on throttled mobile. Now the headline is painted in the
+// initial HTML, and the tagline/CTA entrances are pure CSS (they start at
+// first paint, no hydration required) so the flourish survives without
+// touching the LCP.
 export default function HeroCopy() {
   return (
-    <div className="relative z-10 flex min-h-svh items-end justify-end px-6 pb-12 md:px-16 md:pb-16">
-      <div className="text-right">
+    <div className="relative z-10 flex flex-1 flex-col justify-center bg-[#fafaf7] px-6 sm:min-h-svh sm:flex-row sm:items-end sm:justify-end sm:bg-transparent sm:px-16 sm:pb-16">
+      <div className="sm:text-right">
         {/* No entrance animation on the H1 — it must paint with first HTML.
             Anything that hides or masks it (opacity 0, clip, translate behind a
             mask) delays LCP by the full animation + JS download time. */}
-        <h1 className="font-brand font-bold uppercase text-white text-4xl min-[420px]:text-5xl sm:text-6xl md:text-7xl lg:text-8xl leading-[0.95] tracking-tight">
+        <h1 className="font-brand font-bold uppercase text-zinc-900 sm:text-white text-4xl min-[420px]:text-5xl sm:text-6xl md:text-7xl lg:text-8xl leading-[0.95] tracking-tight">
           6-in-1 Golf Multi-Tool
         </h1>
-        <p className="hero-rise hero-rise-tagline mt-4 text-white text-xl md:text-2xl font-normal tracking-wide [text-shadow:0_1px_8px_rgba(0,0,0,0.5)]">
+        <p className="hero-rise hero-rise-tagline mt-4 text-zinc-600 sm:text-white text-xl md:text-2xl font-normal tracking-wide sm:[text-shadow:0_1px_8px_rgba(0,0,0,0.5)]">
           Everything but the swing.
         </p>
+
+        {/* Star summary — mobile only, so social proof lands in the first
+            viewport. Desktop keeps the overlay minimal; its stars live at the
+            buy moments. */}
+        <div className="hero-rise hero-rise-tagline mt-4 flex items-center gap-2 sm:hidden">
+          <Stars rating={AVERAGE_RATING} className="h-4 w-4" />
+          <span className="font-inter text-sm text-zinc-500">
+            {AVERAGE_RATING.toFixed(1)} · {REVIEW_COUNT} verified reviews
+          </span>
+        </div>
 
         {/* Mobile-only buy CTA. On desktop the persistent header pill carries
             the order action, so this is hidden at sm+. */}
