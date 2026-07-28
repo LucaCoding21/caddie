@@ -6,7 +6,9 @@ import Image from "next/image";
 import Link from "next/link";
 import SiteHeader from "@/components/site-header";
 import Faq from "@/components/faq";
+import { Stars } from "@/components/reviews";
 import { PRODUCT } from "@/lib/products";
+import { AVERAGE_RATING } from "@/lib/reviews";
 
 // Swatch dot colour + a one-line finish blurb, keyed by colour id. Mirrors the
 // FINISH map in closing-colours.tsx so the buy flow reads as one brand.
@@ -237,6 +239,14 @@ function SelectColorConfigurator() {
                   ${(PRODUCT.priceCents / 100).toFixed(0)}{" "}
                   <span className="text-zinc-400">{PRODUCT.currency}</span>
                 </p>
+                {/* The buy page's only social proof — same source of truth as
+                    the home reviews section and the Product JSON-LD. */}
+                <div className="mt-2.5 flex items-center gap-2">
+                  <Stars rating={AVERAGE_RATING} className="h-3.5 w-3.5" />
+                  <span className="font-inter text-xs text-zinc-500">
+                    {AVERAGE_RATING.toFixed(1)} · Amazon-verified reviews
+                  </span>
+                </div>
               </div>
               <p className="mt-3 font-inter text-base leading-[1.5] text-zinc-500">
                 The all-in-one golf multi-tool. Clean clubs, fix divots, and be

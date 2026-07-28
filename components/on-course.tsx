@@ -140,9 +140,12 @@ export default function OnCourse() {
             simple idea: fold the six tools every golfer actually reaches for
             into one frame, machined to last a lifetime of rounds.
           </p>
+          {/* Text link, not a button: the only block-level buttons on the page
+              are buy actions, so the brand-story detour doesn't compete with
+              the red carpet to checkout. */}
           <Link
             href="/about"
-            className="mt-7 inline-flex items-center bg-black px-6 py-3 font-inter text-sm font-medium text-white transition-colors hover:bg-zinc-800"
+            className="mt-7 inline-flex items-center font-inter text-sm font-medium text-zinc-600 underline underline-offset-4 transition-colors hover:text-black"
           >
             Learn more about Caddie Companion
           </Link>

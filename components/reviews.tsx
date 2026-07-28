@@ -3,7 +3,9 @@ import { REVIEWS, REVIEW_COUNT, AVERAGE_RATING } from "@/lib/reviews";
 
 // Row of five stars, filled up to `rating`. Decorative — the numeric rating and
 // review text carry the meaning for screen readers, so this is aria-hidden.
-function Stars({
+// Exported for the star-summary lines at the buy moments (closing section,
+// buy page), so every star on the site draws from one source.
+export function Stars({
   rating,
   className = "h-4 w-4",
 }: {

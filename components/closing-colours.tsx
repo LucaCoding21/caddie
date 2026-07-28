@@ -8,7 +8,8 @@ import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
 import { PRODUCT } from "@/lib/products";
-import Reviews from "@/components/reviews";
+import { AVERAGE_RATING, REVIEW_COUNT } from "@/lib/reviews";
+import Reviews, { Stars } from "@/components/reviews";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger, SplitText);
 
@@ -273,6 +274,15 @@ export default function ClosingColours() {
           <div className="mt-9 flex items-baseline gap-3">
             <span className="font-inter text-lg font-medium text-black">
               {PRICE} {PRODUCT.currency}
+            </span>
+          </div>
+
+          {/* Star summary at the buy moment — the marquee of full reviews these
+              stars summarize scrolls just below this section. */}
+          <div className="mt-3 flex items-center gap-2">
+            <Stars rating={AVERAGE_RATING} className="h-4 w-4" />
+            <span className="font-inter text-sm text-zinc-500">
+              {AVERAGE_RATING.toFixed(1)} · {REVIEW_COUNT} verified reviews
             </span>
           </div>
 

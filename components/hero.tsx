@@ -1,5 +1,6 @@
 import { getImageProps } from "next/image";
 import HeroCopy from "@/components/hero-copy";
+import HeroVideo from "@/components/hero-video";
 
 // Tiny (16px) blurred previews, inlined so they paint instantly while the full
 // hero downloads — no blank black frame on first load. Generated from the
@@ -104,6 +105,10 @@ export default function Hero() {
           className="absolute inset-0 h-full w-full object-cover object-center landscape:object-[20%_center]"
         />
       </picture>
+
+      {/* Tool-in-use loop, cross-faded in over the photo once it's playing.
+          The photo stays the LCP; the video downloads only after page load. */}
+      <HeroVideo />
 
       {/* Subtle top gradient */}
       <div
