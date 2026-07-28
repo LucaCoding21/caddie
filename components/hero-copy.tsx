@@ -17,7 +17,7 @@ import { AVERAGE_RATING, REVIEW_COUNT } from "@/lib/reviews";
 export default function HeroCopy() {
   return (
     <div className="relative z-10 flex flex-1 flex-col justify-center bg-[#fafaf7] px-6 sm:min-h-svh sm:flex-row sm:items-end sm:justify-end sm:bg-transparent sm:px-16 sm:pb-16">
-      <div className="sm:text-right">
+      <div className="w-full text-center sm:w-auto sm:text-right">
         {/* No entrance animation on the H1 — it must paint with first HTML.
             Anything that hides or masks it (opacity 0, clip, translate behind a
             mask) delays LCP by the full animation + JS download time. */}
@@ -31,7 +31,7 @@ export default function HeroCopy() {
         {/* Star summary — mobile only, so social proof lands in the first
             viewport. Desktop keeps the overlay minimal; its stars live at the
             buy moments. */}
-        <div className="hero-rise hero-rise-tagline mt-4 flex items-center gap-2 sm:hidden">
+        <div className="hero-rise hero-rise-tagline mt-4 flex items-center justify-center gap-2 sm:hidden">
           <Stars rating={AVERAGE_RATING} className="h-4 w-4" />
           <span className="font-inter text-sm text-zinc-500">
             {AVERAGE_RATING.toFixed(1)} · {REVIEW_COUNT} verified reviews
@@ -43,7 +43,7 @@ export default function HeroCopy() {
         <div className="hero-rise hero-rise-cta mt-6 sm:hidden">
           <Link
             href="/select-color"
-            className="inline-flex flex-col items-start gap-0.5 rounded-3xl bg-accent py-2.5 pl-5 pr-7 text-white shadow-[0_8px_24px_-8px_rgba(0,0,0,0.5)] transition-colors active:bg-accent-hover"
+            className="flex w-full flex-col items-center gap-0.5 rounded-xl bg-accent px-5 py-3 text-white shadow-[0_8px_24px_-8px_rgba(0,0,0,0.5)] transition-colors active:bg-accent-hover"
           >
             <span className="flex items-center gap-2 text-base font-medium">
               Order now
