@@ -26,18 +26,18 @@ export default function HeroCopy() {
         <div className="hero-rise hero-rise-cta mt-6 sm:hidden">
           <Link
             href="/select-color"
-            className="inline-flex flex-col items-start gap-0.5 rounded-3xl bg-white py-2.5 pl-5 pr-7 text-accent shadow-[0_8px_24px_-8px_rgba(0,0,0,0.5)] transition-colors active:bg-white/90"
+            className="inline-flex flex-col items-start gap-0.5 rounded-3xl bg-accent py-2.5 pl-5 pr-7 text-white shadow-[0_8px_24px_-8px_rgba(0,0,0,0.5)] transition-colors active:bg-accent-hover"
           >
             <span className="flex items-center gap-2 text-base font-medium">
               Order now
-              <span className="text-accent/40" aria-hidden>
+              <span className="text-white/40" aria-hidden>
                 ·
               </span>
               <span className="tabular-nums">$49</span>
             </span>
             {/* Free-shipping nudge — desktop carries this inside the header
                 pill, which is hidden on mobile, so tuck it into the CTA. */}
-            <span className="text-[0.625rem] font-semibold uppercase tracking-[0.14em] text-zinc-500">
+            <span className="text-[0.625rem] font-semibold uppercase tracking-[0.14em] text-white/70">
               Buy 2, get free shipping
             </span>
           </Link>

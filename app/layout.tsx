@@ -6,6 +6,11 @@ import "./globals.css";
 
 const GA_MEASUREMENT_ID = "G-6XVN8BMLK0";
 
+// Microsoft Clarity (heatmaps + session recordings). Set in .env.local /
+// Vercel env; when unset the script is skipped entirely, so local dev and
+// preview builds don't record sessions unless opted in.
+const CLARITY_PROJECT_ID = process.env.NEXT_PUBLIC_CLARITY_PROJECT_ID;
+
 const siteUrl = "https://www.caddiecompanion.com";
 
 const description =
@@ -89,6 +94,20 @@ export default function RootLayout({
             gtag('config', '${GA_MEASUREMENT_ID}');
           `}
         </Script>
+        {/* Clarity rides the same idle lane as GA: it costs ~30 KB and records
+            sessions, so it must never contend with the hero image for
+            first-paint bandwidth. */}
+        {CLARITY_PROJECT_ID && (
+          <Script id="microsoft-clarity" strategy="lazyOnload">
+            {`
+              (function(c,l,a,r,i,t,y){
+                c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+                t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+                y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+              })(window, document, "clarity", "script", "${CLARITY_PROJECT_ID}");
+            `}
+          </Script>
+        )}
       </body>
     </html>
   );

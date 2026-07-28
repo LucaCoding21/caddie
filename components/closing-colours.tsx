@@ -278,7 +278,7 @@ export default function ClosingColours() {
 
           <Link
             href={buyHref}
-            className="mt-5 inline-flex items-center bg-black px-9 py-3.5 font-inter text-sm font-medium text-white transition-colors hover:bg-zinc-800"
+            className="mt-5 inline-flex items-center bg-accent px-9 py-3.5 font-inter text-sm font-medium text-white transition-colors hover:bg-accent-hover"
           >
             Buy Caddie Companion
           </Link>

@@ -451,7 +451,9 @@ function SelectColorConfigurator() {
                       autoCapitalize="characters"
                       autoComplete="off"
                       spellCheck={false}
-                      className="min-w-0 flex-1 border border-zinc-300 bg-white px-3 py-2.5 font-inter text-sm uppercase tracking-wide text-black placeholder:normal-case placeholder:tracking-normal placeholder:text-zinc-400 focus:border-black focus:outline-none"
+                      // text-base (16px): anything smaller makes iOS Safari
+                      // zoom the page when the field is focused on mobile.
+                      className="min-w-0 flex-1 border border-zinc-300 bg-white px-3.5 py-3 font-inter text-base uppercase tracking-wide text-black placeholder:normal-case placeholder:tracking-normal placeholder:text-zinc-400 focus:border-black focus:outline-none sm:py-2.5 sm:text-sm"
                       onKeyDown={(e) => {
                         if (e.key === "Enter" && totalUnits > 0 && !loading)
                           checkout();
@@ -462,7 +464,7 @@ function SelectColorConfigurator() {
                   <button
                     type="button"
                     onClick={() => setCodeOpen(true)}
-                    className="mb-3 inline-flex items-center gap-1.5 font-inter text-[13px] font-medium text-zinc-600 underline underline-offset-4 transition-colors hover:text-black"
+                    className="mb-3 inline-flex items-center gap-1.5 py-1 font-inter text-sm font-medium text-zinc-600 underline underline-offset-4 transition-colors hover:text-black sm:text-[13px]"
                   >
                     <svg
                       width="14"

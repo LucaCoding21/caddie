@@ -190,7 +190,7 @@ export default function Promise() {
         <Link
           ref={ctaRef}
           href="/select-color"
-          className="mt-10 inline-flex items-center border-[0.75px] border-black px-7 py-3 font-inter text-base font-medium text-black transition-colors hover:bg-black hover:text-white"
+          className="mt-10 inline-flex items-center bg-accent px-7 py-3 font-inter text-base font-medium text-white transition-colors hover:bg-accent-hover"
         >
           Order now
         </Link>
