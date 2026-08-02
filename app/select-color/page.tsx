@@ -9,6 +9,7 @@ import Faq from "@/components/faq";
 import { Stars } from "@/components/reviews";
 import { PRODUCT } from "@/lib/products";
 import { AVERAGE_RATING } from "@/lib/reviews";
+import { trackMetaEvent } from "@/lib/meta-pixel";
 
 // Swatch dot colour + a one-line finish blurb, keyed by colour id. Mirrors the
 // FINISH map in closing-colours.tsx so the buy flow reads as one brand.
@@ -157,6 +158,42 @@ function SelectColorConfigurator() {
     if (totalUnits === 0) return;
     setLoading(true);
     setError(null);
+
+    // This one click is both cart-add and checkout-start (there's no separate
+    // cart page — the button builds a Shopify cart and redirects straight to
+    // its checkout), so it sends both Meta standard events. Fired before the
+    // fetch: the redirect at the end of this function unloads the page.
+    const contents = [
+      ...PRODUCT.colors
+        .filter((c) => c.variantId && (quantities[c.id] ?? 0) > 0)
+        .map((c) => ({
+          id: c.variantId as string,
+          quantity: quantities[c.id],
+          item_price: PRODUCT.priceCents / 100,
+        })),
+      ...PRODUCT.addons
+        .filter((a) => a.variantId && (addonQty[a.id] ?? 0) > 0)
+        .map((a) => ({
+          id: a.variantId as string,
+          quantity: addonQty[a.id],
+          item_price: a.priceCents / 100,
+        })),
+    ];
+    const value = totalCents / 100;
+    trackMetaEvent("AddToCart", {
+      content_type: "product",
+      contents,
+      value,
+      currency: PRODUCT.currency,
+    });
+    trackMetaEvent("InitiateCheckout", {
+      content_type: "product",
+      contents,
+      value,
+      currency: PRODUCT.currency,
+      num_items: totalUnits,
+    });
+
     try {
       const colorLines = PRODUCT.colors
         .filter((c) => c.variantId && (quantities[c.id] ?? 0) > 0)
@@ -526,8 +563,9 @@ function SelectColorConfigurator() {
                 )}
 
                 {/* Bundle deal — centered under the full-width CTA. Shipping is
-                    free only on 2-packs (counted across finishes). */}
-                <p className="mt-4 text-center font-inter text-xs text-zinc-500">
+                    free only on 2-packs (counted across finishes). Larger on
+                    mobile where it's the main nudge; desktop stays quiet. */}
+                <p className="mt-4 text-center font-inter text-base font-medium text-zinc-700 sm:text-xs sm:font-normal sm:text-zinc-500">
                   Buy 2, get FREE shipping
                 </p>
               </section>

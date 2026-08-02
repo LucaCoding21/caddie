@@ -6,6 +6,8 @@ import "./globals.css";
 
 const GA_MEASUREMENT_ID = "G-6XVN8BMLK0";
 
+const META_PIXEL_ID = "1545900283576580";
+
 // Microsoft Clarity (heatmaps + session recordings). Set in .env.local /
 // Vercel env; when unset the script is skipped entirely, so local dev and
 // preview builds don't record sessions unless opted in.
@@ -78,6 +80,34 @@ export default function RootLayout({
       <body className="font-sans bg-background text-foreground antialiased">
         {children}
         <DiscountPopup />
+        {/* Meta Pixel runs afterInteractive, NOT lazyOnload like GA/Clarity:
+            Meta only counts a "landing page view" if the PageView event fires
+            before the visitor bounces, and ad-click traffic bounces fast. An
+            idle-time load would undercount the very metric the pixel exists
+            to report (and starve Meta's ad delivery optimization of signal). */}
+        <Script id="meta-pixel" strategy="afterInteractive">
+          {`
+            !function(f,b,e,v,n,t,s)
+            {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+            n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+            if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+            n.queue=[];t=b.createElement(e);t.async=!0;
+            t.src=v;s=b.getElementsByTagName(e)[0];
+            s.parentNode.insertBefore(t,s)}(window, document,'script',
+            'https://connect.facebook.net/en_US/fbevents.js');
+            fbq('init', '${META_PIXEL_ID}');
+            fbq('track', 'PageView');
+          `}
+        </Script>
+        <noscript>
+          <img
+            height="1"
+            width="1"
+            style={{ display: "none" }}
+            alt=""
+            src={`https://www.facebook.com/tr?id=${META_PIXEL_ID}&ev=PageView&noscript=1`}
+          />
+        </noscript>
         {/* lazyOnload (not afterInteractive): GA's ~160 KB script was loading at
             high priority during the hero's first paint, starving the LCP image
             of bandwidth on mobile. lazyOnload defers it to browser idle after

@@ -18,8 +18,9 @@ gsap.registerPlugin(useGSAP, ScrollTrigger, SplitText);
 const PRICE = `$${PRODUCT.priceCents / 100}`;
 
 // Trust line — replaces the old feature tiles. New, de-risking info at the buy
-// moment, not a restatement of the product. SAMPLE COPY — confirm before ship.
-const TRUST = ["Free shipping", "30-day returns", "1-yr guarantee"];
+// moment, not a restatement of the product. No shipping claim here: shipping is
+// only free on 2+, and the bundle nudge carries that message instead.
+const TRUST = ["30-day returns", "1-yr guarantee"];
 
 // Swatch dot colour + a line of copy per finish, keyed by colour id. Drives the
 // finish list. SAMPLE COPY — confirm before ship.

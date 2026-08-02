@@ -59,6 +59,12 @@ Now I can focus on what really matters, hitting greens, making pars, and having 
     color: "Black",
     body: "Wonderful product. Very well built and sturdy. Best golf tool on the market.",
   },
+  {
+    author: "Brian S",
+    rating: 5,
+    title: "A must have",
+    body: "This amazing multi tool is a must have for every golfers. Sturdy metal tools and attaches directly to your cart for easy access. Highly recommend!",
+  },
 ];
 
 export const REVIEW_COUNT = REVIEWS.length;
