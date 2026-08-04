@@ -7,7 +7,8 @@ import Link from "next/link";
 import SiteHeader from "@/components/site-header";
 import Faq from "@/components/faq";
 import { Stars } from "@/components/reviews";
-import { PRODUCT } from "@/lib/products";
+import { FOUR_PACK, PRODUCT } from "@/lib/products";
+import FourPackUpsell from "@/components/four-pack-upsell";
 import { AVERAGE_RATING } from "@/lib/reviews";
 import { trackMetaEvent } from "@/lib/meta-pixel";
 
@@ -98,6 +99,9 @@ function SelectColorConfigurator() {
     0
   );
   const totalCents = totalUnits * PRODUCT.priceCents + addonsCents;
+  // Shopify's automatic four-pack discount, mirrored here so the CTA shows the
+  // price checkout will actually charge once 4 tools are in the cart.
+  const dealCents = totalUnits >= FOUR_PACK.units ? FOUR_PACK.savingsCents : 0;
 
   // Gallery preview: an add-on if one is selected for preview, else the active
   // finish's studio shot.
@@ -140,6 +144,15 @@ function SelectColorConfigurator() {
     setError(null);
   }
 
+  // "Add N more" from the four-pack nudge: top up the finish being previewed,
+  // falling back to the first orderable finish if that one is coming-soon.
+  function addUnits(count: number) {
+    const target = activeColor?.variantId
+      ? activeColor
+      : PRODUCT.colors.find((c) => c.variantId);
+    if (target) changeQty(target.id, count);
+  }
+
   // Same clamp-and-drop pattern as the colours, for add-on quantities. Also
   // previews the add-on in the gallery.
   function changeAddonQty(id: string, delta: number) {
@@ -179,7 +192,8 @@ function SelectColorConfigurator() {
           item_price: a.priceCents / 100,
         })),
     ];
-    const value = totalCents / 100;
+    // Report what checkout will actually charge, net of the four-pack discount.
+    const value = (totalCents - dealCents) / 100;
     trackMetaEvent("AddToCart", {
       content_type: "product",
       contents,
@@ -549,8 +563,15 @@ function SelectColorConfigurator() {
                       <span aria-hidden className="text-white/50">
                         —
                       </span>
+                      {/* At 4+ tools show the four-pack price checkout will
+                          charge, with the full total struck through. */}
+                      {dealCents > 0 && (
+                        <s className="tabular-nums font-normal text-white/50">
+                          ${(totalCents / 100).toFixed(2)}
+                        </s>
+                      )}
                       <span className="tabular-nums">
-                        ${(totalCents / 100).toFixed(2)}
+                        ${((totalCents - dealCents) / 100).toFixed(2)}
                       </span>
                     </>
                   )}
@@ -562,12 +583,10 @@ function SelectColorConfigurator() {
                   </p>
                 )}
 
-                {/* Bundle deal — centered under the full-width CTA. Shipping is
-                    free only on 2-packs (counted across finishes). Larger on
-                    mobile where it's the main nudge; desktop stays quiet. */}
-                <p className="mt-4 text-center font-inter text-base font-medium text-zinc-700 sm:text-xs sm:font-normal sm:text-zinc-500">
-                  Buy 2, get FREE shipping
-                </p>
+                {/* Deal slot under the CTA — the free-shipping line at 0-1
+                    units, the four-pack upsell at 2-3, and the applied
+                    confirmation at 4+ (units counted across finishes). */}
+                <FourPackUpsell totalUnits={totalUnits} onAdd={addUnits} />
               </section>
 
             </div>

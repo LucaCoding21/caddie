@@ -14,6 +14,17 @@ export type ProductAddon = {
   image: string;
 };
 
+// The four-pack deal, an automatic discount configured in Shopify that kicks
+// in at checkout once the cart holds 4 tools. The storefront only mirrors the
+// numbers for the upsell nudge and CTA price; Shopify owns the actual discount.
+export const FOUR_PACK = {
+  units: 4,
+  priceCents: 13900,
+  get savingsCents() {
+    return PRODUCT.priceCents * this.units - this.priceCents;
+  },
+};
+
 export const PRODUCT = {
   title: "Caddie Companion",
   priceCents: 4900,
