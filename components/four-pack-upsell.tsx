@@ -42,7 +42,7 @@ export default function FourPackUpsell({
   const prevRef = useRef({ tier, filled });
 
   const price = `$${(FOUR_PACK.priceCents / 100).toFixed(0)}`;
-  const full = `$${((FOUR_PACK.units * FOUR_PACK.priceCents + FOUR_PACK.savingsCents) / 100).toFixed(0)}`;
+  const full = `$${((FOUR_PACK.priceCents + FOUR_PACK.savingsCents) / 100).toFixed(0)}`;
   const savings = `$${(FOUR_PACK.savingsCents / 100).toFixed(0)}`;
 
   useGSAP(
@@ -106,7 +106,7 @@ export default function FourPackUpsell({
       {tier === "quiet" ? (
         // Baseline nudge, unchanged from before the four-pack existed. Larger
         // on mobile where it's the main nudge; desktop stays quiet.
-        <p className="text-center font-inter text-base font-medium text-zinc-700 sm:text-xs sm:font-normal sm:text-zinc-500">
+        <p className="text-center font-inter text-base font-semibold text-zinc-900 sm:text-xs sm:text-zinc-700">
           Buy 2, get FREE shipping
         </p>
       ) : (

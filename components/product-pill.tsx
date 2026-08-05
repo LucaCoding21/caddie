@@ -17,7 +17,7 @@ export function ProductPill() {
         <span className="hidden text-base font-medium text-black md:inline">
           Caddie Companion
         </span>
-        <span className="text-[0.625rem] font-semibold uppercase tracking-[0.14em] text-zinc-500">
+        <span className="text-[0.6875rem] font-bold uppercase tracking-[0.14em] text-zinc-800">
           Buy 2, get free shipping
         </span>
       </span>

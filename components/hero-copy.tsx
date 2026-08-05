@@ -54,7 +54,7 @@ export default function HeroCopy() {
             </span>
             {/* Free-shipping nudge — desktop carries this inside the header
                 pill, which is hidden on mobile, so tuck it into the CTA. */}
-            <span className="text-[0.625rem] font-semibold uppercase tracking-[0.14em] text-white/70">
+            <span className="text-xs font-bold uppercase tracking-[0.14em] text-white">
               Buy 2, get free shipping
             </span>
           </Link>
