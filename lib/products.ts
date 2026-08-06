@@ -25,6 +25,20 @@ export const FOUR_PACK = {
   },
 };
 
+// The Foursome — a real Shopify product, not a discount: one of each colour as
+// a single $139 line item, shipping included. Pitched on the colours rather
+// than the math, and kept as its own SKU so its revenue reads separately in
+// Shopify analytics (it exists to test whether it sells).
+export const FOURSOME = {
+  id: "foursome",
+  title: "Foursome",
+  priceCents: 13900,
+  units: 4,
+  variantId: "gid://shopify/ProductVariant/51548084601138",
+  image: "/golf-multi-tool-colors-on-golf-balls.png",
+  blurb: "One of each color, shipping included.",
+};
+
 export const PRODUCT = {
   title: "Caddie Companion",
   priceCents: 4900,

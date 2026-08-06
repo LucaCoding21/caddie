@@ -23,9 +23,13 @@ gsap.registerPlugin(useGSAP);
  */
 export default function FourPackUpsell({
   totalUnits,
+  foursomeInCart = false,
   onAdd,
 }: {
   totalUnits: number;
+  // A Foursome line already in the order: shipping is covered, so the quiet
+  // tier confirms that instead of nudging toward the 2-pack threshold.
+  foursomeInCart?: boolean;
   onAdd: (count: number) => void;
 }) {
   const rootRef = useRef<HTMLDivElement>(null);
@@ -107,7 +111,7 @@ export default function FourPackUpsell({
         // Baseline nudge, unchanged from before the four-pack existed. Larger
         // on mobile where it's the main nudge; desktop stays quiet.
         <p className="text-center font-inter text-base font-semibold text-zinc-900 sm:text-xs sm:text-zinc-700">
-          Buy 2, get FREE shipping
+          {foursomeInCart ? "FREE shipping included" : "Buy 2, get FREE shipping"}
         </p>
       ) : (
         <div className="fp-card border border-black/10 bg-zinc-50 px-4 py-3.5 sm:px-5">

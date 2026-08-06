@@ -7,7 +7,7 @@ import Link from "next/link";
 import SiteHeader from "@/components/site-header";
 import Faq from "@/components/faq";
 import { Stars } from "@/components/reviews";
-import { FOUR_PACK, PRODUCT } from "@/lib/products";
+import { FOUR_PACK, FOURSOME, PRODUCT } from "@/lib/products";
 import FourPackUpsell from "@/components/four-pack-upsell";
 import { AVERAGE_RATING } from "@/lib/reviews";
 import { trackMetaEvent } from "@/lib/meta-pixel";
@@ -59,13 +59,21 @@ function SelectColorConfigurator() {
   const initialAddonIds = (searchParams.get("addons") ?? "")
     .split(",")
     .filter((id) => PRODUCT.addons.some((a) => a.id === id));
+  // Arriving from a Foursome link (home page card) opens with the Foursome
+  // already in the order and previewed in the gallery.
+  const initialFoursome = searchParams.get("foursome") === "1";
 
   // Per-colour quantities, keyed by colour id (a colour absent from the map is
   // simply 0). Seed the colour we arrived on at 1 if it's actually orderable.
   const initialColor = PRODUCT.colors.find((c) => c.id === initialColorId);
   const [quantities, setQuantities] = useState<Record<string, number>>(() =>
-    initialColor?.variantId ? { [initialColorId]: 1 } : {}
+    // A Foursome arrival starts with just the Foursome — no loose tool seeded.
+    initialFoursome || !initialColor?.variantId ? {} : { [initialColorId]: 1 }
   );
+  // The Foursome line: one of each colour as a single $139 item.
+  const [foursomeQty, setFoursomeQty] = useState(initialFoursome ? 1 : 0);
+  // When true, the gallery previews the Foursome group shot.
+  const [previewFoursome, setPreviewFoursome] = useState(initialFoursome);
   // The finish the gallery is previewing — whichever row was last touched.
   const [activeColorId, setActiveColorId] = useState(initialColorId);
   // Add-on quantities, keyed by add-on id (absent = 0). Seed any add-on passed
@@ -98,34 +106,55 @@ function SelectColorConfigurator() {
     (sum, a) => sum + (addonQty[a.id] ?? 0) * a.priceCents,
     0
   );
-  const totalCents = totalUnits * PRODUCT.priceCents + addonsCents;
+  const totalCents =
+    totalUnits * PRODUCT.priceCents +
+    foursomeQty * FOURSOME.priceCents +
+    addonsCents;
+  const anythingSelected = totalUnits + foursomeQty > 0;
   // Shopify's automatic four-pack discount, mirrored here so the CTA shows the
   // price checkout will actually charge once 4 tools are in the cart.
   const dealCents = totalUnits >= FOUR_PACK.units ? FOUR_PACK.savingsCents : 0;
 
-  // Gallery preview: an add-on if one is selected for preview, else the active
-  // finish's studio shot.
+  // Gallery preview: the Foursome group shot or an add-on if one is selected
+  // for preview, else the active finish's studio shot.
   const previewAddon = previewAddonId
     ? PRODUCT.addons.find((a) => a.id === previewAddonId)
     : null;
-  const heroSrc = previewAddon
-    ? previewAddon.image
-    : STUDIO_SHOTS[activeColor.id] ?? activeColor.image;
-  const heroAlt = previewAddon
-    ? previewAddon.name
-    : `Caddie Companion golf multi-tool in ${activeColor.name}`;
-  const heroKey = previewAddon ? `addon-${previewAddon.id}` : activeColor.id;
+  const heroSrc = previewFoursome
+    ? FOURSOME.image
+    : previewAddon
+      ? previewAddon.image
+      : STUDIO_SHOTS[activeColor.id] ?? activeColor.image;
+  const heroAlt = previewFoursome
+    ? "Caddie Companion golf multi-tool in all four colors"
+    : previewAddon
+      ? previewAddon.name
+      : `Caddie Companion golf multi-tool in ${activeColor.name}`;
+  const heroKey = previewFoursome
+    ? "foursome"
+    : previewAddon
+      ? `addon-${previewAddon.id}`
+      : activeColor.id;
 
   // Tap a row to preview that finish in the gallery, without changing its qty.
   function previewColor(id: string) {
     setActiveColorId(id);
     setPreviewAddonId(null);
+    setPreviewFoursome(false);
     setError(null);
   }
 
   // Preview an add-on's image in the gallery, without changing its qty.
   function previewAddonImage(id: string) {
     setPreviewAddonId(id);
+    setPreviewFoursome(false);
+    setError(null);
+  }
+
+  // Preview the Foursome group shot in the gallery, without changing its qty.
+  function previewFoursomeImage() {
+    setPreviewFoursome(true);
+    setPreviewAddonId(null);
     setError(null);
   }
 
@@ -141,6 +170,7 @@ function SelectColorConfigurator() {
     });
     setActiveColorId(id);
     setPreviewAddonId(null);
+    setPreviewFoursome(false);
     setError(null);
   }
 
@@ -151,6 +181,14 @@ function SelectColorConfigurator() {
       ? activeColor
       : PRODUCT.colors.find((c) => c.variantId);
     if (target) changeQty(target.id, count);
+  }
+
+  // Adjust the Foursome quantity; clamp at 0. Also previews the group shot.
+  function changeFoursomeQty(delta: number) {
+    setFoursomeQty((q) => Math.max(0, q + delta));
+    setPreviewFoursome(true);
+    setPreviewAddonId(null);
+    setError(null);
   }
 
   // Same clamp-and-drop pattern as the colours, for add-on quantities. Also
@@ -164,11 +202,12 @@ function SelectColorConfigurator() {
       return copy;
     });
     setPreviewAddonId(id);
+    setPreviewFoursome(false);
     setError(null);
   }
 
   async function checkout() {
-    if (totalUnits === 0) return;
+    if (!anythingSelected) return;
     setLoading(true);
     setError(null);
 
@@ -177,6 +216,15 @@ function SelectColorConfigurator() {
     // its checkout), so it sends both Meta standard events. Fired before the
     // fetch: the redirect at the end of this function unloads the page.
     const contents = [
+      ...(foursomeQty > 0
+        ? [
+            {
+              id: FOURSOME.variantId,
+              quantity: foursomeQty,
+              item_price: FOURSOME.priceCents / 100,
+            },
+          ]
+        : []),
       ...PRODUCT.colors
         .filter((c) => c.variantId && (quantities[c.id] ?? 0) > 0)
         .map((c) => ({
@@ -205,7 +253,7 @@ function SelectColorConfigurator() {
       contents,
       value,
       currency: PRODUCT.currency,
-      num_items: totalUnits,
+      num_items: totalUnits + foursomeQty * FOURSOME.units,
     });
 
     try {
@@ -217,6 +265,9 @@ function SelectColorConfigurator() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           lines: [
+            ...(foursomeQty > 0
+              ? [{ variantId: FOURSOME.variantId, quantity: foursomeQty }]
+              : []),
             ...colorLines,
             ...PRODUCT.addons
               .filter((a) => a.variantId && (addonQty[a.id] ?? 0) > 0)
@@ -267,7 +318,11 @@ function SelectColorConfigurator() {
               alt={heroAlt}
               fill
               sizes="(max-width: 1024px) 92vw, 840px"
-              className="hero-rise object-cover"
+              // The Foursome group shot is a 2:1 landscape — contain it so all
+              // four tools stay in frame; the studio shots fill as before.
+              className={`hero-rise ${
+                previewFoursome ? "object-contain" : "object-cover"
+              }`}
               preload
             />
           </div>
@@ -378,6 +433,70 @@ function SelectColorConfigurator() {
                     );
                   })}
                 </ul>
+
+                {/* The Foursome — one of each finish as a single line item.
+                    Leads with the colours (the four dots), not the savings.
+                    A real Shopify product, so its revenue reads on its own
+                    in analytics — the point of the experiment. */}
+                <div className="mt-4 border border-black/10 bg-zinc-50 px-4 py-3">
+                  <div className="flex items-center gap-3">
+                    <button
+                      type="button"
+                      onClick={previewFoursomeImage}
+                      aria-pressed={previewFoursome}
+                      className="flex min-w-0 flex-1 cursor-pointer items-center gap-3 py-1 text-left"
+                    >
+                      <span aria-hidden className="flex shrink-0 -space-x-1.5">
+                        {PRODUCT.colors.map((c) => (
+                          <span
+                            key={c.id}
+                            className="h-4 w-4 rounded-full ring-2 ring-zinc-50"
+                            style={{ backgroundColor: FINISH[c.id]?.hex }}
+                          />
+                        ))}
+                      </span>
+                      <span className="min-w-0 flex-1">
+                        <span
+                          className={`block font-inter text-sm transition-colors ${
+                            foursomeQty > 0 || previewFoursome
+                              ? "font-semibold text-black"
+                              : "font-medium text-zinc-600 hover:text-black"
+                          }`}
+                        >
+                          {FOURSOME.title}
+                          <span className="ml-1.5 font-normal tabular-nums text-zinc-400">
+                            ${(FOURSOME.priceCents / 100).toFixed(0)}
+                          </span>
+                        </span>
+                        <span className="mt-0.5 block font-inter text-xs leading-[1.5] text-zinc-500">
+                          {FOURSOME.blurb}
+                        </span>
+                      </span>
+                    </button>
+                    <div className="flex shrink-0 items-center">
+                      <button
+                        type="button"
+                        onClick={() => changeFoursomeQty(-1)}
+                        disabled={foursomeQty <= 0}
+                        aria-label="Decrease Foursome quantity"
+                        className="flex h-9 w-8 items-center justify-center text-base text-zinc-500 transition-colors hover:text-black disabled:opacity-25"
+                      >
+                        −
+                      </button>
+                      <span className="w-7 text-center font-inter text-sm font-medium tabular-nums">
+                        {foursomeQty}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => changeFoursomeQty(1)}
+                        aria-label="Increase Foursome quantity"
+                        className="flex h-9 w-8 items-center justify-center text-base text-zinc-500 transition-colors hover:text-black"
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
+                </div>
               </section>
 
               {/* Add-ons — same divider-row idiom as the finishes: thumbnail +
@@ -550,12 +669,12 @@ function SelectColorConfigurator() {
 
                 <button
                   onClick={checkout}
-                  disabled={loading || totalUnits === 0}
+                  disabled={loading || !anythingSelected}
                   className="flex w-full min-w-0 items-center justify-center gap-2 bg-accent px-3 py-3 font-inter text-sm font-medium text-white transition-colors hover:bg-accent-hover disabled:opacity-40 disabled:hover:bg-accent sm:gap-2.5 sm:px-6"
                 >
                   {loading ? (
                     "Loading…"
-                  ) : totalUnits === 0 ? (
+                  ) : !anythingSelected ? (
                     "Add to cart"
                   ) : (
                     <>
@@ -586,7 +705,11 @@ function SelectColorConfigurator() {
                 {/* Deal slot under the CTA — the free-shipping line at 0-1
                     units, the four-pack upsell at 2-3, and the applied
                     confirmation at 4+ (units counted across finishes). */}
-                <FourPackUpsell totalUnits={totalUnits} onAdd={addUnits} />
+                <FourPackUpsell
+                  totalUnits={totalUnits}
+                  foursomeInCart={foursomeQty > 0}
+                  onAdd={addUnits}
+                />
               </section>
 
             </div>

@@ -7,7 +7,7 @@ import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
-import { PRODUCT } from "@/lib/products";
+import { FOURSOME, PRODUCT } from "@/lib/products";
 import { AVERAGE_RATING, REVIEW_COUNT } from "@/lib/reviews";
 import Reviews, { Stars } from "@/components/reviews";
 
@@ -209,6 +209,49 @@ export default function ClosingColours() {
             <p className="mt-4 font-inter text-sm leading-[1.5] text-zinc-500">
               {FINISH[activeColor.id]?.blurb}
             </p>
+
+            {/* The Foursome — one of each finish as a single line item, led by
+                the colours (the four dots), not the math. Opens the buy flow
+                with the Foursome already selected. */}
+            <Link
+              href="/select-color?foursome=1"
+              className="mt-6 flex items-center gap-3 border border-black/10 bg-white px-4 py-3 transition-colors hover:border-black/30"
+            >
+              <span aria-hidden className="flex shrink-0 -space-x-1.5">
+                {PRODUCT.colors.map((c) => (
+                  <span
+                    key={c.id}
+                    className="h-4 w-4 rounded-full ring-2 ring-white"
+                    style={{ backgroundColor: FINISH[c.id]?.hex }}
+                  />
+                ))}
+              </span>
+              <span className="min-w-0 flex-1">
+                <span className="block font-inter text-sm font-semibold text-black">
+                  {FOURSOME.title}
+                  <span className="ml-1.5 font-normal tabular-nums text-zinc-400">
+                    ${FOURSOME.priceCents / 100}
+                  </span>
+                </span>
+                <span className="mt-0.5 block font-inter text-xs leading-[1.5] text-zinc-500">
+                  {FOURSOME.blurb}
+                </span>
+              </span>
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden
+                className="shrink-0 text-zinc-400"
+              >
+                <path d="M5 12h14M13 6l6 6-6 6" />
+              </svg>
+            </Link>
 
             {/* Add-ons — same row idiom as the finish list, with a thumbnail of
                 the part. Selection carries through to the buy page. */}
